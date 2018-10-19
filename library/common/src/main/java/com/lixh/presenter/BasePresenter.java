@@ -1,6 +1,7 @@
 package com.lixh.presenter;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.lixh.base.BaseActivity;
 import com.lixh.base.BaseFragment;
@@ -23,10 +24,9 @@ public abstract class BasePresenter{
     public LoadingTip tip;
     public UIntent intent;
     public RxHelper rxHelper;
-    public BaseActivity activity;
+    public FragmentActivity activity;
     private BaseFragment fragment;
     public abstract void onCreate(Bundle savedInstanceState);
-
     /**
      * 对外部开放 以实现外面调用
      *
@@ -44,7 +44,7 @@ public abstract class BasePresenter{
      * @return
      */
     public <T> T getActivity() {
-        return (T) activity.getActivity();
+        return (T) ((BaseActivity) activity).getActivity();
     }
 
     /**
@@ -69,6 +69,7 @@ public abstract class BasePresenter{
     public <T extends BaseFragment> void init(T fragment, Bundle savedInstanceState, BehaviorSubject<LifeEvent> lifecycleSubject) {
         this.fragment = fragment;
         tip = fragment.tip;
+        activity = fragment.getActivity();
         intent = new UIntent(fragment.getActivity());
         rxHelper = RxHelper.build(fragment.getActivity()).setCaChe(fragment.getClass().getName()).bindLifeCycle(lifecycleSubject);
         onCreate(savedInstanceState);

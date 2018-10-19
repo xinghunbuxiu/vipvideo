@@ -70,7 +70,7 @@ public class LoadView implements SwipeBackActivityBase {
     }
 
     //返回布局View
-    public View getRootView() {
+    public RelativeLayout getRootView() {
         return RootView;
     }
 
@@ -172,6 +172,13 @@ public class LoadView implements SwipeBackActivityBase {
         if (toolbar != null) {
             toolbar.bringToFront();
         }
+    }
+
+    public void addView(View view, LayoutParams lp, boolean belowTitle) {
+        if (belowTitle) {
+            lp.addRule(RelativeLayout.BELOW, R.id.toolbar);
+        }
+        RootView.addView(view, lp);
     }
 
     public void initSwipe(boolean enable) {

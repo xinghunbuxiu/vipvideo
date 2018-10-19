@@ -41,7 +41,7 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
             BaseResPose result = new BaseResPose();
             result.message = "ok";
             result.code = 200;
-            result.data = json;
+            result.data = JSON.parse(json);
             json = JSON.toJSONString(result);
         }
         return json;

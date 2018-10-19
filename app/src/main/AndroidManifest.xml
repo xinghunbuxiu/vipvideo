@@ -23,6 +23,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.TabsActivity" />
+        <activity
+            android:name=".ui.video.AllVideoActivity"
+            android:label="电影筛选" />
+        <activity
+            android:name=".ui.video.VideoPlayerActivity"
+            android:label="电影播放" />
 
     </application>
 

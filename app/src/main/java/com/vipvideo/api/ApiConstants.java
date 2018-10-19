@@ -17,7 +17,7 @@
 package com.vipvideo.api;
 
 public class ApiConstants {
-    public static final String BASE_URL = "https://etherscan.io";
+    public static final String BASE_URL = "http://app.video.baidu.com";
     /**
      * 获取对应的host
      *

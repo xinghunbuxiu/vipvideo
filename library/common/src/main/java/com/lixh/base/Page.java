@@ -49,6 +49,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     LoadingTip tip;
     RecyclerView.OnScrollListener onScrollListener;
     private MyOnLoadFinish onLoadFinish;
+    RecyclerView.RecycledViewPool viewPool;
     @Override
     public void reload() {
         onRefresh();
@@ -97,8 +98,8 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     public void onFinish(List<T> list) {
         springView.finishRefreshAndLoadMore();
         onError(LoadingTip.LoadStatus.FINISH);
-        arrayAdapter.notifyDataSetChanged();
         if (arrayAdapter != null) {
+            arrayAdapter.notifyDataSetChanged();
             arrayAdapter.addAll(list);
         } else if (rvAdapter != null) {
             rvAdapter.addAll(list);
@@ -109,20 +110,21 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
      * @param loadStatus 结束状态
      */
     public void onError(@LoadingTip.LoadStatus int loadStatus) {
-        if (arrayAdapter != null) {
             switch (loadStatus) {
                 case LoadingTip.LoadStatus.SHOW_LOAD_MORE_VIEW: //分页加载时
                     if (page > 1) {
                         page--;
                     }
-                    arrayAdapter.pauseMore();
+                    if (arrayAdapter != null) {
+                        arrayAdapter.pauseMore();
+                    }
                     break;
                 default:
                     if (tip != null)
                         tip.setLoadingTip(loadStatus);
                     break;
             }
-        }
+
     }
 
     public void onLoad(OnLoadingListener onLoadingListener) {
@@ -148,7 +150,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     ;
     @Override
     public void onRefresh() {
-        page = 1;
+        page = 0;
         if (arrayAdapter != null) {
             arrayAdapter.clear();
         }
@@ -188,9 +190,9 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
             tip.setLoadingTip(LoadingTip.LoadStatus.LOADING);
             tip.setOnReloadListener(this);
         }
-        if (builder.getAdapter() instanceof RecyclerArrayAdapter)
+        if (builder.getAdapter() instanceof RecyclerArrayAdapter) {
             arrayAdapter = (RecyclerArrayAdapter) builder.getAdapter();
-        else {
+        } else if (builder.getAdapter() instanceof EasyRVAdapter) {
             rvAdapter = (EasyRVAdapter) builder.getAdapter();
         }
         switch (type) {
@@ -203,7 +205,13 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
             case PageType.StaggeredGrid:
                 layoutManager = new StaggeredGridLayoutManager(builder.getSpanCount(), builder.getOrientation());
                 break;
+            case PageType.Custom:
+                layoutManager = builder.layoutManager;
+                break;
         }
+        viewPool = new RecyclerView.RecycledViewPool();
+        recyclerView.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 20);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         onScrollListener = builder.getOnScrollListener();
@@ -225,6 +233,8 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
             adapter = arrayAdapter;
         } else if (rvAdapter != null) {
             adapter = rvAdapter;
+        } else {
+            adapter = builder.adapter;
         }
         recyclerView.setAdapter(adapter);
         if (builder.isPullLoadMore()) {
@@ -270,7 +280,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         return view;
     }
 
-    public abstract static class Builder<T> implements RecyclerArrayAdapter.OnItemClickListener<T> {
+    public static class Builder<T> implements RecyclerArrayAdapter.OnItemClickListener<T> {
         @PageType
         int type;
         RecyclerView.Adapter adapter;
@@ -296,7 +306,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         private int paddingRight;
         private OnLoadingListener onLoadingListener;
         private RecyclerView.OnScrollListener onScrollListener;
-
+        RecyclerView.LayoutManager layoutManager;
         public Builder setLoadTip(LoadingTip loadTip) {
             this.loadTip = loadTip;
             return this;
@@ -563,7 +573,9 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         }
 
         @Override
-        public abstract void onItemClick(View view, int position, T data);
+        public void onItemClick(View view, int position, T data) {
+
+        }
 
         protected void onBindRVHolderData(EasyRVHolder viewHolder, int position, T item) {
 
@@ -619,6 +631,14 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
             return this;
         }
 
+        public Builder setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+            this.layoutManager = layoutManager;
+            return this;
+        }
 
+        public Builder setOtherAdapter(RecyclerView.Adapter adapter) {
+            this.adapter = adapter;
+            return this;
+        }
     }
 }

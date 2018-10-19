@@ -76,7 +76,7 @@ public class BaseViewHolder<M> extends RecyclerView.ViewHolder {
         mContext = mConvertView.getContext();
     }
 
-    protected <T extends View> T $(@IdRes int id) {
+    public final  <T extends View> T $(@IdRes int id) {
         return (T) itemView.findViewById(id);
     }
 

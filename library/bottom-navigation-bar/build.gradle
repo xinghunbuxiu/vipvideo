@@ -18,8 +18,7 @@ android {
     }
 }
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile rootProject.ext.dependencies.appcompatV7
-    compile rootProject.ext.dependencies.design
+    implementation rootProject.ext.dependencies.appcompatV7
+    implementation rootProject.ext.dependencies.design
 }
 
