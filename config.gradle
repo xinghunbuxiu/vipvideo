@@ -15,6 +15,7 @@ ext {
             rxpermissions: 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar',
             butterknife  : 'com.jakewharton:butterknife:7.0.1',
             fastJson     : 'com.alibaba:fastjson:1.1.68.android',
+            multidex     : 'com.android.support:multidex:1.0.2',
 
     ]
 }
