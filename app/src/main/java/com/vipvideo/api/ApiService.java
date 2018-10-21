@@ -2,7 +2,9 @@ package com.vipvideo.api;
 
 
 import com.lixh.base.BaseResPose;
+import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.MovieTypeBean;
+import com.vipvideo.bean.VideoInfoBean;
 
 import java.util.Map;
 
@@ -20,6 +22,9 @@ public interface ApiService {
     Observable<BaseResPose<MovieTypeBean>> getAllMovieType();
 
     @GET("/adnativemovie/")
-    Observable<BaseResPose<MovieTypeBean>> getMovieByWhere(@QueryMap Map<String, String> where);
+    Observable<BaseResPose<AllVideoInfo>> getMovieByWhere(@QueryMap Map<String, String> where);
+
+    @GET("/xqinfo/")
+    Observable<BaseResPose<VideoInfoBean>> getMovieByWorkId(@QueryMap Map<String, String> where);
 
 }

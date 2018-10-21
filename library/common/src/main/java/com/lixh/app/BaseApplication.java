@@ -1,8 +1,8 @@
 package com.lixh.app;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.lixh.setting.AppConfig;
@@ -12,18 +12,18 @@ import com.lixh.utils.SharedPreferencesUtil;
 /**
  * APPLICATION
  */
-public abstract class BaseApplication extends Application  {
+public abstract class BaseApplication extends MultiDexApplication {
 
     private static BaseApplication baseApplication;
 
     @Override
     public void onCreate() {
-        super.onCreate();
+        super.onCreate ( );
         baseApplication = this;
-        LocalAppInfo.init(this);
-        initPrefs();
-        initNightMode();
-        init();
+        LocalAppInfo.init (this);
+        initPrefs ( );
+        initNightMode ( );
+        init ( );
 
     }
 
@@ -31,28 +31,29 @@ public abstract class BaseApplication extends Application  {
      * 初始化SharedPreference
      */
     protected void initPrefs() {
-        SharedPreferencesUtil.init(getApplicationContext(), getPackageName() + "_preference", Context.MODE_PRIVATE);
+        SharedPreferencesUtil.init (getApplicationContext ( ), getPackageName ( ) + "_preference", Context.MODE_PRIVATE);
     }
 
     protected void initNightMode() {
-        boolean isNight = SharedPreferencesUtil.getInstance().getBoolean(AppConfig.ISNIGHT, false);
+        boolean isNight = SharedPreferencesUtil.getInstance ( ).getBoolean (AppConfig.ISNIGHT, false);
         if (isNight) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            AppCompatDelegate.setDefaultNightMode (AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
+
     public static BaseApplication getAppContext() {
         return baseApplication;
     }
 
     public static Resources getAppResources() {
-        return baseApplication.getResources();
+        return baseApplication.getResources ( );
     }
 
     @Override
     public void onTerminate() {
-        super.onTerminate();
+        super.onTerminate ( );
     }
 
 
@@ -66,7 +67,7 @@ public abstract class BaseApplication extends Application  {
      */
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+        super.attachBaseContext (base);
     }
 
 }

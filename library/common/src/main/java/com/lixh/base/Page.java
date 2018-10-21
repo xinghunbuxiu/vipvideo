@@ -50,9 +50,10 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     RecyclerView.OnScrollListener onScrollListener;
     private MyOnLoadFinish onLoadFinish;
     RecyclerView.RecycledViewPool viewPool;
+
     @Override
     public void reload() {
-        onRefresh();
+        onRefresh ( );
     }
 
     public interface OnLoadFinish<T> {
@@ -62,6 +63,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     public interface OnLoadingListener {
         void load(int page, OnLoadFinish onLoadFinish);
     }
+
     /**
      * @return RecyclerArrayAdapter
      */
@@ -79,7 +81,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     @Override
     public void onLoadMore() {
         page++;
-        onLoad(onLoadingListener);
+        onLoad (onLoadingListener);
     }
 
     /**
@@ -87,7 +89,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
      * @param loadStatus //状态
      */
     public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-        onFinish(list);
+        onFinish (list);
     }
 
     /**
@@ -96,41 +98,41 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
      * @param list
      */
     public void onFinish(List<T> list) {
-        springView.finishRefreshAndLoadMore();
-        onError(LoadingTip.LoadStatus.FINISH);
+        onError (LoadingTip.LoadStatus.FINISH);
         if (arrayAdapter != null) {
-            arrayAdapter.notifyDataSetChanged();
-            arrayAdapter.addAll(list);
+            arrayAdapter.addAll (list);
         } else if (rvAdapter != null) {
-            rvAdapter.addAll(list);
+            rvAdapter.addAll (list);
         }
+        springView.finishRefreshAndLoadMore ( );
+
     }
 
     /**
      * @param loadStatus 结束状态
      */
     public void onError(@LoadingTip.LoadStatus int loadStatus) {
-            switch (loadStatus) {
-                case LoadingTip.LoadStatus.SHOW_LOAD_MORE_VIEW: //分页加载时
-                    if (page > 1) {
-                        page--;
-                    }
-                    if (arrayAdapter != null) {
-                        arrayAdapter.pauseMore();
-                    }
-                    break;
-                default:
-                    if (tip != null)
-                        tip.setLoadingTip(loadStatus);
-                    break;
-            }
+        switch (loadStatus) {
+            case LoadingTip.LoadStatus.SHOW_LOAD_MORE_VIEW: //分页加载时
+                if (page > 1) {
+                    page--;
+                }
+                if (arrayAdapter != null) {
+                    arrayAdapter.pauseMore ( );
+                }
+                break;
+            default:
+                if (tip != null)
+                    tip.setLoadingTip (loadStatus);
+                break;
+        }
 
     }
 
     public void onLoad(OnLoadingListener onLoadingListener) {
         if (this.onLoadingListener != null) {
-            onLoadFinish = new MyOnLoadFinish(this);
-            this.onLoadingListener.load(page, onLoadFinish);
+            onLoadFinish = new MyOnLoadFinish (this);
+            this.onLoadingListener.load (page, onLoadFinish);
         }
     }
 
@@ -143,21 +145,22 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
 
         @Override
         public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-            page.finish(list, loadStatus);
+            page.finish (list, loadStatus);
         }
     }
 
     ;
+
     @Override
     public void onRefresh() {
         page = 0;
         if (arrayAdapter != null) {
-            arrayAdapter.clear();
+            arrayAdapter.clear ( );
         }
         if (rvAdapter != null) {
-            rvAdapter.clear();
+            rvAdapter.clear ( );
         }
-        onLoad(onLoadingListener);
+        onLoad (onLoadingListener);
     }
 
 
@@ -180,55 +183,52 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
 
     public Page(Builder builder, @PageType int type) {
         this.builder = builder;
-        rootView = inflate(R.layout.base_recyview);
-        recyclerView = $(R.id.recycle);
-        springView = $(R.id.springView);
-        springView.setAutoRefresh(builder.isAutoRefresh);
-        onLoadingListener = builder.getOnLoadingListener();
-        tip = builder.getLoadTip();
+        rootView = inflate (R.layout.base_recyview);
+        recyclerView = $ (R.id.recycle);
+        springView = $ (R.id.springView);
+        springView.setAutoRefresh (builder.isAutoRefresh);
+        onLoadingListener = builder.getOnLoadingListener ( );
+        tip = builder.getLoadTip ( );
         if (tip != null) {
-            tip.setLoadingTip(LoadingTip.LoadStatus.LOADING);
-            tip.setOnReloadListener(this);
+            tip.setLoadingTip (LoadingTip.LoadStatus.LOADING);
+            tip.setOnReloadListener (this);
         }
-        if (builder.getAdapter() instanceof RecyclerArrayAdapter) {
-            arrayAdapter = (RecyclerArrayAdapter) builder.getAdapter();
-        } else if (builder.getAdapter() instanceof EasyRVAdapter) {
-            rvAdapter = (EasyRVAdapter) builder.getAdapter();
+        if (builder.getAdapter ( ) instanceof RecyclerArrayAdapter) {
+            arrayAdapter = (RecyclerArrayAdapter) builder.getAdapter ( );
+        } else if (builder.getAdapter ( ) instanceof EasyRVAdapter) {
+            rvAdapter = (EasyRVAdapter) builder.getAdapter ( );
         }
         switch (type) {
             case PageType.List:
-                layoutManager = new LinearLayoutManager(mContext, builder.getOrientation(), false);
+                layoutManager = new LinearLayoutManager (mContext, builder.getOrientation ( ), false);
                 break;
             case PageType.Grid:
-                layoutManager = new GridLayoutManager(mContext, builder.getSpanCount(), builder.getOrientation(), false);
+                layoutManager = new GridLayoutManager (mContext, builder.getSpanCount ( ), builder.getOrientation ( ), false);
                 break;
             case PageType.StaggeredGrid:
-                layoutManager = new StaggeredGridLayoutManager(builder.getSpanCount(), builder.getOrientation());
+                layoutManager = new StaggeredGridLayoutManager (builder.getSpanCount ( ), builder.getOrientation ( ));
                 break;
             case PageType.Custom:
                 layoutManager = builder.layoutManager;
                 break;
         }
-        viewPool = new RecyclerView.RecycledViewPool();
-        recyclerView.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 20);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        onScrollListener = builder.getOnScrollListener();
+        recyclerView.setLayoutManager (layoutManager);
+        recyclerView.setHasFixedSize (true);
+        onScrollListener = builder.getOnScrollListener ( );
         if (onScrollListener != null) {
-            recyclerView.addOnScrollListener(onScrollListener);
+            recyclerView.addOnScrollListener (onScrollListener);
         }
-        setItemDecoration(builder.getDivideColor(), builder.getDivideHeight(), builder.getPaddingLeft(), builder.getPaddingRight());
+        setItemDecoration (builder.getDivideColor ( ), builder.getDivideHeight ( ), builder.getPaddingLeft ( ), builder.getPaddingRight ( ));
         if (arrayAdapter != null) {
-            if (builder.isAutoLoadMore()) {
-                arrayAdapter.setError(builder.getError()).setOnClickListener(new View.OnClickListener() {
+            if (builder.isAutoLoadMore ( )) {
+                arrayAdapter.setError (builder.getError ( )).setOnClickListener (new View.OnClickListener ( ) {
                     @Override
                     public void onClick(View v) {
-                        arrayAdapter.resumeMore();
+                        arrayAdapter.resumeMore ( );
                     }
                 });
-                arrayAdapter.setMore(builder.getMore(), this);
-                arrayAdapter.setNoMore(builder.getNoMore());
+                arrayAdapter.setMore (builder.getMore ( ), this);
+                arrayAdapter.setNoMore (builder.getNoMore ( ));
             }
             adapter = arrayAdapter;
         } else if (rvAdapter != null) {
@@ -236,19 +236,19 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         } else {
             adapter = builder.adapter;
         }
-        recyclerView.setAdapter(adapter);
-        if (builder.isPullLoadMore()) {
-            springView.setOnLoadListener(new SpringView.OnLoadListener() {
+        recyclerView.setAdapter (adapter);
+        if (builder.isPullLoadMore ( )) {
+            springView.setOnLoadListener (new SpringView.OnLoadListener ( ) {
                 @Override
                 public void onLoad() {
-                    onLoadMore();
+                    onLoadMore ( );
                 }
             });
         }
-        if (builder.isRefresh() && springView != null) {
-            springView.setOnRefreshListener(this);
+        if (builder.isRefresh ( ) && springView != null) {
+            springView.setOnRefreshListener (this);
         } else {
-            onRefresh();
+            onRefresh ( );
         }
 
     }
@@ -263,11 +263,11 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
      */
 
     public void setItemDecoration(int color, @DimenRes int height, int paddingLeft, int paddingRight) {
-        recyclerView.addItemDecoration(new DividerDecoration(mContext, OrientationHelper.VERTICAL, height, color));
+        recyclerView.addItemDecoration (new DividerDecoration (mContext, OrientationHelper.VERTICAL, height, color));
     }
 
     public <T extends View> T $(int viewId) {
-        return (T) rootView.findViewById(viewId);
+        return (T) rootView.findViewById (viewId);
     }
 
     public View getRootView() {
@@ -275,9 +275,52 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
     }
 
     protected View inflate(int layoutResID) {
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(layoutResID, null);
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate (layoutResID, null);
         return view;
+    }
+
+
+    public Page addFooterView(@LayoutRes final int footer, final int type) {
+        if (arrayAdapter == null) {
+            return this;
+        }
+        arrayAdapter.addFooter (new RecyclerArrayAdapter.ItemView ( ) {
+            @Override
+            public View onCreateView(ViewGroup parent) {
+                View footerView = LayoutInflater.from (mContext).inflate (footer, parent, false);
+                return footerView;
+            }
+
+            @Override
+            public void onBindView(View headerView) {
+                BaseViewHolder baseViewHolder = new BaseViewHolder (headerView);
+                builder.onBindFooterViewData (baseViewHolder, type);
+            }
+        });
+        return this;
+    }
+
+    public Page addHeaderView(@LayoutRes final int header, final int type) {
+        if (arrayAdapter == null) {
+            return this;
+        }
+        arrayAdapter.addHeader (new RecyclerArrayAdapter.ItemView ( ) {
+            @Override
+            public View onCreateView(ViewGroup parent) {
+                View headerView = LayoutInflater.from (mContext).inflate (header, parent, false);
+                return headerView;
+            }
+
+            @Override
+            public void onBindView(View headerView) {
+                BaseViewHolder baseViewHolder = new BaseViewHolder (headerView);
+                builder.onBindHeaderViewData (baseViewHolder, type);
+            }
+
+        });
+
+        return this;
     }
 
     public static class Builder<T> implements RecyclerArrayAdapter.OnItemClickListener<T> {
@@ -307,10 +350,12 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         private OnLoadingListener onLoadingListener;
         private RecyclerView.OnScrollListener onScrollListener;
         RecyclerView.LayoutManager layoutManager;
+
         public Builder setLoadTip(LoadingTip loadTip) {
             this.loadTip = loadTip;
             return this;
         }
+
 
         private LoadingTip loadTip;
 
@@ -476,14 +521,14 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         }
 
         public Builder setRVAdapter(@LayoutRes int layoutRes, List<T> list) {
-            adapter = rvAdapter = new EasyRVAdapter<T>(mContext, list, layoutRes) {
+            adapter = rvAdapter = new EasyRVAdapter<T> (mContext, list, layoutRes) {
                 @Override
                 protected void onBindData(final EasyRVHolder viewHolder, final int position, final T item) {
-                    onBindRVHolderData(viewHolder, position, item);
-                    viewHolder.setOnItemViewClickListener(new View.OnClickListener() {
+                    onBindRVHolderData (viewHolder, position, item);
+                    viewHolder.setOnItemViewClickListener (new View.OnClickListener ( ) {
                         @Override
                         public void onClick(View v) {
-                            onItemClick(viewHolder.getItemView(), position, item);
+                            onItemClick (viewHolder.getItemView ( ), position, item);
                         }
                     });
                 }
@@ -492,55 +537,55 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
 
         }
 
-        public Builder setArrayAdapter(@LayoutRes int layoutRes) {
-            adapter = arrayAdapter = new RecyclerArrayAdapter<T>(mContext, layoutRes) {
+        public Builder setArrayAdapter(@LayoutRes final int layoutRes) {
+            adapter = arrayAdapter = new RecyclerArrayAdapter<T> (mContext) {
 
                 @Override
-                protected void onBindData(final BaseViewHolder viewHolder, final int position, final T item) {
-                    onBindViewData(viewHolder, position, item);
-                    viewHolder.setOnItemViewClickListener(new View.OnClickListener() {
+                public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                    return new BaseViewHolder<T> (parent, layoutRes) {
                         @Override
-                        public void onClick(View v) {
-                            onItemClick(viewHolder.getItemView(), position, item);
+                        public void setData(final T item) {
+                            onBindViewData (holder, holder.getPosition ( ), item);
                         }
-                    });
+                    };
                 }
             };
+            arrayAdapter.setOnItemClickListener (this);
             return this;
         }
 
-        public Builder setArrayAdapter(@LayoutRes int layoutRes, List<T> objects) {
-            adapter = arrayAdapter = new RecyclerArrayAdapter<T>(mContext, objects, layoutRes) {
+        public Builder setArrayAdapter(@LayoutRes final int layoutRes, List<T> objects) {
+            adapter = arrayAdapter = new RecyclerArrayAdapter<T> (mContext, objects) {
 
                 @Override
-                protected void onBindData(final BaseViewHolder viewHolder, final int position, final T item) {
-                    onBindViewData(viewHolder, position, item);
-                    viewHolder.setOnItemViewClickListener(new View.OnClickListener() {
+                public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                    return new BaseViewHolder<T> (parent, layoutRes) {
                         @Override
-                        public void onClick(View v) {
-                            onItemClick(viewHolder.getItemView(), position, item);
+                        public void setData(final T item) {
+                            onBindViewData (holder, holder.getPosition ( ), item);
                         }
-                    });
+                    };
                 }
             };
+            arrayAdapter.setOnItemClickListener (this);
             return this;
 
         }
 
-        public Builder setArrayAdapter(@LayoutRes int layoutRes, T[] objects) {
-            adapter = arrayAdapter = new RecyclerArrayAdapter<T>(mContext, objects, layoutRes) {
+        public Builder setArrayAdapter(@LayoutRes final int layoutRes, T[] objects) {
+            adapter = arrayAdapter = new RecyclerArrayAdapter<T> (mContext, objects) {
 
                 @Override
-                protected void onBindData(final BaseViewHolder viewHolder, final int position, final T item) {
-                    onBindViewData(viewHolder, position, item);
-                    viewHolder.setOnItemViewClickListener(new View.OnClickListener() {
+                public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
+                    return new BaseViewHolder<T> (parent, layoutRes) {
                         @Override
-                        public void onClick(View v) {
-                            onItemClick(viewHolder.getItemView(), position, item);
+                        public void setData(final T item) {
+                            onBindViewData (holder, holder.getPosition ( ), item);
                         }
-                    });
+                    };
                 }
             };
+            arrayAdapter.setOnItemClickListener (this);
             return this;
         }
 
@@ -560,7 +605,7 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         }
 
         public Page<T> Build(@PageType int type) {
-            return new Page<T>(this, type);
+            return new Page<T> (this, type);
         }
 
         public int getSpanCount() {
@@ -570,11 +615,6 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
 
         public RecyclerView.Adapter getAdapter() {
             return adapter;
-        }
-
-        @Override
-        public void onItemClick(View view, int position, T data) {
-
         }
 
         protected void onBindRVHolderData(EasyRVHolder viewHolder, int position, T item) {
@@ -593,43 +633,6 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
 
         }
 
-        public Builder addFooterView(@LayoutRes final int footer) {
-            if (arrayAdapter != null) {
-                arrayAdapter.addFooter(new RecyclerArrayAdapter.FooterItemView() {
-                    @Override
-                    public View OnCreateFooterViewHolder(ViewGroup parent) {
-                        View footerView = LayoutInflater.from(mContext).inflate(footer, parent, false);
-                        return footerView;
-                    }
-
-                    @Override
-                    public void onBindFooterData(View headerView, int position) {
-                        BaseViewHolder baseViewHolder = new BaseViewHolder(headerView);
-                        onBindFooterViewData(baseViewHolder, position);
-                    }
-                });
-            }
-            return this;
-        }
-
-        public Builder addHeaderView(@LayoutRes final int header) {
-            if (arrayAdapter != null) {
-                arrayAdapter.addHeader(new RecyclerArrayAdapter.HeaderItemView() {
-                    @Override
-                    public View OnCreateHeaderViewHolder(ViewGroup parent) {
-                        View headerView = LayoutInflater.from(mContext).inflate(header, parent, false);
-                        return headerView;
-                    }
-
-                    @Override
-                    public void onBindHeaderData(View headerView, int position) {
-                        BaseViewHolder baseViewHolder = new BaseViewHolder(headerView);
-                        onBindHeaderViewData(baseViewHolder, position);
-                    }
-                });
-            }
-            return this;
-        }
 
         public Builder setLayoutManager(RecyclerView.LayoutManager layoutManager) {
             this.layoutManager = layoutManager;
@@ -639,6 +642,11 @@ public class Page<T> implements OnLoadMoreListener, SpringView.OnRefreshListener
         public Builder setOtherAdapter(RecyclerView.Adapter adapter) {
             this.adapter = adapter;
             return this;
+        }
+
+        @Override
+        public void onItemClick(View v, int position, T t) {
+
         }
     }
 }
