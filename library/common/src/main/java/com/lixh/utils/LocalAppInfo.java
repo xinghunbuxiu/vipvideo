@@ -1,11 +1,12 @@
 package com.lixh.utils;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
 import com.lixh.rxhttp.Observable;
@@ -20,7 +21,6 @@ public class LocalAppInfo extends Observable {
     String labelRes;
     private static LocalAppInfo localAppInfo;
 
-    @SuppressLint("MissingPermission")
     public static void init(Context mContext) {
         localAppInfo = new LocalAppInfo();
         PackageManager pm = mContext.getPackageManager();
@@ -35,9 +35,19 @@ public class LocalAppInfo extends Observable {
                 localAppInfo.setLabelRes(mContext.getResources().getString(info.applicationInfo.labelRes));
             }
             TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             localAppInfo.setIMei(tm.getDeviceId());
             ULog.d(TAG, "about: LocalAppInfo = " + localAppInfo.toString());
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
