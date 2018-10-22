@@ -115,12 +115,10 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         //设置播放类型
         //videoPlayer.setPlayerType(VideoPlayer.TYPE_NATIVE);
         videoPlayer.setPlayerType (ConstantKeys.IjkPlayerType.TYPE_IJK);
-
         //是否从上一次的位置继续播放
         videoPlayer.continueFromLastPosition (true);
         //设置播放速度
         videoPlayer.setSpeed (1.0f);
-
         //创建视频控制器
         controller = new VideoPlayerController(this);
         controller.setTitle ("高仿优酷视频播放页面");
@@ -184,8 +182,8 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     public void setRealPath(String realPath) {
-        this.videoUrl = realPath;
-        controller.setTitle(videoUrl);
+        this.videoUrl = "http://dy.jsyunbf.com/20170914/3fMIUCOf/index.m3u8";
+        controller.setTitle("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4");
         //设置视频地址和请求头部
         videoPlayer.setUp(videoUrl, null);
         videoPlayer.start();

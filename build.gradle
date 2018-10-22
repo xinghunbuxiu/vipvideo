@@ -3,7 +3,7 @@ apply from: "config.gradle"
 buildscript {
 
     repositories {
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
         jcenter()
         google()
     }
@@ -18,7 +18,7 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
         jcenter()
         maven {
             url "https://jitpack.io"
