@@ -76,7 +76,6 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
                     }
                 });
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
         }

@@ -29,6 +29,16 @@
         <activity
             android:name=".ui.video.VideoPlayerActivity"
             android:label="电影播放" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="登录" />
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:label="注册" />
+        <activity
+            android:name=".ui.login.ForgetPasswordActivity"
+            android:label="找回密码" />
+
 
     </application>
 

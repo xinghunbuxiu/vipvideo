@@ -10,6 +10,7 @@ import com.vipvideo.R;
 import com.vipvideo.presenter.TabPresenter;
 import com.vipvideo.ui.fragment.HomeFragment;
 import com.vipvideo.ui.fragment.MyFragment;
+import com.vipvideo.ui.login.LoginActivity;
 
 /**
  * Created by LIXH on 2016/12/21.
@@ -50,7 +51,9 @@ public class TabsActivity extends BaseActivity<TabPresenter> {
         builder.setOnTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
-
+                if (position == 2) {
+                    intent.go(LoginActivity.class);
+                }
             }
 
             @Override

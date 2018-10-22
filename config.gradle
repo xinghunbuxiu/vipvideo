@@ -6,6 +6,7 @@ ext {
             targetSdkVersion : 26,
     ]
     dependencies = [
+            constraintLayout:'com.android.support.constraint:constraint-layout:1.1.2',
             appcompatV7  : 'com.android.support:appcompat-v7:26.+',
             design       : 'com.android.support:design:26.+',
             spinkit      : 'com.github.ybq:Android-SpinKit:1.1.0',

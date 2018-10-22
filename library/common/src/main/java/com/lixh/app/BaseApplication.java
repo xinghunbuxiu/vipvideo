@@ -1,8 +1,8 @@
 package com.lixh.app;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.lixh.setting.AppConfig;
@@ -12,7 +12,7 @@ import com.lixh.utils.SharedPreferencesUtil;
 /**
  * APPLICATION
  */
-public abstract class BaseApplication extends Application  {
+public abstract class BaseApplication extends MultiDexApplication {
 
     private static BaseApplication baseApplication;
 
