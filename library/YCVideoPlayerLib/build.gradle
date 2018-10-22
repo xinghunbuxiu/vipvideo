@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.dependencies.appcompatV7
+    //这两个是必须要加的，其它的可供选择
+    implementation project(':library:ijkplayer-java')
+    implementation project(':library:ijkplayer-exo')
+}
+
