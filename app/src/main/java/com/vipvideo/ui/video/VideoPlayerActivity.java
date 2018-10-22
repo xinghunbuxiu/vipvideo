@@ -20,7 +20,6 @@ import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.VideoTopDesHolder;
 import com.vipvideo.ui.adpter.VideoTopShareHolder;
 
-import org.jsoup.nodes.Document;
 import org.yczbj.ycvideoplayerlib.constant.ConstantKeys;
 import org.yczbj.ycvideoplayerlib.controller.VideoPlayerController;
 import org.yczbj.ycvideoplayerlib.manager.VideoPlayerManager;
@@ -49,7 +48,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     VideoPresenter presenter;
     String workId;
     private VBaseAdapter shareAdapter, topDesAdapter;
-
+    VideoPlayerController controller;
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setVisibility (View.GONE);
@@ -123,7 +122,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         videoPlayer.setSpeed (1.0f);
 
         //创建视频控制器
-        VideoPlayerController controller = new VideoPlayerController (this);
+        controller = new VideoPlayerController(this);
         controller.setTitle ("高仿优酷视频播放页面");
         controller.setLoadingType (ConstantKeys.Loading.LOADING_QQ);
         controller.setTopVisibility (true);
@@ -184,10 +183,11 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         presenter.getRealPath (videoUrl);
     }
 
-    public void setRealPath(Document realPath) {
-//        this.videoUrl = realPath;
-//        //设置视频地址和请求头部
-//        videoPlayer.setUp (videoUrl, null);
-//        videoPlayer.start ( );
+    public void setRealPath(String realPath) {
+        this.videoUrl = realPath;
+        controller.setTitle(videoUrl);
+        //设置视频地址和请求头部
+        videoPlayer.setUp(videoUrl, null);
+        videoPlayer.start();
     }
 }

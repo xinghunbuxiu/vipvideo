@@ -81,12 +81,12 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         lifecycleSubject.onNext(LifeEvent.CREATE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//无标题
+        requestWindowFeature(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);// 设置竖屏
         super.onCreate(savedInstanceState);
         layout = new LoadView.Builder(this) {
             {
                 mBottomLayout = getLayoutId();
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);// 设置竖屏
-                requestWindowFeature(Window.FEATURE_NO_TITLE);//无标题
                 initLoad(this);
             }
         }.createActivity();

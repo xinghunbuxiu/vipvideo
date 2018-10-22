@@ -17,6 +17,7 @@ import com.vipvideo.ui.video.VideoPlayerActivity;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -89,12 +90,18 @@ public class VideoPresenter extends BasePresenter {
 
     public void getRealPath(String site_url) {
         VideoPlayerActivity activity = getActivity ( );
-        Observable.create ((Observable.OnSubscribe<Document>) subscriber -> {
+        site_url = "https://www.iqiyi.com/v_19rr7qhp7c.html#vfrm=2-4-0-1";
+        String finalSite_url = site_url;
+        Observable.create((Observable.OnSubscribe<String>) subscriber -> {
             try {
-                String realUrl = "https://jx.618g.com/?url=" + site_url;
+                String realUrl = "https://jx.618g.com/jx.php?url=" + finalSite_url;
                 Connection conn = Jsoup.connect (realUrl);
-                Document doc = conn.followRedirects (true).execute ( ).parse ( );
-                subscriber.onNext (doc);
+                conn.header("referer", "https://jx.618g.com/?url=" + finalSite_url);
+                Document doc = conn.get();
+                Element player = doc.getElementById("player");
+                String src = player.attr("src");
+                String url = src.replace("/m3u8.php?url=", "");
+                subscriber.onNext(url);
             } catch (IOException e) {
                 e.printStackTrace ( );
                 subscriber.onError (e);
@@ -104,9 +111,9 @@ public class VideoPresenter extends BasePresenter {
             }
 
         }).subscribeOn (Schedulers.newThread ( ))
-                .observeOn (AndroidSchedulers.mainThread ( )).subscribe (new RxSubscriber<Document> (activity, true) {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<String>(activity, true) {
             @Override
-            protected void _onNext(Document s) {
+            protected void _onNext(String s) {
                 activity.setRealPath (s);
             }
         });
