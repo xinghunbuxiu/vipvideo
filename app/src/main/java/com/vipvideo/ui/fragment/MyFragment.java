@@ -21,7 +21,7 @@ public class MyFragment extends BaseFragment {
 
     @Override
     public void initTitle(UToolBar toolBar) {
-        toolBar.setTitle("我");
+        toolBar.setTitle("会员中心");
         toolBar.setTitleTextColor(Color.WHITE);
     }
 
@@ -29,7 +29,7 @@ public class MyFragment extends BaseFragment {
     protected void init(Bundle savedInstanceState) {
         if (UserInfoUtils.isLogin()) {
             tvUsername.setText(UserInfoUtils.getUserInfo().getAdvert());
-            tvVipTime.setText(UserInfoUtils.getUserInfo().getTime());
+            tvVipTime.setText(UserInfoUtils.getUserInfo().getTime()+"");
         } else {
             tvUsername.setText("请登录");
         }

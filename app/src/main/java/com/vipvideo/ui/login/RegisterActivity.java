@@ -141,6 +141,8 @@ public class RegisterActivity extends BaseActivity<LoginPresenter> implements Te
      * 登录成功
      */
     public void loginSuccess(UserBean userInfoBean) {
+        userInfoBean.setUsername(username);
+        userInfoBean.setPassword(password);
         UserInfoUtils.saveUserInfo(userInfoBean);
         AppManager.getAppManager().returnToActivity(TabsActivity.class);
         finish();

@@ -77,7 +77,7 @@
                 <carbon.widget.EditText
                     android:id="@+id/edit_account"
                     android:hint="@string/account_login_account_hint"
-                    android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
+                    android:inputType="phone"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
                     android:maxLength="32"
@@ -109,7 +109,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:hint="@string/account_login_password_hint"
-                    android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
+                    android:inputType="text"
                     android:maxLength="32"
                     android:paddingRight="10dp"
                     android:maxLines="1"

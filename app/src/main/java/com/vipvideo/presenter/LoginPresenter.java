@@ -10,6 +10,7 @@ import com.lixh.utils.LocalAppInfo;
 import com.lixh.utils.UToast;
 import com.vipvideo.api.Api;
 import com.vipvideo.api.ApiService;
+import com.vipvideo.api.HostType;
 import com.vipvideo.bean.UserBean;
 import com.vipvideo.ui.login.ForgetPasswordActivity;
 import com.vipvideo.ui.login.LoginActivity;
@@ -103,7 +104,7 @@ public class LoginPresenter extends BasePresenter {
      * @param param
      */
     public void validateCode(Map<String, String> param) {
-        rxHelper.createSubscriber(apiService.validateCode(param)
+        rxHelper.createSubscriber(Api.getDefault(HostType.JUHE_URL).validateCode(param)
                 , new RxSubscriber<String>(activity, true) {
                     @Override
                     protected void _onNext(String bean) {

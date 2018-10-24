@@ -28,5 +28,16 @@ public class HostType {
      */
     public static final int BASE_URL = 1;
 
+    /**
+     * 基本url
+     */
+    public static final int BAIDU_URL = 2;
+
+
+    /**
+     * 基本url
+     */
+    public static final int JUHE_URL = 3;
+
 
 }

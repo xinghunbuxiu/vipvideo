@@ -17,7 +17,13 @@
 package com.vipvideo.api;
 
 public class ApiConstants {
-    public static final String BASE_URL = "http://app.video.baidu.com";
+
+    public static final String BAIDU_URL = "http://app.video.baidu.com";
+
+    public static final String BASE_URL = "http://www.wdfgm.com";
+
+    public static final String JUHE_URL = "http://v.juhe.cn";
+
     /**
      * 获取对应的host
      *
@@ -30,8 +36,14 @@ public class ApiConstants {
             case HostType.BASE_URL:
                 host = BASE_URL;
                 break;
+            case HostType.JUHE_URL:
+                host = JUHE_URL;
+                break;
+            case HostType.BAIDU_URL:
+                host = BAIDU_URL;
+                break;
             default:
-                host = "";
+                host = BASE_URL;
                 break;
         }
         return host;

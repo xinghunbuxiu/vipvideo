@@ -6,6 +6,7 @@ import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
 import com.vipvideo.api.Api;
 import com.vipvideo.api.ApiService;
+import com.vipvideo.api.HostType;
 import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.AllVideoInfoBean;
 import com.vipvideo.bean.MovieTypeBean;
@@ -18,7 +19,7 @@ import rx.functions.Func2;
 
 
 public class VideoPresenter extends BasePresenter {
-    ApiService apiService = Api.getDefault();
+    ApiService apiService = Api.getDefault(HostType.BAIDU_URL);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

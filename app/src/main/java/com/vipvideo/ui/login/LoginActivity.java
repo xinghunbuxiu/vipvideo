@@ -42,8 +42,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements TextW
 
     @Override
     public void initTitle(UToolBar toolBar) {
-        loginPresenter = getPresenter();
-
     }
 
     @Override
@@ -57,6 +55,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements TextW
         super.init(savedInstanceState);
         editAccount.addTextChangedListener(this);
         editPassword.addTextChangedListener(this);
+        loginPresenter = getPresenter();
     }
 
     @Override
@@ -100,6 +99,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements TextW
      * 登录成功
      */
     public void loginSuccess(UserBean userInfoBean) {
+        userInfoBean.setUsername(username);
+        userInfoBean.setPassword(password);
         UserInfoUtils.saveUserInfo(userInfoBean);
         UToast.showShort("登录成功");
         finish();
