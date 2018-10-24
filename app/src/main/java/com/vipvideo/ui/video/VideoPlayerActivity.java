@@ -1,5 +1,6 @@
 package com.vipvideo.ui.video;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,18 +13,18 @@ import com.lixh.base.BaseActivity;
 import com.lixh.base.adapter.ItemListener;
 import com.lixh.base.adapter.VBaseAdapter;
 import com.lixh.utils.Alert;
-import com.lixh.utils.UToast;
 import com.lixh.view.UToolBar;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.vipvideo.R;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.VideoTopDesHolder;
 import com.vipvideo.ui.adpter.VideoTopShareHolder;
-
-import org.yczbj.ycvideoplayerlib.constant.ConstantKeys;
-import org.yczbj.ycvideoplayerlib.controller.VideoPlayerController;
-import org.yczbj.ycvideoplayerlib.manager.VideoPlayerManager;
-import org.yczbj.ycvideoplayerlib.player.VideoPlayer;
+import com.vipvideo.view.LandLayoutVideo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ import butterknife.Bind;
 
 public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     @Bind(R.id.video_player)
-    VideoPlayer videoPlayer;
+    LandLayoutVideo detailPlayer;
     @Bind(R.id.rv_video)
     RecyclerView rvVideo;
     //网络视频地址
@@ -48,7 +49,12 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     VideoPresenter presenter;
     String workId;
     private VBaseAdapter shareAdapter, topDesAdapter;
-    VideoPlayerController controller;
+    private OrientationUtils orientationUtils;
+
+    private GSYVideoOptionBuilder gsyVideoOptionBuilder;
+    private boolean isPlay;
+    private boolean isPause;
+
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setVisibility (View.GONE);
@@ -112,57 +118,117 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     private void initVideoPlayer() {
-        //设置播放类型
-        //videoPlayer.setPlayerType(VideoPlayer.TYPE_NATIVE);
-        videoPlayer.setPlayerType (ConstantKeys.IjkPlayerType.TYPE_IJK);
-        //是否从上一次的位置继续播放
-        videoPlayer.continueFromLastPosition (true);
-        //设置播放速度
-        videoPlayer.setSpeed (1.0f);
-        //创建视频控制器
-        controller = new VideoPlayerController(this);
-        controller.setTitle ("高仿优酷视频播放页面");
-        controller.setLoadingType (ConstantKeys.Loading.LOADING_QQ);
-        controller.setTopVisibility (true);
-        controller.imageView ( ).setBackgroundResource (R.color.colorAccent);
-        controller.setOnVideoBackListener (() -> {
-            onBackPressed ( );
-        });
-        controller.setOnPlayOrPauseListener (isPlaying -> {
 
-        });
-        controller.setOnVideoControlListener (type -> {
-            switch (type) {
-                case ConstantKeys.VideoControl.DOWNLOAD:
-                    UToast.showShort ("下载音视频");
-                    break;
-                case ConstantKeys.VideoControl.AUDIO:
-                    UToast.showShort ("切换音频");
-                    break;
-                case ConstantKeys.VideoControl.SHARE:
-                    UToast.showShort ("分享内容");
-                    break;
-                default:
-                    break;
+        //外部辅助的旋转，帮助全屏
+        orientationUtils = new OrientationUtils(this, detailPlayer);
+        //初始化不打开外部的旋转
+        orientationUtils.setEnable(false);
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder()
+                .setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true)
+                .setSeekRatio(1)
+                .setCacheWithPlay(true)
+                .setVideoTitle("测试视频")
+                .setVideoAllCallBack(new GSYSampleCallBack() {
+                    @Override
+                    public void onPrepared(String url, Object... objects) {
+                        super.onPrepared(url, objects);
+                        //开始播放了才能旋转和全屏
+                        orientationUtils.setEnable(true);
+                        isPlay = true;
+                    }
+
+                    @Override
+                    public void onQuitFullscreen(String url, Object... objects) {
+                        super.onQuitFullscreen(url, objects);
+                        if (orientationUtils != null) {
+                            orientationUtils.backToProtVideo();
+                        }
+                    }
+                });
+        gsyVideoOptionBuilder.build(detailPlayer);
+
+        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //直接横屏
+                orientationUtils.resolveByClick();
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                detailPlayer.startWindowFullscreen(getActivity(), true, true);
             }
         });
-        //设置视频控制器
-        videoPlayer.setController (controller);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop ( );
-        VideoPlayerManager.instance ( ).releaseVideoPlayer ( );
-    }
-
 
     @Override
     public void onBackPressed() {
-        if (VideoPlayerManager.instance ( ).onBackPressed ( )) {
+
+        if (orientationUtils != null) {
+            orientationUtils.backToProtVideo();
+        }
+
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed ( );
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        getCurPlay().onVideoPause();
+        super.onPause();
+        isPause = true;
+    }
+
+    @Override
+    protected void onResume() {
+        getCurPlay().onVideoResume();
+        super.onResume();
+        isPause = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isPlay) {
+            getCurPlay().release();
+        }
+        //GSYPreViewManager.instance().releaseMediaPlayer();
+        if (orientationUtils != null)
+            orientationUtils.releaseListener();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (isPlay && !isPause) {
+            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+        }
+    }
+
+    private GSYVideoPlayer getCurPlay() {
+        if (detailPlayer.getFullWindowPlayer() != null) {
+            return detailPlayer.getFullWindowPlayer();
+        }
+        return detailPlayer;
+    }
+
+    private void playVideo() {
+        detailPlayer.release();
+        gsyVideoOptionBuilder.setUrl(videoUrl)
+                .setCacheWithPlay(true)
+                .setVideoTitle("测试视频")
+                .build(detailPlayer);
+        gsyVideoOptionBuilder.build(detailPlayer);
+        detailPlayer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                detailPlayer.startPlayLogic();
+            }
+        }, 1000);
     }
 
     @Override
@@ -182,10 +248,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     public void setRealPath(String realPath) {
-        this.videoUrl = "http://dy.jsyunbf.com/20170914/3fMIUCOf/index.m3u8";
-        controller.setTitle("http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4");
-        //设置视频地址和请求头部
-        videoPlayer.setUp(videoUrl, null);
-        videoPlayer.start();
+        this.videoUrl = "https://dy.jsyunbf.com/20170914/3fMIUCOf/index.m3u8";
+        playVideo();
     }
 }

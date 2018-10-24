@@ -1,6 +1,3 @@
 include ':app',
         ':library:bottom-navigation-bar',
-        ':library:common',
-        ':library:YCVideoPlayerLib',
-        ':library:ijkplayer-java',
-        ':library:ijkplayer-exo'
+        ':library:common'
