@@ -3,7 +3,7 @@ package com.vipvideo.api;
 
 import com.lixh.base.BaseResPose;
 import com.vipvideo.bean.MovieTypeBean;
-import com.vipvideo.bean.UserInfoBean;
+import com.vipvideo.bean.UserBean;
 
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public interface ApiService {
     Observable<BaseResPose<MovieTypeBean>> getMovieByWhere(@QueryMap Map<String, String> where);
 
     @GET("/login/login/veifys.html")
-    Observable<BaseResPose<UserInfoBean>> login(@Query("username") String username, @Query("passwd") String passwd, @Query("imei") String imei);
+    Observable<BaseResPose<UserBean>> login(@Query("username") String username, @Query("passwd") String passwd, @Query("imei") String imei);
 
     @GET("/login/login/create.html")
     Observable<BaseResPose<String>> register(@Query("username") String username, @Query("passwd") String passwd);
@@ -34,7 +34,7 @@ public interface ApiService {
     Observable<BaseResPose<String>> forgetPwd(@QueryMap Map<String, String> where);
 
     @GET("/sms/send?tpl_id=107511")
-    Observable<String> sendMobileCode(@QueryMap Map<String, String> where);
+    Observable<BaseResPose<String>> sendMobileCode(@QueryMap Map<String, String> where);
 
     @GET("/login/login/yzcode.html")
     Observable<BaseResPose<String>> validateCode(@QueryMap Map<String, String> where);

@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/offset_10dp">
 
-                    <com.vipvideo.view.ClearEditText
+                    <carbon.widget.EditText
                         android:id="@+id/edit_phone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -153,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/offset_10dp">
 
-                    <com.vipvideo.view.ClearEditText
+                    <carbon.widget.EditText
                         android:id="@+id/edit_password"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -162,7 +162,6 @@
                         android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
                         android:maxLength="32"
                         android:maxLines="1"
-                        android:paddingRight="50dp"
                         android:textColor="@color/edit_text_color"
                         android:textColorHint="@color/edit_text_hint_color"
                         android:textSize="16sp" />
@@ -183,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/offset_10dp">
 
-                    <com.vipvideo.view.ClearEditText
+                    <carbon.widget.EditText
                         android:id="@+id/edit_password_confirm"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -192,7 +191,6 @@
                         android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
                         android:maxLength="32"
                         android:maxLines="1"
-                        android:paddingRight="50dp"
                         android:tag="skin:edit_text_color:textColor|skin:edit_text_hint_color:textColorHint"
                         android:textColor="@color/edit_text_color"
                         android:textColorHint="@color/edit_text_hint_color"

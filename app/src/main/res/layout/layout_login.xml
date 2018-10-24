@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/offset_10dp">
 
-                <com.vipvideo.view.ClearEditText
+                <carbon.widget.EditText
                     android:id="@+id/edit_account"
                     android:hint="@string/account_login_account_hint"
                     android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:maxLength="32"
                     android:maxLines="1"
-                    android:paddingRight="50dp"
+                    android:paddingRight="10dp"
                     android:textColor="@color/edit_text_color"
                     android:textColorHint="@color/edit_text_hint_color"
                     android:textSize="16sp" />
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/offset_10dp">
 
-                <com.vipvideo.view.ClearEditText
+                <carbon.widget.EditText
                     android:id="@+id/edit_password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -111,8 +111,8 @@
                     android:hint="@string/account_login_password_hint"
                     android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|phone"
                     android:maxLength="32"
+                    android:paddingRight="10dp"
                     android:maxLines="1"
-                    android:paddingRight="50dp"
                     android:textColor="@color/edit_text_color"
                     android:textColorHint="@color/edit_text_hint_color"
                     android:textSize="16sp" />
@@ -145,7 +145,7 @@
         <carbon.widget.Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_50"
+            android:layout_height="@dimen/btn_height"
             android:layout_marginTop="30dp"
             android:background="@drawable/login_button_selector"
             android:enabled="false"

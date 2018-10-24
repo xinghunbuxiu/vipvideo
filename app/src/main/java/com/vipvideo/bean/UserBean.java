@@ -8,7 +8,7 @@ import com.lixh.bean.BaseModel;
  * description:
  */
 
-public class UserInfoBean extends BaseModel {
+public class UserBean extends BaseModel {
 
 
     /**

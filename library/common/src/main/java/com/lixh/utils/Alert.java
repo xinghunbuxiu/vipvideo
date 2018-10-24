@@ -60,7 +60,7 @@ public class Alert {
      * @param message
      */
     public static void displayAlertDialog(Activity context,String message) {
-        displayAlertDialog(context, "温馨提示", message, null);
+        displayAlertDialog(context, "温馨提示", message, (OnBtnClickL) null);
     }
 
     /**
@@ -71,7 +71,7 @@ public class Alert {
      * @param message
      */
     public static void displayAlertDialog(Activity context, String title, String message) {
-        displayAlertDialog(context, title, message, null);
+        displayAlertDialog(context, title, message, (OnBtnClickL) null);
     }
 
     /**
