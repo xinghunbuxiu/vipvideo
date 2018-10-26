@@ -19,11 +19,11 @@ import butterknife.Bind;
  * Created by Moushao on 2017/8/30.
  */
 
-public class BannerHolder extends VBaseHolder<BannerBean> {
+public class GridHolder extends VBaseHolder<BannerBean> {
     @Bind(R.id.banner)
     Banner mBanner;
 
-    public BannerHolder(View itemView) {
+    public GridHolder(View itemView) {
         super (itemView);
     }
 

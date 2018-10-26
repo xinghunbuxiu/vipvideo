@@ -8,6 +8,7 @@ import com.vipvideo.api.Api;
 import com.vipvideo.api.ApiService;
 import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.AllVideoInfoBean;
+import com.vipvideo.bean.GroupVideoInfo;
 import com.vipvideo.bean.MovieTypeBean;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.ui.fragment.VipFragment;
@@ -46,6 +47,15 @@ public class VideoPresenter extends BasePresenter {
         });
     }
 
+    public void getBannerData() {
+        VipFragment vipFragment = getFragment();
+//        rxHelper.createSubscriber (apiService.getAllMovieType ( ), new RxSubscriber<MovieTypeBean> (activity, false) {
+//            @Override
+//            protected void _onNext(MovieTypeBean bean) {
+//                vipFragment.setMovieTypeBean (bean);
+//            }
+//        });
+    }
     public void getMovieByWhere(int page, Map<String, String> map) {
         AllVideoActivity videoActivity = getActivity ( );
         if (page == 0) {
@@ -118,5 +128,16 @@ public class VideoPresenter extends BasePresenter {
             }
         });
 
+    }
+
+
+    public void getGroupVideoInfo() {
+        VipFragment vipFragment = getFragment();
+        rxHelper.createSubscriber(apiService.getMovieGroup(), new RxSubscriber<GroupVideoInfo>(activity, false) {
+            @Override
+            protected void _onNext(GroupVideoInfo bean) {
+                vipFragment.setGroupVideoInfo(bean);
+            }
+        });
     }
 }

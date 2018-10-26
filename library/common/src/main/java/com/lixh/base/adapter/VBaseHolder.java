@@ -26,7 +26,6 @@ public class VBaseHolder<T> extends RecyclerView.ViewHolder {
     }
 
     public void init() {
-
     }
 
     public void setContext(Context context) {
