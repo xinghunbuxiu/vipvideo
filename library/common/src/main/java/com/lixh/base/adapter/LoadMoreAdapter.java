@@ -188,7 +188,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
-        recyclerView.addOnScrollListener(mOnScrollListener);
+//        recyclerView.addOnScrollListener(mOnScrollListener);
 
         // 当为 GridLayoutManager 的时候, 设置 footerView 占据整整一行.
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();

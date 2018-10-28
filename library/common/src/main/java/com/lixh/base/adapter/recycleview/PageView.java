@@ -7,6 +7,7 @@ import android.support.annotation.DimenRes;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.RecycledViewPool;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -15,6 +16,7 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.lixh.R;
 import com.lixh.base.adapter.LoadMoreAdapter;
 import com.lixh.base.adapter.LoadMoreWrapper;
+import com.lixh.base.adapter.VBaseAdapter;
 import com.lixh.utils.LoadingTip;
 import com.lixh.view.refresh.SpringView;
 
@@ -51,28 +53,28 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     private LoadMoreAdapter loadMoreAdapter;
 
     public static PageView with(Context context) {
-        return new PageView(context);
+        return new PageView (context);
     }
 
     public PageView(Context context) {
         mContext = context;
-        rootView = inflate(R.layout.base_recyview);
-        recyclerView = $(R.id.recycle);
-        springView = $(R.id.springView);
-        virtualLayoutManager = new VirtualLayoutManager(context);
-        mAdapters = new DelegateAdapter(virtualLayoutManager, false);
-        viewPool = new RecyclerView.RecycledViewPool();
+        rootView = inflate (R.layout.base_recyview);
+        recyclerView = $ (R.id.recycle);
+        springView = $ (R.id.springView);
+        virtualLayoutManager = new VirtualLayoutManager (context);
+        mAdapters = new DelegateAdapter (virtualLayoutManager, false);
+        viewPool = new RecyclerView.RecycledViewPool ( );
     }
 
     @Override
     public void reload() {
-        onRefresh();
+        onRefresh ( );
     }
 
     @Override
     public void onLoadMore(LoadMoreAdapter.Enabled enabled) {
         page++;
-        onLoad(onLoadingListener);
+        onLoad (onLoadingListener);
     }
 
     public PageView setLayoutManager(VirtualLayoutManager layoutManager) {
@@ -89,8 +91,27 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
         return recycledViewPool;
     }
 
-    public PageView<Object> setMaxRecycledViews(int i, int i1) {
-        return null;
+    public PageView setMaxRecycledViews(int viewType, int max) {
+        if (recycledViewPool != null) {
+            recycledViewPool.setMaxRecycledViews (viewType, max);
+        }
+
+        return this;
+    }
+
+    public void addAllAdapter(List<DelegateAdapter.Adapter> adapters) {
+        Log.e ("nnihao","ddddddd");
+        if (mAdapters != null) {
+            Log.e ("nnihao","eeeeeeeeeeeeeeeeeeeeeee");
+
+            mAdapters.addAdapters (adapters);
+        }
+    }
+
+    public void addAdapter(VBaseAdapter adapters) {
+        if (mAdapters != null) {
+            mAdapters.addAdapter (adapters);
+        }
     }
 
     public interface OnLoadFinish<T> {
@@ -110,7 +131,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
      * @param loadStatus //状态
      */
     public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-        onFinish(list);
+        onFinish (list);
     }
 
     /**
@@ -119,8 +140,8 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
      * @param list
      */
     public void onFinish(List<T> list) {
-        onError(LoadingTip.LoadStatus.FINISH);
-        springView.finishRefreshAndLoadMore();
+        onError (LoadingTip.LoadStatus.FINISH);
+        springView.finishRefreshAndLoadMore ( );
 
     }
 
@@ -134,12 +155,12 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
                     page--;
                 }
                 if (moreAdapter != null) {
-                    moreAdapter.pauseMore();
+                    moreAdapter.pauseMore ( );
                 }
                 break;
             default:
                 if (loadingTip != null)
-                    loadingTip.setLoadingTip(loadStatus);
+                    loadingTip.setLoadingTip (loadStatus);
                 break;
         }
 
@@ -147,8 +168,8 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
 
     public void onLoad(OnLoadingListener onLoadingListener) {
         if (this.onLoadingListener != null) {
-            onLoadFinish = new MyOnLoadFinish(this);
-            this.onLoadingListener.load(page, onLoadFinish);
+            onLoadFinish = new MyOnLoadFinish (this);
+            this.onLoadingListener.load (page, onLoadFinish);
         }
     }
 
@@ -161,7 +182,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
 
         @Override
         public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-            page.finish(list, loadStatus);
+            page.finish (list, loadStatus);
         }
     }
 
@@ -170,41 +191,40 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     @Override
     public void onRefresh() {
         page = 0;
-        onLoad(onLoadingListener);
+        onLoad (onLoadingListener);
     }
 
     static Context mContext;
 
     public PageView build() {
-        springView.setAutoRefresh(isAutoRefresh);
-        onLoadingListener = getOnLoadingListener();
+        springView.setAutoRefresh (isAutoRefresh);
+        onLoadingListener = getOnLoadingListener ( );
         if (loadingTip != null) {
-            loadingTip.setLoadingTip(LoadingTip.LoadStatus.LOADING);
-            loadingTip.setOnReloadListener(this);
+            loadingTip.setLoadingTip (LoadingTip.LoadStatus.LOADING);
+            loadingTip.setOnReloadListener (this);
         }
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(virtualLayoutManager);
+        recyclerView.setLayoutManager (virtualLayoutManager);
         if (viewPool != null) {
-            recyclerView.setRecycledViewPool(viewPool);
+            recyclerView.setRecycledViewPool (viewPool);
         }
         if (onScrollListener != null) {
-            recyclerView.addOnScrollListener(onScrollListener);
+            recyclerView.addOnScrollListener (onScrollListener);
         }
-        if (adapter != null) {
+        if (mAdapters != null) {
             if (isAutoLoadMore) {
-                loadMoreAdapter = LoadMoreWrapper.with(adapter)
-                        .setShowNoMoreEnabled(true) // enable show NoMoreView，default false
-                        .setListener(this).into(recyclerView);
+                loadMoreAdapter = LoadMoreWrapper.with (mAdapters)
+                        .setShowNoMoreEnabled (true) // enable show NoMoreView，default false
+                        .setListener (this).into (recyclerView);
             } else {
-                recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter (mAdapters);
             }
-            if (isPullLoadMore()) {
-                springView.setOnLoadListener(() -> onLoadMore(null));
+            if (isPullLoadMore ( )) {
+                springView.setOnLoadListener (() -> onLoadMore (null));
             }
-            if (isRefresh() && springView != null) {
-                springView.setOnRefreshListener(this);
+            if (isRefresh ( ) && springView != null) {
+                springView.setOnRefreshListener (this);
             } else {
-                onRefresh();
+                onRefresh ( );
             }
 
         }
@@ -222,11 +242,11 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
 
     public void setItemDecoration(int color, @DimenRes int height, int paddingLeft,
                                   int paddingRight) {
-        recyclerView.addItemDecoration(new DividerDecoration(mContext, OrientationHelper.VERTICAL, height, color));
+        recyclerView.addItemDecoration (new DividerDecoration (mContext, OrientationHelper.VERTICAL, height, color));
     }
 
     public <T extends View> T $(int viewId) {
-        return (T) rootView.findViewById(viewId);
+        return (T) rootView.findViewById (viewId);
     }
 
     public View getRootView() {
@@ -234,8 +254,8 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     }
 
     protected View inflate(int layoutResID) {
-        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(layoutResID, null);
+        LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate (layoutResID, null);
         return view;
     }
 

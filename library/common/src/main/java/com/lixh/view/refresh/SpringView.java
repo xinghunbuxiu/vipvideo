@@ -413,13 +413,10 @@ public class SpringView extends ViewGroup {
 
     public void finishRefreshAndLoadMore() {
         setStateType (StateType.LOAD_CLOSE);
-        this.postDelayed (new Runnable ( ) {
-            @Override
-            public void run() {
-                if (needResetAnim) {
-                    eventUp ( );
-                    setStateType (StateType.NONE);
-                }
+        this.postDelayed (() -> {
+            if (needResetAnim) {
+                eventUp ( );
+                setStateType (StateType.NONE);
             }
         }, 400);
     }

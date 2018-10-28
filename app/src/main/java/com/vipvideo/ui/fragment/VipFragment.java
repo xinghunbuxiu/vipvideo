@@ -3,6 +3,7 @@ package com.vipvideo.ui.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -33,6 +34,8 @@ import com.vipvideo.ui.video.AllVideoActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+
 
 public class VipFragment extends BaseFragment<VideoPresenter> {
     PageView page;
@@ -40,65 +43,75 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
             topCondAdapter;//二级筛选类型
 
     VideoPresenter presenter;
-
+    @Bind(R.id.recycle)
+    RecyclerView recycle;
+    DelegateAdapter mAdapters;
 
     @Override
     public void initTitle(UToolBar toolBar) {
-        toolBar.setVisibility(View.GONE);
+        toolBar.setVisibility (View.GONE);
     }
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        presenter = getPresenter();
-        initVLayout();
-        initTopData();
-        page.onRefresh();
+        presenter = getPresenter ( );
+        initVLayout ( );
+        initAllTypeView ( );
+        initTopData ( );
+        presenter.getGroupVideoInfo ( );
+
+//        page.onRefresh ( );
     }
 
     private void initTopData() {
-        presenter.getBannerData();
-        presenter.getAllMovieType();
+        presenter.getBannerData ( );
+        presenter.getAllMovieType ( );
     }
 
-    PageView.OnLoadingListener onLoadingListener = new PageView.OnLoadingListener() {
+    PageView.OnLoadingListener onLoadingListener = new PageView.OnLoadingListener ( ) {
         @Override
         public void load(int page, PageView.OnLoadFinish onLoadFinish) {
-            presenter.getGroupVideoInfo();
-            finish();
+            presenter.getGroupVideoInfo ( );
+            finish ( );
         }
     };
 
     private void initVLayout() {
-        initAllTypeView();
-        page = PageView.with(activity)
-                .setAutoLoadMore(false)
-                .setRefresh(true)
-                .setDivideHeight(R.dimen.space_1)
-                .setLoadTip(tip)
-                .setOnLoadingListener(onLoadingListener)
-                .setAutoRefresh(false)
-                .setMaxRecycledViews(0, 20)
-                .build();
-        layout.setContentView(page.getRootView());
+//        page = PageView.with (activity)
+//                .setPullLoadMore (true)
+//                .setRefresh (true)
+//                .setDivideHeight (R.dimen.space_1)
+//                .setLoadTip (tip)
+//                .setOnLoadingListener (onLoadingListener)
+//                .setAutoRefresh (false)
+//                .setMaxRecycledViews (0, 20)
+//                .build ( );
+//        layout.setContentView (page.getRootView ( ));
+        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager (getActivity ());
+        mAdapters = new DelegateAdapter (virtualLayoutManager, false);
+        RecyclerView.RecycledViewPool  viewPool = new RecyclerView.RecycledViewPool ( );
+        recycle.setLayoutManager (virtualLayoutManager);
+        recycle.setRecycledViewPool (viewPool);
+        recycle.setAdapter (mAdapters);
     }
 
     /**
      * 添加不同类型数据布局
      */
     private void initAllTypeView() {
-        initBannerView();
-        initSecondView();
-        mAdapters.addAdapter(bannerAdapter);
-        mAdapters.addAdapter(topCondAdapter);
+        initBannerView ( );
+        initSecondView ( );
+        mAdapters.addAdapter (bannerAdapter);
+        mAdapters.addAdapter (topCondAdapter);
     }
 
     private void initBannerView() {
-        bannerAdapter = new VBaseAdapter(getActivity())//
-                .setData(new ArrayList<BannerBean>())//
-                .setLayout(R.layout.home_first_banner)//
-                .setLayoutHelper(new LinearLayoutHelper())//
-                .setHolder(BannerHolder.class)//
-                .setListener((ItemListener<VideoInfoBean>) (view, position, mData) -> {
+        bannerAdapter = new VBaseAdapter (getActivity ( ))//
+                .setData (new ArrayList<BannerBean> ( ))//
+                .setLayout (R.layout.home_first_banner)//
+                .setLayoutHelper (new LinearLayoutHelper ( ))//
+                .setHolder (BannerHolder.class)//
+                .setListener ((ItemListener<VideoInfoBean>) (view, position, mData) -> {
 
                         }
                 );
@@ -106,20 +119,20 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
 
     //筛选
     private void initSecondView() {
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(4);
-        gridLayoutHelper.setPadding(0, 16, 0, 16);
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper (4);
+        gridLayoutHelper.setPadding (0, 16, 0, 16);
         // 控制子元素之间的垂直间距
-        gridLayoutHelper.setVGap(16);
+        gridLayoutHelper.setVGap (16);
         // 控制子元素之间的水平间距
-        gridLayoutHelper.setHGap(0);
-        gridLayoutHelper.setBgColor(Color.WHITE);
-        topCondAdapter = new VBaseAdapter(getActivity())//
-                .setData(new ArrayList<TopcondsBean>())//
-                .setLayout(R.layout.home_sencond_layout)//
-                .setLayoutHelper(gridLayoutHelper)//
-                .setHolder(TopCondHolder.class)//
-                .setListener((ItemListener<TopcondsBean>) (view, position, mData) -> {
-                            intent.withString("type", mData.getType()).withString("order", mData.getOrder()).go(AllVideoActivity.class);
+        gridLayoutHelper.setHGap (0);
+        gridLayoutHelper.setBgColor (Color.WHITE);
+        topCondAdapter = new VBaseAdapter (getActivity ( ))//
+                .setData (new ArrayList<TopcondsBean> ( ))//
+                .setLayout (R.layout.home_sencond_layout)//
+                .setLayoutHelper (gridLayoutHelper)//
+                .setHolder (TopCondHolder.class)//
+                .setListener ((ItemListener<TopcondsBean>) (view, position, mData) -> {
+                            intent.withString ("type", mData.getType ( )).withString ("order", mData.getOrder ( )).go (AllVideoActivity.class);
                         }
                 );
 
@@ -127,70 +140,71 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
 
 
     private void initListView(List<DelegateAdapter.Adapter> adapters, GroupVideoInfo.SlicesBean slicesBean) {
-        VBaseAdapter titleAdapter = new VBaseAdapter(getActivity())//
-                .setData(new ArrayList<TitleBean>())//
-                .setLayout(R.layout.home_vlayout_title)//
-                .setLayoutHelper(new LinearLayoutHelper())//
-                .setHolder(TitleHolder.class)
-                .setItem(new TitleBean(slicesBean.getName()));
-        VBaseAdapter mMoreAdapter = new VBaseAdapter(getActivity())//
-                .setData(new ArrayList<TitleBean>())//
-                .setItem(new TitleBean("更多"))//
-                .setLayout(R.layout.home_vlayout_more)//
-                .setLayoutHelper(new LinearLayoutHelper())//
-                .setHolder(TitleHolder.class);
+        VBaseAdapter titleAdapter = new VBaseAdapter (getActivity ( ))//
+                .setData (new ArrayList<TitleBean> ( ))//
+                .setLayout (R.layout.home_vlayout_title)//
+                .setLayoutHelper (new LinearLayoutHelper ( ))//
+                .setHolder (TitleHolder.class)
+                .setItem (new TitleBean (slicesBean.getName ( )));
+        VBaseAdapter mMoreAdapter = new VBaseAdapter (getActivity ( ))//
+                .setData (new ArrayList<TitleBean> ( ))//
+                .setItem (new TitleBean ("更多"))//
+                .setLayout (R.layout.home_vlayout_more)//
+                .setLayoutHelper (new LinearLayoutHelper ( ))//
+                .setHolder (TitleHolder.class);
 
-        VBaseAdapter mListAdapter = new VBaseAdapter(getActivity())//
-                .setData(slicesBean.getVideos())//
-                .setLayout(R.layout.home_video_layout)//
-                .setLayoutHelper(getListHelper())//
-                .setHolder(VideoHolder.class)//
-                .setListener((ItemListener<VideoInfoBean>) (view, position, mData) -> {
+        VBaseAdapter mListAdapter = new VBaseAdapter (getActivity ( ))//
+                .setData (slicesBean.getVideos ( ))//
+                .setLayout (R.layout.home_video_layout)//
+                .setLayoutHelper (getListHelper ( ))//
+                .setHolder (VideoHolder.class)//
+                .setListener ((ItemListener<VideoInfoBean>) (view, position, mData) -> {
 
                         }
                 );
-        adapters.add(titleAdapter);
-//        adapters.add(mListAdapter);
-        adapters.add(mMoreAdapter);
+        mAdapters.addAdapter (titleAdapter);
+        mAdapters.addAdapter (mListAdapter);
+        mAdapters.addAdapter (mMoreAdapter);
     }
 
     public void finish() {
-        page.finish(null, LoadingTip.LoadStatus.FINISH);
+        page.finish (null, LoadingTip.LoadStatus.FINISH);
     }
 
     private LayoutHelper getListHelper() {
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(2);
-        gridLayoutHelper.setPadding(0, 16, 0, 16);
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper (2);
+        gridLayoutHelper.setPadding (0, 16, 0, 16);
         // 控制子元素之间的垂直间距
-        gridLayoutHelper.setVGap(16);
+        gridLayoutHelper.setVGap (16);
         // 控制子元素之间的水平间距
-        gridLayoutHelper.setHGap(0);
-        gridLayoutHelper.setBgColor(Color.WHITE);
+        gridLayoutHelper.setHGap (0);
+        gridLayoutHelper.setBgColor (Color.WHITE);
         return gridLayoutHelper;
     }
 
     @Override
     public int getLayoutId() {
-        return 0;
+        return R.layout.test_layout;
     }
 
     //类型填充
     public void setMovieTypeBean(MovieTypeBean movieTypeBean) {
-        TopcondsBean all = movieTypeBean.getTopconds().get(0);//全部
-        List<TopcondsBean> list = movieTypeBean.getTopconds().subList(3, movieTypeBean.getTopconds().size());
-        list.add(all);
-        topCondAdapter.setData(list);
-        topCondAdapter.notifyDataSetChanged();
+        TopcondsBean all = movieTypeBean.getTopconds ( ).get (0);//全部
+        List<TopcondsBean> list = movieTypeBean.getTopconds ( ).subList (3, movieTypeBean.getTopconds ( ).size ( ));
+        list.add (all);
+        topCondAdapter.setData (list);
+        topCondAdapter.notifyDataSetChanged ( );
     }
 
     public void setGroupVideoInfo(GroupVideoInfo groupVideoInfo) {
-        List<DelegateAdapter.Adapter> adapters = new ArrayList<>();
-        for (GroupVideoInfo.SlicesBean slicesBean : groupVideoInfo.getSlices()) {
-            if (slicesBean.getName().equals("index_flash")) {
-                return;
+        List<DelegateAdapter.Adapter> adapters = new ArrayList<> ( );
+        for (GroupVideoInfo.SlicesBean slicesBean : groupVideoInfo.getSlices ( )) {
+            if (!slicesBean.getName ( ).equals ("index_flash")) {
+                initListView (adapters, slicesBean);
             }
-            initListView(adapters, slicesBean);
         }
-        mAdapters.setAdapters(adapters);
+        Log.e ("nnihao", "aaaaaaaaaaaaaaaaaaaa");
+
+
     }
 }
