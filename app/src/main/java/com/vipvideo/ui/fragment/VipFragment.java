@@ -2,13 +2,11 @@ package com.vipvideo.ui.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
-import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.lixh.base.BaseFragment;
@@ -26,6 +24,7 @@ import com.vipvideo.bean.TitleBean;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.BannerHolder;
+import com.vipvideo.ui.adpter.MoreHolder;
 import com.vipvideo.ui.adpter.TitleHolder;
 import com.vipvideo.ui.adpter.TopCondHolder;
 import com.vipvideo.ui.adpter.VideoHolder;
@@ -34,8 +33,6 @@ import com.vipvideo.ui.video.AllVideoActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-
 
 public class VipFragment extends BaseFragment<VideoPresenter> {
     PageView page;
@@ -43,10 +40,6 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
             topCondAdapter;//二级筛选类型
 
     VideoPresenter presenter;
-    @Bind(R.id.recycle)
-    RecyclerView recycle;
-    DelegateAdapter mAdapters;
-
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setVisibility (View.GONE);
@@ -58,9 +51,7 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
         initVLayout ( );
         initAllTypeView ( );
         initTopData ( );
-        presenter.getGroupVideoInfo ( );
-
-//        page.onRefresh ( );
+        page.onRefresh();
     }
 
     private void initTopData() {
@@ -77,22 +68,16 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
     };
 
     private void initVLayout() {
-//        page = PageView.with (activity)
-//                .setPullLoadMore (true)
-//                .setRefresh (true)
-//                .setDivideHeight (R.dimen.space_1)
-//                .setLoadTip (tip)
-//                .setOnLoadingListener (onLoadingListener)
-//                .setAutoRefresh (false)
-//                .setMaxRecycledViews (0, 20)
-//                .build ( );
-//        layout.setContentView (page.getRootView ( ));
-        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager (getActivity ());
-        mAdapters = new DelegateAdapter (virtualLayoutManager, false);
-        RecyclerView.RecycledViewPool  viewPool = new RecyclerView.RecycledViewPool ( );
-        recycle.setLayoutManager (virtualLayoutManager);
-        recycle.setRecycledViewPool (viewPool);
-        recycle.setAdapter (mAdapters);
+        page = PageView.with(activity)
+                .setPullLoadMore(true)
+                .setRefresh(true)
+                .setDivideHeight(R.dimen.space_1)
+                .setLoadTip(tip)
+                .setOnLoadingListener(onLoadingListener)
+                .setAutoRefresh(false)
+                .setMaxRecycledViews(0, 20)
+                .build();
+        layout.setContentView(page.getRootView());
     }
 
     /**
@@ -101,8 +86,8 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
     private void initAllTypeView() {
         initBannerView ( );
         initSecondView ( );
-        mAdapters.addAdapter (bannerAdapter);
-        mAdapters.addAdapter (topCondAdapter);
+        page.addAdapter(bannerAdapter);
+        page.addAdapter(topCondAdapter);
     }
 
     private void initBannerView() {
@@ -151,7 +136,7 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
                 .setItem (new TitleBean ("更多"))//
                 .setLayout (R.layout.home_vlayout_more)//
                 .setLayoutHelper (new LinearLayoutHelper ( ))//
-                .setHolder (TitleHolder.class);
+                .setHolder (MoreHolder.class);
 
         VBaseAdapter mListAdapter = new VBaseAdapter (getActivity ( ))//
                 .setData (slicesBean.getVideos ( ))//
@@ -162,9 +147,9 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
 
                         }
                 );
-        mAdapters.addAdapter (titleAdapter);
-        mAdapters.addAdapter (mListAdapter);
-        mAdapters.addAdapter (mMoreAdapter);
+        adapters.add(titleAdapter);
+        adapters.add(mListAdapter);
+        adapters.add(mMoreAdapter);
     }
 
     public void finish() {
@@ -184,7 +169,7 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
 
     @Override
     public int getLayoutId() {
-        return R.layout.test_layout;
+        return 0;
     }
 
     //类型填充
@@ -204,7 +189,7 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
             }
         }
         Log.e ("nnihao", "aaaaaaaaaaaaaaaaaaaa");
-
+        page.addAllAdapter(adapters);
 
     }
 }

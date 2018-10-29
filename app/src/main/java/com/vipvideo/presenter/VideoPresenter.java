@@ -97,9 +97,10 @@ public class VideoPresenter extends BasePresenter {
         });
 
     }
-
+   //解析地址 http://tv.dsqndh.com/
     public void getRealPath(String site_url) {
         VideoPlayerActivity activity = getActivity ( );
+
         site_url = "https://www.iqiyi.com/v_19rr7qhp7c.html#vfrm=2-4-0-1";
         String finalSite_url = site_url;
         Observable.create((Observable.OnSubscribe<String>) subscriber -> {
@@ -133,7 +134,7 @@ public class VideoPresenter extends BasePresenter {
 
     public void getGroupVideoInfo() {
         VipFragment vipFragment = getFragment();
-        rxHelper.createSubscriber(apiService.getMovieGroup(), new RxSubscriber<GroupVideoInfo>(activity, false) {
+        rxHelper.createSubscriber(apiService.getMovieGroup("8.6.2"), new RxSubscriber<GroupVideoInfo>(activity, false) {
             @Override
             protected void _onNext(GroupVideoInfo bean) {
                 vipFragment.setGroupVideoInfo(bean);

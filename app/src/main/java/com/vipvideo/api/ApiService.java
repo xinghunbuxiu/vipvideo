@@ -10,6 +10,7 @@ import com.vipvideo.bean.VideoInfoBean;
 import java.util.Map;
 
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -26,7 +27,7 @@ public interface ApiService {
     Observable<BaseResPose<AllVideoInfo>> getMovieByWhere(@QueryMap Map<String, String> where);
 
     @GET("/wiseselected/?worktype=adnativemovie")
-    Observable<BaseResPose<GroupVideoInfo>> getMovieGroup();
+    Observable<BaseResPose<GroupVideoInfo>> getMovieGroup(@Query("version") String version);
 
     @GET("/xqinfo/")
     Observable<BaseResPose<VideoInfoBean>> getMovieByWorkId(@QueryMap Map<String, String> where);
