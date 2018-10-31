@@ -2,7 +2,6 @@ package com.vipvideo.ui.video;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -41,11 +40,6 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
 
 
     PageView page;
-    TabLayout hotTab;
-    TabLayout actionTab;
-    TabLayout areaTab;
-    TabLayout timeTab;
-    TabLayout nameTab;
     TextView lastType;
     private MovieTypeBean movieTypeBean;
     private List<AllVideoInfo.VideoListBean.VideosBean> videoListBeans = new ArrayList<> ( );
@@ -69,9 +63,9 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         type = intent.getString ("type");
         order = intent.getString ("order");
         addTopNavView ( );
-        initFilterView();
         initPageList ( );
-
+        initFilterView();
+        initVideoList();
     }
 
     private void initPageList() {
@@ -159,7 +153,7 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         videoListBeans.addAll(videoInfo.getAllVideoInfo().getVideo_list().getVideos());
         mListAdapter.setData(videoListBeans);
         mListAdapter.notifyDataSetChanged();
-        this.page.finish (videoListBeans, LoadingTip.LoadStatus.FINISH);
+        this.page.finish (null, LoadingTip.LoadStatus.FINISH);
 
     }
 
