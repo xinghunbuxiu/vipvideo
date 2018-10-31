@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
     signingConfigs {
 
         config {
@@ -14,8 +14,8 @@ android {
     }
     defaultConfig {
         applicationId "com.vipvideo"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

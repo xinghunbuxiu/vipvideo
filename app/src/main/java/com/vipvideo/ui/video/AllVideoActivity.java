@@ -1,15 +1,19 @@
 package com.vipvideo.ui.video;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.vlayout.LayoutHelper;
+import com.alibaba.android.vlayout.layout.GridLayoutHelper;
+import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.lixh.base.BaseActivity;
-import com.lixh.base.Page;
-import com.lixh.base.adapter.recycleview.BaseViewHolder;
+import com.lixh.base.adapter.ItemListener;
+import com.lixh.base.adapter.VBaseAdapter;
+import com.lixh.base.adapter.recycleview.PageView;
 import com.lixh.utils.DensityUtil;
 import com.lixh.utils.LoadingTip;
 import com.lixh.view.UToolBar;
@@ -17,14 +21,15 @@ import com.vipvideo.R;
 import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.AllVideoInfoBean;
 import com.vipvideo.bean.MovieTypeBean;
+import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
+import com.vipvideo.ui.adpter.AllVideoFilterHolder;
+import com.vipvideo.ui.adpter.VideoHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by LIXH on 2018/10/17.
@@ -34,10 +39,8 @@ import java.util.regex.Pattern;
 
 public class AllVideoActivity extends BaseActivity<VideoPresenter> {
 
-    String lastStr = "[hotTab]/[actionTab]/[areaTab]/[timeTab]/[nameTab]";
-    String reg = "[hotTab]/[actionTab]/[areaTab]/[timeTab]/[nameTab]";
-    Page.Builder builder;
-    Page page;
+
+    PageView page;
     TabLayout hotTab;
     TabLayout actionTab;
     TabLayout areaTab;
@@ -53,7 +56,7 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
     String area = "";
     String start = "";
     String actor = "";
-
+    VBaseAdapter tabsAdapter, mListAdapter;
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setTitle ("电影筛选");
@@ -66,118 +69,50 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         type = intent.getString ("type");
         order = intent.getString ("order");
         addTopNavView ( );
+        initFilterView();
         initPageList ( );
 
     }
 
     private void initPageList() {
-        builder = new Page.Builder<AllVideoInfo.VideoListBean.VideosBean> (getApplicationContext ( )) {
-            @Override
-            public void onBindViewData(BaseViewHolder viewHolder, int position, AllVideoInfo.VideoListBean.VideosBean bean) {
-                viewHolder.setText (R.id.tv_title, bean.getTitle ( ));
-                viewHolder.setImageUrl (R.id.iv_video, bean.getImg_url ( ));
-            }
-
-            @Override
-            public void onBindHeaderViewData(BaseViewHolder headerView, int position) {
-                hotTab = (TabLayout) headerView.getView (R.id.hot_tab);
-                actionTab = (TabLayout) headerView.getView (R.id.action_tab);
-                areaTab = (TabLayout) headerView.getView (R.id.area_tab);
-                timeTab = (TabLayout) headerView.getView (R.id.time_tab);
-                nameTab = (TabLayout) headerView.getView (R.id.name_tab);
-                for (MovieTypeBean.CondsBean condsBean : movieTypeBean.getConds ( )) {
-                    for (MovieTypeBean.CondsBean.ValuesBean bean : condsBean.getValues ( )) {
-                        switch (condsBean.getField ( )) {
-                            case "type"://类型
-                                actionTab.addTab (actionTab.newTab ( ).setText ("全部"));
-                                actionTab.addTab (actionTab.newTab ( ).setText (condsBean.getName ( )));
-                                break;
-                            case "area"://区域
-                                areaTab.addTab (areaTab.newTab ( ).setText ("全部"));
-                                areaTab.addTab (areaTab.newTab ( ).setText (condsBean.getName ( )));
-                                break;
-                            case "start"://年代
-                                timeTab.addTab (timeTab.newTab ( ).setText ("全部"));
-                                timeTab.addTab (timeTab.newTab ( ).setText (condsBean.getName ( )));
-                                break;
-                            case "actor"://演员
-                                nameTab.addTab (nameTab.newTab ( ).setText ("全部"));
-                                nameTab.addTab (nameTab.newTab ( ).setText (condsBean.getName ( )));
-                                break;
-                        }
-                    }
-                    for (MovieTypeBean.CondsBean bean : movieTypeBean.getOrders ( )) {
-                        hotTab.addTab (hotTab.newTab ( ).setText (bean.getName ( )));
-                    }
-                }
-                addOnTabSelectedListener (hotTab);
-                addOnTabSelectedListener (actionTab);
-                addOnTabSelectedListener (areaTab);
-                addOnTabSelectedListener (timeTab);
-                addOnTabSelectedListener (nameTab);
-            }
-
-            public void addOnTabSelectedListener(TabLayout layout) {
-                layout.setTabMode (TabLayout.MODE_SCROLLABLE);
-                layout.addOnTabSelectedListener (new TabLayout.OnTabSelectedListener ( ) {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        switch (layout.getId ( )) {
-                            case R.id.hot_tab:
-                                order = tab.getText ( ).toString ( );
-                                lastStr.replace ("[hot_tab]", order);
-                                break;
-                            case R.id.action_tab:
-                                type = tab.getText ( ).toString ( );
-                                lastStr.replace ("[action_tab]", type);
-                                break;
-                            case R.id.time_tab:
-                                start = tab.getText ( ).toString ( );
-                                lastStr.replace ("[time_tab]", start);
-                                break;
-                            case R.id.name_tab:
-                                actor = tab.getText ( ).toString ( );
-                                lastStr.replace ("[name_tab]", actor);
-                                break;
-                            case R.id.area_tab:
-                                area = tab.getText ( ).toString ( );
-                                lastStr.replace ("[area_tab]", area);
-                                break;
-                        }
-                        Pattern pat = Pattern.compile (reg);
-                        Matcher mat = pat.matcher (lastStr);
-                        lastStr = mat.replaceAll ("");
-                        lastType.setText (lastStr);
-                        page.onRefresh ( );
-                    }
-
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
-
-                    }
-
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onItemClick(View view, int position, AllVideoInfo.VideoListBean.VideosBean data) {
-                intent.withString ("workId", data.getWorks_id ( )).go (VideoPlayerActivity.class);
-
-            }
-        }.setAutoLoadMore (false).setPullLoadMore (true).setRefresh (true).setDivideHeight (R.dimen.space_1).setLoadTip (tip);
-        builder.setOnLoadingListener (onLoadingListener).setAutoRefresh (true);
-        builder.setArrayAdapter (R.layout.layout_all_video_rv_item, videoListBeans);
-        builder.setSpanCount (3);
-        page = builder.Build (Page.PageType.Grid);
-        layout.setContentView (page.getRootView ( ));
-//        page.addHeaderView (R.layout.layout_all_video_header, 0);
-
+        page = PageView.with(this)
+                .setPullLoadMore(true)
+                .setRefresh(true)
+                .setDivideHeight(R.dimen.space_1)
+                .setLoadTip(tip)
+                .setOnLoadingListener(onLoadingListener)
+                .setAutoRefresh(false)
+                .setMaxRecycledViews(0, 20)
+                .build();
+        layout.setContentView(page.getRootView());
     }
 
+    public void initVideoList() {
+        mListAdapter = new VBaseAdapter(getActivity())//
+                .setData(new ArrayList<AllVideoInfo.VideoListBean.VideosBean>())//
+                .setLayout(R.layout.layout_all_video_rv_item)//
+                .setLayoutHelper(getListHelper())//
+                .setHolder(VideoHolder.class)//
+                .setListener((ItemListener<AllVideoInfo.VideoListBean.VideosBean>) (view, position, mData) -> {
+                            intent.withString("workId", mData.getWorks_id()).go(VideoPlayerActivity.class);
+
+                        }
+                );
+        page.addAdapter(mListAdapter);
+    }
+
+    private void initFilterView() {
+        tabsAdapter = new VBaseAdapter(getActivity())//
+                .setData(new ArrayList<MovieTypeBean>())//
+                .setLayout(R.layout.home_first_banner)//
+                .setLayoutHelper(new LinearLayoutHelper())//
+                .setHolder(AllVideoFilterHolder.class)//
+                .setListener((ItemListener<VideoInfoBean>) (view, position, mData) -> {
+
+                        }
+                );
+        page.addAdapter(tabsAdapter);
+    }
     private void addTopNavView() {
         lastType = new TextView (getApplicationContext ( ));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams (ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px (getApplicationContext ( ), 40));
@@ -185,7 +120,7 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         layout.addView (lastType, lp, true);
     }
 
-    Page.OnLoadingListener onLoadingListener = (page, onLoadFinish) -> getMoveInfo (page, order, actor, start, area, type);
+    PageView.OnLoadingListener onLoadingListener = (page, onLoadFinish) -> getMoveInfo(page, order, actor, start, area, type);
 
     private void getMoveInfo(int page, String order, String actor, String start, String area, String type) {
         Map<String, String> params = new HashMap<> ( );
@@ -205,11 +140,25 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
     }
 
 
+    private LayoutHelper getListHelper() {
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
+        gridLayoutHelper.setPadding(0, 16, 0, 16);
+        // 控制子元素之间的垂直间距
+        gridLayoutHelper.setVGap(16);
+        // 控制子元素之间的水平间距
+        gridLayoutHelper.setHGap(0);
+        gridLayoutHelper.setBgColor(Color.WHITE);
+        return gridLayoutHelper;
+    }
     public void setVideoInfo(int page, AllVideoInfoBean videoInfo) {
         if (page == 0) {
             movieTypeBean = videoInfo.getMovieTypeBean ( );
+            tabsAdapter.setItem(movieTypeBean);
+            tabsAdapter.notifyDataSetChanged();
         }
-        videoListBeans = videoInfo.getAllVideoInfo ( ).getVideo_list ( ).getVideos ( );
+        videoListBeans.addAll(videoInfo.getAllVideoInfo().getVideo_list().getVideos());
+        mListAdapter.setData(videoListBeans);
+        mListAdapter.notifyDataSetChanged();
         this.page.finish (videoListBeans, LoadingTip.LoadStatus.FINISH);
 
     }

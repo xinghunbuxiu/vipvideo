@@ -4,31 +4,168 @@ package com.vipvideo.api.constant;
 
 public class ConstantVideo {
 
+    String video = "{" +
+            "acfun.tv"+
+            "61.com" +
+            "funshion.com" +
+            "wasu.cn" +
+            "kumi.cn" +
+            "163.com" +
+            "56.com" +
+            "m1905.com" +
+            "pps.tv" +
+            "pptv.com" +
+            "cntv.cn" +
+            "ifeng.com" +
+            "joy.cn" +
+            "ku6.com" +
+            "letv.com" +
+            "iqiyi.com" +
+            "qq.com" +
+            "sina.com.cn" +
+            "sohux.com" +
+            "sohu.com" +
+            "tudou.com" +
+            "kankan.com" +
+            "yinyuetai.com" +
+            "yingyin.com" +
+            "ugc.com" +
+            "viki.com" +
+            "douban.com" +
+            "zuidianying.5i.tv" +
+            "hunantv.com" +
+            "fun.tv" +
+            "mtime.com" +
+            "baofeng.com" +
+            "app.video.baidu.com" +
+            "xinlan.com" +
+            "cztv.com" +
+            "1905.com" +
+            "brtn.cn" +
+            "nen.com.cn" +
+            "youku.com" +
+            "yy6080.org" +
+            "aipai.com" +
+            "baomihua.com" +
+            "kankannews.com" +
+            "yunshipin.com" +
+            "tangdou.com" +
+            "wasuvip.cn" +
+            "bestv.com.cn" +
+            "hunanviptv.com" +
+            "letvx.com" +
+            "xiankan.com" +
+            "le.com" +
+            "utovr.com" +
+            "hotcast.cn" +
+            "mgtv.com" +
+            "mgtvapp.com" +
+            "cctv.com" +
+            "xdnat.com" +
+            "wangluo1.com" +
+            "wangluo2.com" +
+            "bilibili.com" +
+            "my.tv.sohu.com" +
+            "paopaoys.com" +
+            "yehetang.com" +
+            "tuxinmoney.com" +
+            "meijub.com" +
+            "kkkkba.com" +
+            "qiqibu.com" +
+            "migu.cn" +
+            "sudujq.com" +
+            "djhuo.com" +
+            "17pu.net" +
+            "mitehao.com" +
+            "djhuo1.com" +
+            "goudaitv.com" +
+            "wuxiaoxi.cn" +
+            "tellworld.cc" +
+            "acfun.cn" +
+            "lelevod.com" +
+            "zaizai8.com" +
+            "pianha.com" +
+            "halihali.tv" +
+            "ckck.tv" +
+            "7nmg.com" +
+            "myei.cc" +
+            "videolive.tv" +
+            "lovedy.net" +
+            "haojilu.com" +
+            "2hanju.com" +
+            "baishi.baidu.com" +
+            "cgfdjz.com" +
+            "82ke.com" +
+            "xiaohutv.com" +
+            "rrmj.tv" +
+            "hbtv.com.cn" +
+            "wangpan.com" +
+            "vcinema.cn" +
+            "lookmp4.com" +
+            "e8yy.com" +
+            "zhibotai.com" +
+            "rr.tv" +
+            "yse360.cc" +
+            "yingshimp.com" +
+            "79hd.com" +
+            "qiqibu8.com" +
+            "y3600.com" +
+            "hanju.cc" +
+            "iqi5.com" +
+            "97hanju.com" +
+            "tongbuyy.com" +
+            "haokan666.com" +
+            "dy4410.com" +
+            "gqyyy.com" +
+            "miaopai.com" +
+            "73ck.com"+
+            "wb199.com" +
+            "ttwanda.com" +
+            "91simi.com" +
+            "yse123.com" +
+            "youfeifan.cn"+
+            "haokan7.com" +
+            "miguvideo.cn" +
+            "haokan77.com" +
+            "byjsj.cn" +
+            "pptvvip.com" +
+            "miguvideovip.com" +
+            "1905vip.com" +
+            "letvvip.com" +
+            "vcinemavip.cn" +
+            "sofamovie.cn" +
+            "sohuapp.com" +
+            "360yuejiao.com" +
+            "xigua110.com" +
+            "yingshiha.com" +
+            "list.video.baidu.com" +
+            "list.xiaodutv.com," +
+            "77kp.com" +
+            "meijutvxt.com" +
+            "mmyyds.com" +
+            "yingshifantv.com"+
+            "h5link.xiaodutv.com"+
+            "aassx.com" +
+            "jadianying.com" +
+            "94a1.com" +
+            "bbfuli5.com" +
+            "yelang8.com" +
+            "iqiyiweb.com" +
+            "iqiyivip.com" +
+            "damocourtyard.cn" +
+            "haiwai.tv" +
+            "vbuluo.com" +
+            "wyjc123.com" +
+            "youlady.cc" +
+            "ys-we.com" +
+            "dushudang.com" +
+            "52088.cc" +
+            "imahua.tv" +
+            "pan.baidu.com" +
+            "tv189.com" +
+            "jiaqizhuan.cc" +
+            "hlyy.cc" +
+            "}";
 
-    /**
-     * 由于之前，我把视频文章发到七牛云上，有众多限制。
-     * 所有有时导致视频无法播放，流量过高，一个星期竟然用了20多个G。
-     */
-    public static String[] VideoPlayerList = {
-            "http://jzvd.nathen.cn/c494b340ff704015bb6682ffde3cd302/64929c369124497593205a4190d7d128-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/63f3f73712544394be981d9e4f56b612/69c5767bb9e54156b5b60a1b6edeb3b5-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/b201be3093814908bf987320361c5a73/2f6d913ea25941ffa78cc53a59025383-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/d2438fd1c37c4618a704513ad38d68c5/68626a9d53ca421c896ac8010f172b68-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/25a8d119cfa94b49a7a4117257d8ebd7/f733e65a22394abeab963908f3c336db-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/7512edd1ad834d40bb5b978402274b1a/9691c7f2d7b74b5e811965350a0e5772-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4",
-            "http://play.g3proxy.lecloud.com/vod/v2/MjUxLzE2LzgvbGV0di11dHMvMTQvdmVyXzAwXzIyLTExMDc2NDEzODctYXZjLTE5OTgxOS1hYWMtNDgwMDAtNTI2MTEwLTE3MDg3NjEzLWY1OGY2YzM1NjkwZTA2ZGFmYjg2MTVlYzc5MjEyZjU4LTE0OTg1NTc2ODY4MjMubXA0?b=259&mmsid=65565355&tm=1499247143&key=f0eadb4f30c404d49ff8ebad673d3742&platid=3&splatid=345&playid=0&tss=no&vtype=21&cvid=2026135183914&payff=0&pip=08cc52f8b09acd3eff8bf31688ddeced&format=0&sign=mb&dname=mobile&expect=1&tag=mobile&xformat=super"
-    };
-
-
-    public static String[] VideoPlayerTitle = {
-            "大家好，我是潇湘剑雨",
-            "如果项目可以，可以给个star",
-            "有bug，可以直接提出来，欢迎一起探讨",
-            "把本地项目代码复制到拷贝的仓库",
-            "依次输入命令上传代码",
-            "把本地项目代码复制到拷贝的仓库",
-            "依次输入命令上传代码",
-    };
 
 }

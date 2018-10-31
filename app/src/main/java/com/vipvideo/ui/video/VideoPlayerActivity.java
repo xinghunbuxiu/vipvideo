@@ -55,6 +55,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     private boolean isPlay;
     private boolean isPause;
 
+
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setVisibility (View.GONE);
@@ -98,7 +99,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                             Alert.displayAlertSingledDialog (this, sites, (parent, v, position1, id) -> {
                                 VideoInfoBean.SitesBean sitesBean = sitesBeans.get (position1);
                                 ((TextView) view).setText (sitesBean.getSite_name ( ));
-                                presenter.getRealPath (sitesBean.getSite_url ( ));
+                                presenter.getRealPath(sitesBean.getSite_domain(), sitesBean.getSite_url());
                             });
 
                         }
@@ -244,7 +245,8 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         shareAdapter.setData (b);
         shareAdapter.notifyDataSetChanged ( );
         String videoUrl = bean.getSites ( ).get (0).getSite_url ( );
-        presenter.getRealPath (videoUrl);
+        String sit_host = bean.getSites().get(0).getSite_domain();
+        presenter.getRealPath(sit_host, videoUrl);
     }
 
     public void setRealPath(String realPath) {
