@@ -637,9 +637,12 @@ public class UIntent {
     }
 
     public String getString(@Nullable String key) {
-        return TextUtils.isEmpty (mBundle.getString (key)) ? "" : mBundle.getString (key);
+        return getString(key, "");
     }
 
+    public String getString(@Nullable String key, String value) {
+        return TextUtils.isEmpty(mBundle.getString(key)) ? value : mBundle.getString(key);
+    }
     /**
      * Returns the value associated with the given key, or null if
      * no mapping of the desired type exists for the given key or a null

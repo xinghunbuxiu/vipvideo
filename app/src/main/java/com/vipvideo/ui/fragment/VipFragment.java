@@ -16,8 +16,8 @@ import com.lixh.base.adapter.recycleview.PageView;
 import com.lixh.utils.LoadingTip;
 import com.lixh.view.UToolBar;
 import com.vipvideo.R;
-import com.vipvideo.bean.BannerBean;
 import com.vipvideo.bean.GroupVideoInfo;
+import com.vipvideo.bean.GroupVideoInfo.SlicesBean.VideosBean;
 import com.vipvideo.bean.MovieTypeBean;
 import com.vipvideo.bean.MovieTypeBean.TopcondsBean;
 import com.vipvideo.bean.TitleBean;
@@ -86,15 +86,14 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
     private void initAllTypeView() {
         initBannerView ( );
         initSecondView ( );
-        page.addAdapter(bannerAdapter);
+//        page.addAdapter(bannerAdapter);
         page.addAdapter(topCondAdapter);
     }
 
     private void initBannerView() {
         bannerAdapter = new VBaseAdapter (getActivity ( ))//
-                .setData (new ArrayList<BannerBean> ( ))//
                 .setLayout (R.layout.home_first_banner)//
-                .setLayoutHelper (new LinearLayoutHelper ( ))//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
                 .setHolder (BannerHolder.class)//
                 .setListener ((ItemListener<VideoInfoBean>) (view, position, mData) -> {
 
@@ -125,25 +124,23 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
 
 
     private void initListView(List<DelegateAdapter.Adapter> adapters, GroupVideoInfo.SlicesBean slicesBean) {
-        VBaseAdapter titleAdapter = new VBaseAdapter (getActivity ( ))//
-                .setData (new ArrayList<TitleBean> ( ))//
+        VBaseAdapter titleAdapter = new VBaseAdapter<TitleBean>(getActivity())//
                 .setLayout (R.layout.home_vlayout_title)//
                 .setLayoutHelper (new LinearLayoutHelper ( ))//
                 .setHolder (TitleHolder.class)
                 .setItem (new TitleBean (slicesBean.getName ( )));
-        VBaseAdapter mMoreAdapter = new VBaseAdapter (getActivity ( ))//
-                .setData (new ArrayList<TitleBean> ( ))//
+        VBaseAdapter mMoreAdapter = new VBaseAdapter<TitleBean>(getActivity())//
                 .setItem (new TitleBean ("更多"))//
                 .setLayout (R.layout.home_vlayout_more)//
                 .setLayoutHelper (new LinearLayoutHelper ( ))//
                 .setHolder (MoreHolder.class);
 
-        VBaseAdapter mListAdapter = new VBaseAdapter (getActivity ( ))//
+        VBaseAdapter mListAdapter = new VBaseAdapter<VideosBean>(getActivity())//
                 .setData (slicesBean.getVideos ( ))//
                 .setLayout (R.layout.home_video_layout)//
                 .setLayoutHelper (getListHelper ( ))//
                 .setHolder (VideoHolder.class)//
-                .setListener ((ItemListener<VideoInfoBean>) (view, position, mData) -> {
+                .setListener((ItemListener<VideosBean>) (view, position, mData) -> {
 
                         }
                 );

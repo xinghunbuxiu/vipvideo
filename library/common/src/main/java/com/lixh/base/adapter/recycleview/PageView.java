@@ -4,6 +4,7 @@ package com.lixh.base.adapter.recycleview;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.RecycledViewPool;
@@ -140,8 +141,12 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
      * @param list
      */
     public void onFinish(List<T> list) {
-        onError (LoadingTip.LoadStatus.FINISH);
         springView.finishRefreshAndLoadMore ( );
+        onError(LoadingTip.LoadStatus.FINISH);
+        //是第一页并且 可以向上滚 说明超出一屏
+        if (page == 0 && ViewCompat.canScrollVertically(recyclerView, 1) && loadMoreAdapter != null) {
+            loadMoreAdapter.setLoadMoreEnabled(true);
+        }
 
     }
 
@@ -191,6 +196,8 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     @Override
     public void onRefresh() {
         page = 0;
+        if (loadMoreAdapter != null)
+            loadMoreAdapter.setLoadMoreEnabled(false);
         onLoad (onLoadingListener);
     }
 
@@ -213,6 +220,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
         if (mAdapters != null) {
             if (isAutoLoadMore) {
                 loadMoreAdapter = LoadMoreWrapper.with (mAdapters)
+                        .setLoadMoreEnabled(false)
                         .setShowNoMoreEnabled (true) // enable show NoMoreView，default false
                         .setListener (this).into (recyclerView);
             } else {

@@ -188,7 +188,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
-//        recyclerView.addOnScrollListener(mOnScrollListener);
+        recyclerView.addOnScrollListener(mOnScrollListener);
 
         // 当为 GridLayoutManager 的时候, 设置 footerView 占据整整一行.
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -359,7 +359,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (mShouldRemove) {
                 mShouldRemove = false;
             }
-            LoadMoreAdapter.this.notifyDataSetChanged();
+            notifyDataSetChanged();
             mIsLoading = false;
         }
 
@@ -368,7 +368,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (mShouldRemove && positionStart == mAdapter.getItemCount()) {
                 mShouldRemove = false;
             }
-            LoadMoreAdapter.this.notifyItemRangeChanged(positionStart, itemCount);
+            notifyItemRangeChanged(positionStart, itemCount);
             mIsLoading = false;
         }
 
@@ -377,7 +377,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (mShouldRemove && positionStart == mAdapter.getItemCount()) {
                 mShouldRemove = false;
             }
-            LoadMoreAdapter.this.notifyItemRangeChanged(positionStart, itemCount, payload);
+            notifyItemRangeChanged(positionStart, itemCount, payload);
             mIsLoading = false;
         }
 
@@ -386,9 +386,9 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             // when no data is initialized (has loadMoreView)
             // should remove loadMoreView before notifyItemRangeInserted
             if (mRecyclerView.getChildCount() == 1) {
-                LoadMoreAdapter.this.notifyItemRemoved(0);
+                notifyItemRemoved(0);
             }
-            LoadMoreAdapter.this.notifyItemRangeInserted(positionStart, itemCount);
+            notifyItemRangeInserted(positionStart, itemCount);
             notifyFooterHolderChanged();
             mIsLoading = false;
         }
@@ -411,10 +411,10 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 // recyclerView will auto scroll to bottom, because has one item(loadMoreView)
                 // remove loadMoreView
                 if (getItemCount() == 1) {
-                    LoadMoreAdapter.this.notifyItemRemoved(0);
+                    notifyItemRemoved(0);
                 }
             }
-            LoadMoreAdapter.this.notifyItemRangeRemoved(positionStart, itemCount);
+            notifyItemRangeRemoved(positionStart, itemCount);
             if (shouldSync) {
                 setLoadMoreEnabled(true);
             }
@@ -426,7 +426,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (mShouldRemove && (fromPosition == mAdapter.getItemCount() || toPosition == mAdapter.getItemCount())) {
                 throw new IllegalArgumentException("can not move last position after setLoadMoreEnabled(false)");
             }
-            LoadMoreAdapter.this.notifyItemMoved(fromPosition, toPosition);
+            notifyItemMoved(fromPosition, toPosition);
             mIsLoading = false;
         }
     };
@@ -436,7 +436,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     private void notifyFooterHolderChanged() {
         if (getLoadMoreEnabled()) {
-            LoadMoreAdapter.this.notifyItemChanged(mAdapter.getItemCount());
+            notifyItemChanged(mAdapter.getItemCount());
         } else if (mShouldRemove) {
             mShouldRemove = false;
 
@@ -448,9 +448,9 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             RecyclerView.ViewHolder viewHolder =
                     mRecyclerView.findViewHolderForAdapterPosition(position);
             if (viewHolder instanceof FooterHolder) {
-                LoadMoreAdapter.this.notifyItemRemoved(position);
+                notifyItemRemoved(position);
             } else {
-                LoadMoreAdapter.this.notifyItemChanged(position);
+                notifyItemChanged(position);
             }
         }
     }

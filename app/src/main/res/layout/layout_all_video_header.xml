@@ -7,39 +7,7 @@
     android:orientation="vertical">
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/hot_tab"
-        style="@style/TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:tabTextColor="@color/colorAccent" />
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/action_tab"
-        style="@style/TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:tabTextColor="@color/colorAccent" />
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/area_tab"
-        style="@style/TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:tabTextColor="@color/colorAccent" />
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/time_tab"
-        style="@style/TabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:tabTextColor="@color/colorAccent" />
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/name_tab"
+        android:id="@+id/tab_view"
         style="@style/TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

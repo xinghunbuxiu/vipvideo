@@ -13,22 +13,22 @@ import butterknife.Bind;
  * Created by Moushao on 2017/8/30.
  */
 
-public class AllVideoFilterHolder extends VBaseHolder<MovieTypeBean.CondsBean> {
+public class AllVideoHotHolder extends VBaseHolder<MovieTypeBean> {
     @Bind(R.id.tab_view)
     TabLayout tabLayout;
 
-    public AllVideoFilterHolder(View itemView) {
+    public AllVideoHotHolder(View itemView) {
         super(itemView);
     }
 
     @Override
-    public void setData(int ps, MovieTypeBean.CondsBean condsBean) {
-        super.setData(ps, condsBean);
-        for (MovieTypeBean.CondsBean.ValuesBean bean : condsBean.getValues()) {
-            tabLayout.addTab(tabLayout.newTab().setText(bean.getTitle()));
+    public void setData(int ps, MovieTypeBean bean) {
+        super.setData(ps, bean);
+        for (MovieTypeBean.CondsBean condsBean : bean.getOrders()) {
+            tabLayout.addTab(tabLayout.newTab().setText(condsBean.getName()));
         }
-
     }
+
     @Override
     public void init() {
         super.init();

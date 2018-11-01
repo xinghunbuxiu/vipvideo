@@ -2,10 +2,12 @@ package com.vipvideo.ui.video;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
@@ -20,15 +22,18 @@ import com.vipvideo.R;
 import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.AllVideoInfoBean;
 import com.vipvideo.bean.MovieTypeBean;
-import com.vipvideo.bean.VideoInfoBean;
+import com.vipvideo.bean.MovieTypeBean.CondsBean.ValuesBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.AllVideoFilterHolder;
-import com.vipvideo.ui.adpter.VideoHolder;
+import com.vipvideo.ui.adpter.AllVideoHolder;
+import com.vipvideo.ui.adpter.AllVideoHotHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by LIXH on 2018/10/17.
@@ -38,19 +43,27 @@ import java.util.Map;
 
 public class AllVideoActivity extends BaseActivity<VideoPresenter> {
 
-
+    List<DelegateAdapter.Adapter> adapters = new ArrayList<>();
     PageView page;
     TextView lastType;
     private MovieTypeBean movieTypeBean;
     private List<AllVideoInfo.VideoListBean.VideosBean> videoListBeans = new ArrayList<> ( );
-    int pageSize = 20;
+    int pageSize = 18;
     VideoPresenter presenter;
     String order = "hot";
     String type = "";
     String area = "";
     String start = "";
     String actor = "";
-    VBaseAdapter tabsAdapter, mListAdapter;
+    String lastStr = "[hotTab]/[actionTab]/[areaTab]/[timeTab]/[nameTab]";
+    String reg = "[hotTab]/[actionTab]/[areaTab]/[timeTab]/[nameTab]";
+    VBaseAdapter mListAdapter;
+    VBaseAdapter hotAdapter;
+    VBaseAdapter actionAdapter;
+    VBaseAdapter areaAdapter;
+    VBaseAdapter timeAdapter;
+    VBaseAdapter nameAdapter;
+    boolean isFirst = true;
     @Override
     public void initTitle(UToolBar toolBar) {
         toolBar.setTitle ("电影筛选");
@@ -61,16 +74,17 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         super.init (savedInstanceState);
         presenter = getPresenter ( );
         type = intent.getString ("type");
-        order = intent.getString ("order");
+        order = intent.getString("order", order);
         addTopNavView ( );
-        initPageList ( );
+        initPageList();
         initFilterView();
         initVideoList();
+        page.onRefresh();
     }
 
     private void initPageList() {
         page = PageView.with(this)
-                .setPullLoadMore(true)
+                .setAutoLoadMore(true)
                 .setRefresh(true)
                 .setDivideHeight(R.dimen.space_1)
                 .setLoadTip(tip)
@@ -81,12 +95,80 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         layout.setContentView(page.getRootView());
     }
 
+    private void initFilterView() {
+        hotAdapter = new VBaseAdapter<MovieTypeBean>(getActivity())//
+                .setLayout(R.layout.layout_all_video_header)//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
+                .setHolder(AllVideoHotHolder.class)//
+                .setListener((ItemListener<MovieTypeBean>) (view, position, mData) -> {
+                            order = mData.getOrders().get(position).getField();
+                            lastStr.replace("[hotTab]", order);
+                            Pattern pat = Pattern.compile(reg);
+                            Matcher mat = pat.matcher(lastStr);
+                            lastStr = mat.replaceAll("");
+                        }
+                );
+        actionAdapter = new VBaseAdapter<MovieTypeBean.CondsBean>(getActivity())//
+                .setLayout(R.layout.layout_all_video_header)//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
+                .setHolder(AllVideoFilterHolder.class)//
+                .setListener((ItemListener<MovieTypeBean.CondsBean>) (view, position, mData) -> {
+                            type = mData.getValues().get(position).getTerm();
+                            lastStr.replace("[actionTab]", order);
+                            Pattern pat = Pattern.compile(reg);
+                            Matcher mat = pat.matcher(lastStr);
+                            lastStr = mat.replaceAll("");
+                        }
+                );
+        areaAdapter = new VBaseAdapter<MovieTypeBean.CondsBean>(getActivity())//
+                .setLayout(R.layout.layout_all_video_header)//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
+                .setHolder(AllVideoFilterHolder.class)//
+                .setListener((ItemListener<MovieTypeBean.CondsBean>) (view, position, mData) -> {
+                            area = mData.getValues().get(position).getTerm();
+                            lastStr.replace("[areaTab]", order);
+                            Pattern pat = Pattern.compile(reg);
+                            Matcher mat = pat.matcher(lastStr);
+                            lastStr = mat.replaceAll("");
+                        }
+                );
+        timeAdapter = new VBaseAdapter<MovieTypeBean.CondsBean>(getActivity())//
+                .setLayout(R.layout.layout_all_video_header)//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
+                .setHolder(AllVideoFilterHolder.class)//
+                .setListener((ItemListener<MovieTypeBean.CondsBean>) (view, position, mData) -> {
+                            start = mData.getValues().get(position).getTerm();
+                            lastStr.replace("[timeTab]", order);
+                            Pattern pat = Pattern.compile(reg);
+                            Matcher mat = pat.matcher(lastStr);
+                            lastStr = mat.replaceAll("");
+                        }
+                );
+        nameAdapter = new VBaseAdapter<MovieTypeBean.CondsBean>(getActivity())//
+                .setLayout(R.layout.layout_all_video_header)//
+                .setLayoutHelper(new LinearLayoutHelper(0, 1))//
+                .setHolder(AllVideoFilterHolder.class)//
+                .setListener((ItemListener<MovieTypeBean.CondsBean>) (view, position, mData) -> {
+                            actor = mData.getValues().get(position).getTerm();
+                            lastStr.replace("[nameTab]", order);
+                            Pattern pat = Pattern.compile(reg);
+                            Matcher mat = pat.matcher(lastStr);
+                            lastStr = mat.replaceAll("");
+                        }
+                );
+        page.addAdapter(hotAdapter);
+        page.addAdapter(actionAdapter);
+        page.addAdapter(areaAdapter);
+        page.addAdapter(timeAdapter);
+        page.addAdapter(nameAdapter);
+    }
+
     public void initVideoList() {
         mListAdapter = new VBaseAdapter(getActivity())//
                 .setData(new ArrayList<AllVideoInfo.VideoListBean.VideosBean>())//
                 .setLayout(R.layout.layout_all_video_rv_item)//
                 .setLayoutHelper(getListHelper())//
-                .setHolder(VideoHolder.class)//
+                .setHolder(AllVideoHolder.class)//
                 .setListener((ItemListener<AllVideoInfo.VideoListBean.VideosBean>) (view, position, mData) -> {
                             intent.withString("workId", mData.getWorks_id()).go(VideoPlayerActivity.class);
 
@@ -95,18 +177,35 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         page.addAdapter(mListAdapter);
     }
 
-    private void initFilterView() {
-        tabsAdapter = new VBaseAdapter(getActivity())//
-                .setData(new ArrayList<MovieTypeBean>())//
-                .setLayout(R.layout.home_first_banner)//
-                .setLayoutHelper(new LinearLayoutHelper())//
-                .setHolder(AllVideoFilterHolder.class)//
-                .setListener((ItemListener<VideoInfoBean>) (view, position, mData) -> {
-
-                        }
-                );
-        page.addAdapter(tabsAdapter);
+    private void fillFilterView(MovieTypeBean movieTypeBean) {
+        hotAdapter.setItem(movieTypeBean);
+        hotAdapter.notifyDataSetChanged();
+        ValuesBean all = new ValuesBean();
+        all.setTitle("全部");
+        all.setTerm("");
+        for (MovieTypeBean.CondsBean bean : movieTypeBean.getConds()) {
+            bean.getValues().add(0, all);
+            switch (bean.getField()) {
+                case "type":
+                    actionAdapter.setItem(bean);
+                    actionAdapter.notifyDataSetChanged();
+                    break;
+                case "area":
+                    areaAdapter.setItem(bean);
+                    areaAdapter.notifyDataSetChanged();
+                    break;
+                case "start":
+                    timeAdapter.setItem(bean);
+                    timeAdapter.notifyDataSetChanged();
+                    break;
+                case "actor":
+                    nameAdapter.setItem(bean);
+                    nameAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
     }
+
     private void addTopNavView() {
         lastType = new TextView (getApplicationContext ( ));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams (ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px (getApplicationContext ( ), 40));
@@ -117,14 +216,22 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
     PageView.OnLoadingListener onLoadingListener = (page, onLoadFinish) -> getMoveInfo(page, order, actor, start, area, type);
 
     private void getMoveInfo(int page, String order, String actor, String start, String area, String type) {
-        Map<String, String> params = new HashMap<> ( );
+        Map<String, String> params = new TreeMap<>();
         params.put ("beg", page * pageSize + "");
         params.put ("end", (page + 1) * pageSize + "");
-        params.put ("order", order == null ? "" : order);
-        params.put ("type", type == null ? "" : type);
-        params.put ("area", area);
-        params.put ("start", start);
-        params.put ("actor", actor);
+        params.put("order", order);
+        if (!TextUtils.isEmpty(type)) {
+            params.put("type", type);
+        }
+        if (!TextUtils.isEmpty(area)) {
+            params.put("area", area);
+        }
+        if (!TextUtils.isEmpty(start)) {
+            params.put("start", start);
+        }
+        if (!TextUtils.isEmpty(actor)) {
+            params.put("actor", actor);
+        }
         presenter.getMovieByWhere (page, params);
     }
 
@@ -136,25 +243,24 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
 
     private LayoutHelper getListHelper() {
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-        gridLayoutHelper.setPadding(0, 16, 0, 16);
+        gridLayoutHelper.setPadding(16, 16, 16, 16);
         // 控制子元素之间的垂直间距
         gridLayoutHelper.setVGap(16);
         // 控制子元素之间的水平间距
-        gridLayoutHelper.setHGap(0);
+        gridLayoutHelper.setHGap(16);
         gridLayoutHelper.setBgColor(Color.WHITE);
         return gridLayoutHelper;
     }
     public void setVideoInfo(int page, AllVideoInfoBean videoInfo) {
-        if (page == 0) {
+        this.page.finish(null, LoadingTip.LoadStatus.FINISH);
+        if (isFirst) {
+            isFirst = false;
             movieTypeBean = videoInfo.getMovieTypeBean ( );
-            tabsAdapter.setItem(movieTypeBean);
-            tabsAdapter.notifyDataSetChanged();
+            fillFilterView(movieTypeBean);
         }
         videoListBeans.addAll(videoInfo.getAllVideoInfo().getVideo_list().getVideos());
         mListAdapter.setData(videoListBeans);
         mListAdapter.notifyDataSetChanged();
-        this.page.finish (null, LoadingTip.LoadStatus.FINISH);
-
     }
 
 }

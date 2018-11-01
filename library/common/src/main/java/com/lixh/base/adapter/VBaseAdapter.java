@@ -10,6 +10,7 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.lixh.utils.UView;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class VBaseAdapter<T> extends DelegateAdapter.Adapter<VBaseHolder<T>> {
 
     public VBaseAdapter(Context context) {
         mContext = context;
+        mDatas = new ArrayList<T>();
     }
 
     /**
@@ -67,11 +69,15 @@ public class VBaseAdapter<T> extends DelegateAdapter.Adapter<VBaseHolder<T>> {
      * <br/> 参数: mDatas，数据源
      * <br/> 返回值:  VBaseAdapter
      */
-    public VBaseAdapter setData(List<T> mDatas) {
-        this.mDatas = mDatas;
+    public VBaseAdapter setData(List<T> datas) {
+        this.mDatas = datas;
         return this;
     }
 
+    public VBaseAdapter addDatas(List<T> mDatas) {
+        this.mDatas.addAll(mDatas);
+        return this;
+    }
     /**
      * <br/> 方法名称: setItem
      * <br/> 方法详述: 设置单个数据源
