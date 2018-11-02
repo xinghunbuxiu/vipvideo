@@ -1,7 +1,6 @@
 package com.vipvideo.presenter;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
@@ -15,7 +14,6 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
-import com.vipvideo.util.ParseWebUrlHelper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -27,7 +25,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 
 /**
  * <option value="http://jqaaa.com/jx.php?url=">线路一</option>
@@ -122,28 +123,59 @@ public class VideoPresenter extends BasePresenter {
     }
 
     //解析地址 http://tv.dsqndh.com/
+//    public void getRealPath(String site_domain, String site_url) {
+//        VideoPlayerActivity activity = getActivity();
+//        String url = "https://www.jqaaa.com/jx.php?url=";
+//        String realUrl = url + site_url;
+//        ParseWebUrlHelper.getInstance().init(activity, realUrl).setWebView(activity.getWebView())
+////解析网页中视频
+//                .setOnParseListener(new ParseWebUrlHelper.OnParseWebUrlListener() {
+//                    @Override
+//                    public void onFindUrl(String url) {
+//                        Log.d("webUrl", url);
+//                        activity.setRealPath(url);
+//                    }
+//
+//                    @Override
+//                    public void onError(String errorMsg) {
+//                        Log.d("webUrlerrorMsg", errorMsg);
+//                    }
+//                }).startParse();
+//
+//
+//    }
     public void getRealPath(String site_domain, String site_url) {
         VideoPlayerActivity activity = getActivity();
-        String url = "https://www.jqaaa.com/jx.php?url=";
-        String realUrl = url + site_url;
-        ParseWebUrlHelper.getInstance().init(activity, realUrl)
-//解析网页中视频
-                .setOnParseListener(new ParseWebUrlHelper.OnParseWebUrlListener() {
+
+        String finalSite_url = "https://www.iqiyi.com/v_19rr7qhp7c.html#vfrm=2-4-0-1";
+        Observable.create((Observable.OnSubscribe<String>) subscriber -> {
+            try {
+                String realUrl = "https://www.1717yun.com/1717yun/url.php";
+                Connection conn = Jsoup.connect(realUrl);
+                conn.data("id", finalSite_url);
+                conn.data("type", "auto");
+                conn.data("md5", "ab594276948ab5d633facd90ca26loij");
+                conn.header("Accept", "application/json, text/javascript, */*; q=0.01");
+                conn.header("Referer", "https://www.1717yun.com/1717yun/?url=" + finalSite_url);
+                Document doc = conn.post();
+                String url = doc.getElementsByTag("body").text();
+                subscriber.onNext(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+                subscriber.onError(e);
+
+            } finally {
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).
+
+                subscribe(new RxSubscriber<String>(activity, true) {
                     @Override
-                    public void onFindUrl(String url) {
-                        Log.d("webUrl", url);
-                        activity.setRealPath(url);
+                    protected void _onNext(String s) {
+                        activity.setRealPath(s);
                     }
-
-                    @Override
-                    public void onError(String errorMsg) {
-                        Log.d("webUrlerrorMsg", errorMsg);
-                    }
-                }).startParse();
-
-
+                });
     }
-
     /**
      * @param //site_domain
      * @param finalSite_url
@@ -184,6 +216,24 @@ public class VideoPresenter extends BasePresenter {
 
     public String getVideoInJx618(String finalSite_url) throws IOException {
         String realUrl = "https://jx.618g.com/jx.php?url=" + finalSite_url;
+        Connection conn = Jsoup.connect(realUrl);
+        conn.header("referer", "https://jx.618g.com/?url=" + finalSite_url);
+        Document doc = conn.get();
+        Element player = doc.getElementById("player");
+        String src = player.attr("src");
+        String url = src.replace("/m3u8.php?url=", "");
+        return url;
+    }
+
+    /**
+     * http://rrjiexi.com/
+     * http://www.xmqbook.com/xnflv/index.php?url=https://www.iqiyi.com/v_19rr7qhp7c.html
+     * @param finalSite_url
+     * @return
+     * @throws IOException
+     */
+    public String getVideoByLine3(String finalSite_url) throws IOException {
+        String realUrl = "http://www.xmqbook.com/xnflv/index.php?url=" + finalSite_url;
         Connection conn = Jsoup.connect(realUrl);
         conn.header("referer", "https://jx.618g.com/?url=" + finalSite_url);
         Document doc = conn.get();

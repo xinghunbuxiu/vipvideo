@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -42,6 +43,8 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     LandLayoutVideo detailPlayer;
     @Bind(R.id.rv_video)
     RecyclerView rvVideo;
+    @Bind(R.id.my_webView)
+    WebView webView;
     //网络视频地址
     String videoUrl = "";
     DelegateAdapter delegateAdapter;
@@ -251,6 +254,10 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     public void setRealPath(String realPath) {
         this.videoUrl = "https://dy.jsyunbf.com/20170914/3fMIUCOf/index.m3u8";
-        playVideo();
+//        playVideo();
+    }
+
+    public WebView getWebView() {
+        return webView;
     }
 }

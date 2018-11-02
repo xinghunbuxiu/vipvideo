@@ -25,9 +25,9 @@ public class ParseWebUrlHelper {
     private static ParseWebUrlHelper parseWebUrlHelper;
     private String webUrl;
     private Activity mAct;
-    private WebView webView;
     private int timeOut = 20 * 1000;
     private OnParseWebUrlListener onParseListener;
+    private WebView mWebView;
 
     public static ParseWebUrlHelper getInstance() {
         if (parseWebUrlHelper == null) parseWebUrlHelper = new ParseWebUrlHelper();
@@ -37,14 +37,17 @@ public class ParseWebUrlHelper {
     public ParseWebUrlHelper init(Activity act, String url) {
         this.mAct = act;
         this.webUrl = url;
-        this.webView = new WebView(mAct);
+        return this;
+    }
+
+    public ParseWebUrlHelper setWebView(WebView mWebView) {
+        this.mWebView = mWebView;
+        mWebView.clearFocus();
         initWebSettings();
         return this;
     }
 
     private void initWebSettings() {
-        WebView mWebView = this.webView;
-        mWebView.clearFocus();
         WebSettings mWebSettings = mWebView.getSettings();
         mWebSettings.setJavaScriptEnabled(true);
         mWebSettings.setDefaultTextEncodingName("utf-8");
@@ -92,7 +95,7 @@ public class ParseWebUrlHelper {
             instance.setAcceptThirdPartyCookies(mWebView, true);
         }
         mWebView.setWebViewClient(new MyWebViewClient());
-        enabledCookie(webView);//启用cookie
+        enabledCookie(mWebView);//启用cookie
     }
 
     public ParseWebUrlHelper setLoadUrl(String url) {
@@ -101,7 +104,7 @@ public class ParseWebUrlHelper {
     }
 
     public ParseWebUrlHelper startParse() {
-        webView.loadUrl(this.webUrl);
+        mWebView.loadUrl(this.webUrl);
         return this;
     }
 
