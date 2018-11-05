@@ -214,34 +214,7 @@ public class VideoPresenter extends BasePresenter {
     }
 
 
-    public String getVideoInJx618(String finalSite_url) throws IOException {
-        String realUrl = "https://jx.618g.com/jx.php?url=" + finalSite_url;
-        Connection conn = Jsoup.connect(realUrl);
-        conn.header("referer", "https://jx.618g.com/?url=" + finalSite_url);
-        Document doc = conn.get();
-        Element player = doc.getElementById("player");
-        String src = player.attr("src");
-        String url = src.replace("/m3u8.php?url=", "");
-        return url;
-    }
 
-    /**
-     * http://rrjiexi.com/
-     * http://www.xmqbook.com/xnflv/index.php?url=https://www.iqiyi.com/v_19rr7qhp7c.html
-     * @param finalSite_url
-     * @return
-     * @throws IOException
-     */
-    public String getVideoByLine3(String finalSite_url) throws IOException {
-        String realUrl = "http://www.xmqbook.com/xnflv/index.php?url=" + finalSite_url;
-        Connection conn = Jsoup.connect(realUrl);
-        conn.header("referer", "https://jx.618g.com/?url=" + finalSite_url);
-        Document doc = conn.get();
-        Element player = doc.getElementById("player");
-        String src = player.attr("src");
-        String url = src.replace("/m3u8.php?url=", "");
-        return url;
-    }
 
 
     public void getGroupVideoInfo() {
