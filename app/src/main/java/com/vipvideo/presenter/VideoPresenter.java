@@ -14,6 +14,7 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
+import com.vipvideo.util.UJsonp;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -150,15 +151,7 @@ public class VideoPresenter extends BasePresenter {
         String finalSite_url = "https://www.iqiyi.com/v_19rr7qhp7c.html#vfrm=2-4-0-1";
         Observable.create((Observable.OnSubscribe<String>) subscriber -> {
             try {
-                String realUrl = "https://www.1717yun.com/1717yun/url.php";
-                Connection conn = Jsoup.connect(realUrl);
-                conn.data("id", finalSite_url);
-                conn.data("type", "auto");
-                conn.data("md5", "ab594276948ab5d633facd90ca26loij");
-                conn.header("Accept", "application/json, text/javascript, */*; q=0.01");
-                conn.header("Referer", "https://www.1717yun.com/1717yun/?url=" + finalSite_url);
-                Document doc = conn.post();
-                String url = doc.getElementsByTag("body").text();
+                String url = UJsonp.getInstance().getLineBy163ren(finalSite_url);
                 subscriber.onNext(url);
             } catch (IOException e) {
                 e.printStackTrace();

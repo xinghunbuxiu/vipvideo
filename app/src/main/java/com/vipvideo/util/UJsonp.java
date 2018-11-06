@@ -9,11 +9,12 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class UJsonp {
@@ -46,6 +47,8 @@ public class UJsonp {
     }
 
     /**
+     *
+     * http://jx.arpps.com/  pps解析器
      * http://rrjiexi.com/
      * http://jx.arpps.com/380k/api.php
      * {"play":"m3zy","url":"https:\/\/cdn1.chlpdq.com\/20180906\/hFiWZoDR\/index.m3u8","success":1,"ext":"dp","msg":null}
@@ -97,20 +100,25 @@ public class UJsonp {
      */
     public String getLineBy163ren(String finalSite_url) throws IOException {
         String getH5 = "http://jx.api.163ren.com/vod.php?url=" + finalSite_url;
-        Document h5Con = Jsoup.connect(getH5).get();
-        Elements keyElement = h5Con.getElementsByAttributeValueMatching(h5Con.toString().trim(), "url:'(.*?)'");
-        String key = keyElement.text().replaceAll("url:'|'", "");
-        String realUrl = "http://jx.api.163ren.com/api.php";
-        Connection conn = Jsoup.connect(realUrl);
-        conn.data("url", key);
-        conn.data("up", "0");
-        conn.header("Accept", "application/json, text/javascript, */*; q=0.01");
-        conn.header("referer", "http://jx.api.163ren.com/vod.php?url=" + finalSite_url);
-        Document doc = conn.get();
-        String body = doc.getElementsByTag("body").text();
-        if (TextUtils.isEmpty(body)) {
-            JSONObject object = JSON.parseObject(body);
-            return object.getString("url");
+        Connection h5 = Jsoup.connect(getH5).header("Accept", "text/html");
+        Document h5Con = h5.get();
+        String h5body = h5Con.getElementsByTag("body").toString().replaceAll("\r|\n|\\s*", "").trim();
+        Pattern p = Pattern.compile("url\\s*: '(.*?)'");
+        Matcher m = p.matcher(h5body);
+        if (m.find()) {
+            String key = m.group().replaceAll("url:'|'", "");
+            String realUrl = "http://jx.api.163ren.com/api.php";
+            Connection conn = Jsoup.connect(realUrl);
+            conn.data("url", key);
+            conn.data("up", "0");
+            conn.header("Accept", "application/json");
+            conn.header("referer", "http://jx.api.163ren.com/vod.php?url=" + finalSite_url);
+            Document doc = conn.get();
+            String body = doc.getElementsByTag("body").text();
+            if (TextUtils.isEmpty(body)) {
+                JSONObject object = JSON.parseObject(body);
+                return object.getString("url");
+            }
         }
         return "";
     }
