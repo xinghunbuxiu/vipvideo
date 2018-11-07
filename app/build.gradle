@@ -88,8 +88,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':library:common')
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'com.google.guava:guava:23.6-android'
-    implementation group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.14.6'
+    implementation 'com.github.evgenyneu:js-evaluator-for-android:v2.0.0'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     //Optional: see how to use the utility.
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
