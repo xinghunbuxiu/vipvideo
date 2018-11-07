@@ -253,8 +253,8 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     public void setRealPath(String realPath) {
-        this.videoUrl = "https://dy.jsyunbf.com/20170914/3fMIUCOf/index.m3u8";
-//        playVideo();
+        this.videoUrl = realPath;
+        playVideo();
     }
 
     public WebView getWebView() {

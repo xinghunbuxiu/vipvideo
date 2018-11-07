@@ -1,6 +1,7 @@
 package com.vipvideo.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -103,25 +104,49 @@ public class UJsonp {
         Connection h5 = Jsoup.connect(getH5).header("Accept", "text/html");
         Document h5Con = h5.get();
         String h5body = h5Con.getElementsByTag("body").toString().replaceAll("\r|\n|\\s*", "").trim();
-        Pattern p = Pattern.compile("url\\s*: '(.*?)'");
+        Pattern p = Pattern.compile("url\\s*:\\s*'(.*?)'");
         Matcher m = p.matcher(h5body);
-        if (m.find()) {
-            String key = m.group().replaceAll("url:'|'", "");
+        boolean find = m.find();
+        if (find) {
+            String group = m.group();
+            Log.e("dddddddddddddd", find + "---" + group);
+            String key = group.replaceAll("url\\s*:\\s*'|'", "");
             String realUrl = "http://jx.api.163ren.com/api.php";
             Connection conn = Jsoup.connect(realUrl);
             conn.data("url", key);
             conn.data("up", "0");
-            conn.header("Accept", "application/json");
+            conn.header("Accept", "application/json, text/javascript, */*; q=0.01");
+            conn.header("User-Agent", "Android");
             conn.header("referer", "http://jx.api.163ren.com/vod.php?url=" + finalSite_url);
-            Document doc = conn.get();
+            conn.header("Accept-Language", "zh-CN");
+            Document doc = conn.post();
             String body = doc.getElementsByTag("body").text();
-            if (TextUtils.isEmpty(body)) {
+            if (!TextUtils.isEmpty(body)) {
                 JSONObject object = JSON.parseObject(body);
-                return object.getString("url");
+                String ext = object.getString("ext");
+                String url = object.getString("url");
+                if (ext.equals("link")) {
+                    String linkUrl = "http://jx.api.163ren.com" + url;
+                    Connection link = Jsoup.connect(linkUrl).header("Accept", "text/html");
+                    Document linkCon = link.get();
+                    String linkBody = linkCon.getElementsByTag("body").toString().replaceAll("\r|\n|\\s*", "").trim();
+                    Pattern p1 = Pattern.compile("url\\s*:\\s*'(.*?)'");
+                    Matcher m1 = p.matcher(linkBody);
+                    boolean linkfind = m.find();
+                    if (linkfind) {
+                        String linkGroup = m.group();
+                        Log.e("dddddddddddddd", find + "---" + linkGroup);
+                        String finalUrl = linkGroup.replaceAll("url\\s*:\\s*'|'", "");
+                        return finalUrl;
+                    }
+                }
+                return url;
             }
         }
         return "";
     }
+
+    ;
 
     /**
      * https://www.1717yun.com/1717yun/url.php

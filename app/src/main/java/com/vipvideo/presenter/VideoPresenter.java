@@ -148,7 +148,7 @@ public class VideoPresenter extends BasePresenter {
     public void getRealPath(String site_domain, String site_url) {
         VideoPlayerActivity activity = getActivity();
 
-        String finalSite_url = "https://www.iqiyi.com/v_19rr7qhp7c.html#vfrm=2-4-0-1";
+        String finalSite_url = site_url;
         Observable.create((Observable.OnSubscribe<String>) subscriber -> {
             try {
                 String url = UJsonp.getInstance().getLineBy163ren(finalSite_url);
