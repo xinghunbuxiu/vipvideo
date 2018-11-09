@@ -1,30 +1,33 @@
 package com.vipvideo.util;
 
+import android.content.res.AssetManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.evgenii.jsevaluator.interfaces.JsCallback;
+import com.vipvideo.app.UApplication;
+import com.vipvideo.jscrawler.JsCrawler;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class UJsonp {
 
+    private static final String TAG = "UJsonp";
     private static UJsonp instance = null;
 
     private final static String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36";
-
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 返回单例
@@ -43,10 +46,34 @@ public class UJsonp {
      * @param url
      * @throws Exception
      */
-    public void getLine1(String url) throws Exception {
-        Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
+    public void getLine1(String url) {
+        JsCrawler jsCrawler = JsCrawler.getInstance();
+        final String js = loadJs();
+        jsCrawler.callFunction(js, new JsCallback() {
+
+            @Override
+            public void onResult(String result) {
+                Log.d("UJsonp", "onResult: " + result);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.d(TAG, "onError: " + errorMessage);
+            }
+        }, "getBlogList");
     }
 
+    public String loadJs() {
+        try {
+            final AssetManager am = UApplication.getAppContext().getAssets();
+            final InputStream inputStream = am.open("crawler.js");
+            Scanner scanner = new Scanner(inputStream, "UTF-8");
+            return scanner.useDelimiter("\\A").next();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      *
      * http://jx.arpps.com/  pps解析器

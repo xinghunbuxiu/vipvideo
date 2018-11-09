@@ -3,6 +3,7 @@ package com.vipvideo.app;
 import com.lixh.BuildConfig;
 import com.lixh.app.BaseApplication;
 import com.lixh.utils.ULog;
+import com.vipvideo.jscrawler.JsCrawler;
 
 /**
  * APPLICATION
@@ -14,8 +15,18 @@ public class UApplication extends BaseApplication {
     @Override
     public void init() {
         instance = this;
-        //初始化logger
+        JsCrawler.initialize(this);
+        // 获取JsCrawler实例
+        JsCrawler jsCrawler = JsCrawler.getInstance();
+        // 设置是否开启使用JQuery
+        jsCrawler.setJQueryEnabled(true);
         ULog.logInit(BuildConfig.LOG_DEBUG);
 
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        JsCrawler.release();
     }
 }

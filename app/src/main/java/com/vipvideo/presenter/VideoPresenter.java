@@ -26,10 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func2;
-import rx.schedulers.Schedulers;
 
 /**
  * <option value="http://jqaaa.com/jx.php?url=">线路一</option>
@@ -149,25 +146,26 @@ public class VideoPresenter extends BasePresenter {
         VideoPlayerActivity activity = getActivity();
 
         String finalSite_url = site_url;
-        Observable.create((Observable.OnSubscribe<String>) subscriber -> {
-            try {
-                String url = UJsonp.getInstance().getLineBy163ren(finalSite_url);
-                subscriber.onNext(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-                subscriber.onError(e);
-
-            } finally {
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).
-
-                subscribe(new RxSubscriber<String>(activity, true) {
-                    @Override
-                    protected void _onNext(String s) {
-                        activity.setRealPath(s);
-                    }
-                });
+        UJsonp.getInstance().getLine1(finalSite_url);
+//        Observable.create((Observable.OnSubscribe<String>) subscriber -> {
+//            try {
+//                String url = ;
+//                subscriber.onNext(url);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                subscriber.onError(e);
+//
+//            } finally {
+//                subscriber.onCompleted();
+//            }
+//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).
+//
+//                subscribe(new RxSubscriber<String>(activity, true) {
+//                    @Override
+//                    protected void _onNext(String s) {
+//                        activity.setRealPath(s);
+//                    }
+//                });
     }
     /**
      * @param //site_domain
