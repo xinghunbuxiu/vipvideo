@@ -14,7 +14,7 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
-import com.vipvideo.util.UJsonp;
+import com.vipvideo.util.ParseWebUrlHelper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -146,26 +146,10 @@ public class VideoPresenter extends BasePresenter {
         VideoPlayerActivity activity = getActivity();
 
         String finalSite_url = site_url;
-        UJsonp.getInstance().getLine1(finalSite_url);
-//        Observable.create((Observable.OnSubscribe<String>) subscriber -> {
-//            try {
-//                String url = ;
-//                subscriber.onNext(url);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                subscriber.onError(e);
-//
-//            } finally {
-//                subscriber.onCompleted();
-//            }
-//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).
-//
-//                subscribe(new RxSubscriber<String>(activity, true) {
-//                    @Override
-//                    protected void _onNext(String s) {
-//                        activity.setRealPath(s);
-//                    }
-//                });
+//        UJsonp.getInstance().getLine1(finalSite_url);
+        ParseWebUrlHelper helper = new ParseWebUrlHelper(activity);
+        helper.setLoadUrl(finalSite_url);
+        helper.show();
     }
     /**
      * @param //site_domain
