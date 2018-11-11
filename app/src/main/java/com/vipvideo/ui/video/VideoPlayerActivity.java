@@ -102,7 +102,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                             Alert.displayAlertSingledDialog (this, sites, (parent, v, position1, id) -> {
                                 VideoInfoBean.SitesBean sitesBean = sitesBeans.get (position1);
                                 ((TextView) view).setText (sitesBean.getSite_name ( ));
-                                presenter.getRealPath(sitesBean.getSite_domain(), sitesBean.getSite_url());
+                                presenter.getRealPath (sitesBean.getSite_domain ( ), sitesBean.getSite_url ( ));
                             });
 
                         }
@@ -124,44 +124,44 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     private void initVideoPlayer() {
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
+        orientationUtils = new OrientationUtils (this, detailPlayer);
         //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-        gsyVideoOptionBuilder = new GSYVideoOptionBuilder()
-                .setIsTouchWiget(true)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
-                .setShowFullAnimation(false)
-                .setNeedLockFull(true)
-                .setSeekRatio(1)
-                .setCacheWithPlay(true)
-                .setVideoTitle("测试视频")
-                .setVideoAllCallBack(new GSYSampleCallBack() {
+        orientationUtils.setEnable (false);
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder ( )
+                .setIsTouchWiget (true)
+                .setRotateViewAuto (false)
+                .setLockLand (false)
+                .setShowFullAnimation (false)
+                .setNeedLockFull (true)
+                .setSeekRatio (1)
+                .setCacheWithPlay (true)
+                .setVideoTitle ("测试视频")
+                .setVideoAllCallBack (new GSYSampleCallBack ( ) {
                     @Override
                     public void onPrepared(String url, Object... objects) {
-                        super.onPrepared(url, objects);
+                        super.onPrepared (url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable(true);
+                        orientationUtils.setEnable (true);
                         isPlay = true;
                     }
 
                     @Override
                     public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen(url, objects);
+                        super.onQuitFullscreen (url, objects);
                         if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo();
+                            orientationUtils.backToProtVideo ( );
                         }
                     }
                 });
-        gsyVideoOptionBuilder.build(detailPlayer);
+        gsyVideoOptionBuilder.build (detailPlayer);
 
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+        detailPlayer.getFullscreenButton ( ).setOnClickListener (new View.OnClickListener ( ) {
             @Override
             public void onClick(View v) {
                 //直接横屏
-                orientationUtils.resolveByClick();
+                orientationUtils.resolveByClick ( );
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(getActivity(), true, true);
+                detailPlayer.startWindowFullscreen (getActivity ( ), true, true);
             }
         });
     }
@@ -170,69 +170,63 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     public void onBackPressed() {
 
         if (orientationUtils != null) {
-            orientationUtils.backToProtVideo();
+            orientationUtils.backToProtVideo ( );
         }
 
-        if (GSYVideoManager.backFromWindowFull(this)) {
+        if (GSYVideoManager.backFromWindowFull (this)) {
             return;
         }
-        super.onBackPressed();
+        super.onBackPressed ( );
     }
 
     @Override
     protected void onPause() {
-        getCurPlay().onVideoPause();
-        super.onPause();
+        getCurPlay ( ).onVideoPause ( );
+        super.onPause ( );
         isPause = true;
     }
 
     @Override
     protected void onResume() {
-        getCurPlay().onVideoResume();
-        super.onResume();
+        getCurPlay ( ).onVideoResume ( );
+        super.onResume ( );
         isPause = false;
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (isPlay) {
-            getCurPlay().release();
+            getCurPlay ( ).release ( );
         }
-        //GSYPreViewManager.instance().releaseMediaPlayer();
         if (orientationUtils != null)
-            orientationUtils.releaseListener();
+            orientationUtils.releaseListener ( );
+        super.onDestroy ( );
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+        super.onConfigurationChanged (newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
+            detailPlayer.onConfigurationChanged (this, newConfig, orientationUtils, true, true);
         }
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer() != null) {
-            return detailPlayer.getFullWindowPlayer();
+        if (detailPlayer.getFullWindowPlayer ( ) != null) {
+            return detailPlayer.getFullWindowPlayer ( );
         }
         return detailPlayer;
     }
 
     private void playVideo() {
-        detailPlayer.release();
-        gsyVideoOptionBuilder.setUrl(videoUrl)
-                .setCacheWithPlay(true)
-                .setVideoTitle("测试视频")
-                .build(detailPlayer);
-        gsyVideoOptionBuilder.build(detailPlayer);
-        detailPlayer.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                detailPlayer.startPlayLogic();
-            }
-        }, 1000);
+        detailPlayer.release ( );
+        gsyVideoOptionBuilder.setUrl (videoUrl)
+                .setCacheWithPlay (true)
+                .setVideoTitle ("测试视频")
+                .build (detailPlayer);
+        gsyVideoOptionBuilder.build (detailPlayer);
+        detailPlayer.postDelayed (() -> detailPlayer.startPlayLogic ( ), 1000);
     }
 
     @Override
@@ -248,16 +242,13 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         shareAdapter.setData (b);
         shareAdapter.notifyDataSetChanged ( );
         String videoUrl = bean.getSites ( ).get (0).getSite_url ( );
-        String sit_host = bean.getSites().get(0).getSite_domain();
-        presenter.getRealPath(sit_host, videoUrl);
+        String sit_host = bean.getSites ( ).get (0).getSite_domain ( );
+        presenter.getRealPath (sit_host, videoUrl);
     }
 
     public void setRealPath(String realPath) {
         this.videoUrl = realPath;
-        playVideo();
+        playVideo ( );
     }
 
-    public WebView getWebView() {
-        return webView;
-    }
 }

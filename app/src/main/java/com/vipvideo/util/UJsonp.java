@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.evgenii.jsevaluator.interfaces.JsCallback;
 import com.vipvideo.app.UApplication;
 import com.vipvideo.jscrawler.JsCrawler;
 
@@ -49,18 +48,18 @@ public class UJsonp {
     public void getLine1(String url) {
         JsCrawler jsCrawler = JsCrawler.getInstance();
         final String js = loadJs();
-        jsCrawler.callFunction(js, new JsCallback() {
-
-            @Override
-            public void onResult(String result) {
-                Log.d("UJsonp", "onResult: " + result);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                Log.d(TAG, "onError: " + errorMessage);
-            }
-        }, "getBlogList");
+//        jsCrawler.callFunction(js, new JsCallback() {
+//
+//            @Override
+//            public void onResult(String result) {
+//                Log.d("UJsonp", "onResult: " + result);
+//            }
+//
+//            @Override
+//            public void onError(String errorMessage) {
+//                Log.d(TAG, "onError: " + errorMessage);
+//            }
+//        }, "getBlogList");
     }
 
     public String loadJs() {

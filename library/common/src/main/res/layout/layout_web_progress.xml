@@ -16,17 +16,14 @@
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="150dp"
     android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="20"
-        android:progressDrawable="@drawable/drawable_webview_progress"
         android:visibility="gone" />
 
     <WebView
