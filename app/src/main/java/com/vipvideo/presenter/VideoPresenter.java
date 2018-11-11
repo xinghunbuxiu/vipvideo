@@ -1,8 +1,6 @@
 package com.vipvideo.presenter;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.webkit.WebResourceResponse;
 
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
@@ -16,8 +14,6 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
-import com.vipvideo.util.AdFilterTool;
-import com.vipvideo.util.ParseWebUrlHelper;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -126,20 +122,7 @@ public class VideoPresenter extends BasePresenter {
 
     public void getRealPath(String site_domain, String site_url) {
         VideoPlayerActivity activity = getActivity ( );
-        String finalSite_url = "http://www.1717yun.com/jx/ty.php?url=" + site_url;
-        ParseWebUrlHelper helper = new ParseWebUrlHelper (activity);
-        helper.setInterceptRequest ((view, url) -> {
-            //判断是否是广告相关的资源链接
-            if (AdFilterTool.isAd ("www.1717yun.com", url)) {
-                //有广告的请求数据，我们直接返回空数据，注：不能直接返回null
-                return new WebResourceResponse (null, null, null);
-            }
-            Log.e ("setInterceptRequest11", url);
-            //这里是不做处理的数据
-            return null;
-        });
-        helper.setOnParseListener (url -> activity.setRealPath (url));
-        helper.loadUrl (finalSite_url);
+
     }
 
     /**

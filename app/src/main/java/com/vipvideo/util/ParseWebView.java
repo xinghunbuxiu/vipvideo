@@ -1,22 +1,21 @@
 package com.vipvideo.util;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.vipvideo.R;
@@ -27,7 +26,7 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2018/3/22.
  */
 
-public class ParseWebUrlHelper extends Dialog {
+public class ParseWebView extends FrameLayout {
     private WebView mWebView;
     ProgressBar mProgressBar;
     private final static String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36";
@@ -35,7 +34,6 @@ public class ParseWebUrlHelper extends Dialog {
 
     OnParseWebUrlListener parseWebUrlListener;
     InterceptRequest interceptRequest;
-    private int timeOut = 20 * 1000;
 
     String finalUrl;
 
@@ -53,23 +51,33 @@ public class ParseWebUrlHelper extends Dialog {
 
     }
 
-    public ParseWebUrlHelper(Context context) {
-        super (context);
+    public ParseWebView(Context context) {
+        this (context, null);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
-        setContentView (R.layout.layout_web_progress);
-        mWebView = findViewById (R.id.web_view);
-        mProgressBar = findViewById (R.id.progress_bar);
-        setCanceledOnTouchOutside (false);
-        initWebSettings ( );
+    public ParseWebView(Context context, AttributeSet attrs) {
+        this (context, attrs, 0);
+    }
+
+    public ParseWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super (context, attrs, defStyleAttr);
+        initView (context);
+    }
+
+    private void initView(Context context) {
+        if (!isInEditMode ( )) {
+            View view = View.inflate (context, R.layout.layout_web_progress, null);
+            mWebView = view.findViewById (R.id.web_view);
+            mProgressBar = view.findViewById (R.id.progress_bar);
+            addView (view);
+            initWebSettings ( );
+
+        }
     }
 
     private void initWebSettings() {
         mWebView.clearFocus ( );
-        mWebView.addJavascriptInterface (new InJavaScriptLocalObj ( ), "local_obj");
+        mWebView.setVisibility (INVISIBLE);
         WebSettings mWebSettings = mWebView.getSettings ( );
         mWebSettings.setJavaScriptEnabled (true);
         mWebSettings.setDefaultTextEncodingName ("utf-8");
@@ -103,12 +111,10 @@ public class ParseWebUrlHelper extends Dialog {
             mWebSettings.setAllowUniversalAccessFromFileURLs (true);
         }
         mWebSettings.setJavaScriptCanOpenWindowsAutomatically (true);
-        mWebSettings.setLoadsImagesAutomatically (true);
-        mWebSettings.setAppCacheEnabled (true);
-        mWebSettings.setAppCachePath (getContext ( ).getCacheDir ( ).getAbsolutePath ( ));
+        mWebSettings.setAppCacheEnabled (false);
         mWebSettings.setDatabaseEnabled (true);
         mWebSettings.setGeolocationDatabasePath (getContext ( ).getDir ("database", 0).getPath ( ));
-        mWebSettings.setGeolocationEnabled (true);
+        mWebSettings.setGeolocationEnabled (false);
         enabledCookie (mWebView);//启用cookie
         mWebView.setWebViewClient (new MyWebViewClient ( ));
         mWebView.setWebChromeClient (new WebChromeClient ( ));
@@ -116,15 +122,8 @@ public class ParseWebUrlHelper extends Dialog {
 
     }
 
-    public final class InJavaScriptLocalObj {
-        @JavascriptInterface
-        public void showSource(String src) {
-            Log.e ("ddddddd", src);
-        }
-    }
 
     public void loadUrl(String url) {
-        super.show ( );
         mWebView.loadUrl (url);
     }
 
@@ -183,20 +182,16 @@ public class ParseWebUrlHelper extends Dialog {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished (view, url);
             // 获取页面内容
-            view.loadUrl ("javascript:window.local_obj.showSource('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
             mProgressBar.setVisibility (View.GONE);
-//            dismiss ( );
-//            if (parseWebUrlListener != null) {
-//                Log.e ("onPageFinished", finalUrl+"");
-//                mWebView.destroy ();
-//                parseWebUrlListener.onFindUrl (finalUrl);
-//            }
-
+            if (parseWebUrlListener != null) {
+                Log.e ("onPageFinished", finalUrl + "");
+                parseWebUrlListener.onFindUrl (finalUrl);
+            }
         }
     }
 
 
-    public void setInterceptRequest(ParseWebUrlHelper.InterceptRequest interceptRequest) {
+    public void setInterceptRequest(ParseWebView.InterceptRequest interceptRequest) {
         this.interceptRequest = interceptRequest;
     }
 

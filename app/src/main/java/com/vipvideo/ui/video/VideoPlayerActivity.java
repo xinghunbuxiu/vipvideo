@@ -3,8 +3,10 @@ package com.vipvideo.ui.video;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
+import android.webkit.WebResourceResponse;
 import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -25,6 +27,8 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.VideoTopDesHolder;
 import com.vipvideo.ui.adpter.VideoTopShareHolder;
+import com.vipvideo.util.AdFilterTool;
+import com.vipvideo.util.ParseWebView;
 import com.vipvideo.view.LandLayoutVideo;
 
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     @Bind(R.id.rv_video)
     RecyclerView rvVideo;
     @Bind(R.id.my_webView)
-    WebView webView;
+    ParseWebView webView;
     //网络视频地址
     String videoUrl = "";
     DelegateAdapter delegateAdapter;
@@ -57,6 +61,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     private GSYVideoOptionBuilder gsyVideoOptionBuilder;
     private boolean isPlay;
     private boolean isPause;
+    private String sit_host;
 
 
     @Override
@@ -102,7 +107,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                             Alert.displayAlertSingledDialog (this, sites, (parent, v, position1, id) -> {
                                 VideoInfoBean.SitesBean sitesBean = sitesBeans.get (position1);
                                 ((TextView) view).setText (sitesBean.getSite_name ( ));
-                                presenter.getRealPath (sitesBean.getSite_domain ( ), sitesBean.getSite_url ( ));
+                                switchLine (sitesBean.getSite_url ( ));
                             });
 
                         }
@@ -154,7 +159,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                     }
                 });
         gsyVideoOptionBuilder.build (detailPlayer);
-
+        detailPlayer.getStartButton ( ).setVisibility (View.GONE);
         detailPlayer.getFullscreenButton ( ).setOnClickListener (new View.OnClickListener ( ) {
             @Override
             public void onClick(View v) {
@@ -220,6 +225,9 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     private void playVideo() {
+        if (TextUtils.isEmpty (videoUrl) || detailPlayer == null) {
+            return;
+        }
         detailPlayer.release ( );
         gsyVideoOptionBuilder.setUrl (videoUrl)
                 .setCacheWithPlay (true)
@@ -241,9 +249,26 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
         topDesAdapter.notifyDataSetChanged ( );
         shareAdapter.setData (b);
         shareAdapter.notifyDataSetChanged ( );
-        String videoUrl = bean.getSites ( ).get (0).getSite_url ( );
-        String sit_host = bean.getSites ( ).get (0).getSite_domain ( );
-        presenter.getRealPath (sit_host, videoUrl);
+        videoUrl = bean.getSites ( ).get (0).getSite_url ( );
+        sit_host = bean.getSites ( ).get (0).getSite_domain ( );
+        switchLine (videoUrl);
+
+    }
+
+    public void switchLine(String videoUrl) {
+        String finalSite_url = "http://www.1717yun.com/jx/ty.php?url=" + videoUrl;
+        webView.setInterceptRequest ((view, url) -> {
+            //判断是否是广告相关的资源链接
+            if (AdFilterTool.isAd ("www.1717yun.com", url)) {
+                //有广告的请求数据，我们直接返回空数据，注：不能直接返回null
+                return new WebResourceResponse (null, null, null);
+            }
+            Log.e ("setInterceptRequest11", url);
+            //这里是不做处理的数据
+            return null;
+        });
+        webView.setOnParseListener (url -> setRealPath (url));
+        webView.loadUrl (finalSite_url);
     }
 
     public void setRealPath(String realPath) {

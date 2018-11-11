@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <WebView
-        android:id="@+id/my_webView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +15,7 @@
             android:id="@+id/video_player"
             android:layout_width="match_parent"
             android:layout_height="200dp" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_video"
             android:layout_width="match_parent"
@@ -29,5 +23,12 @@
         <!--视频播放器下面内容-->
     </LinearLayout>
 
+    <com.vipvideo.util.ParseWebView
+        android:id="@+id/my_webView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
 </RelativeLayout>
