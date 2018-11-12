@@ -394,8 +394,14 @@ public class SpringView extends ViewGroup {
             setStateType (StateType.LOADING);
             scrollState = ScrollState.NONE;
             mScroller.startScroll (0, getScrollY ( ), 0, -getScrollY ( ) - implPull.getHeight ( ), MOVE_TIME);
-            onRefreshListener.onRefresh ( );
             invalidate ( );
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onRefreshListener.onRefresh();
+                }
+            }, 400);
+
         }
 
     }

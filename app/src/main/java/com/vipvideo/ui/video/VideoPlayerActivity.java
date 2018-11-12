@@ -143,6 +143,11 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                 .setVideoTitle ("测试视频")
                 .setVideoAllCallBack (new GSYSampleCallBack ( ) {
                     @Override
+                    public void onStartPrepared(String url, Object... objects) {
+                        super.onStartPrepared(url, objects);
+                    }
+
+                    @Override
                     public void onPrepared(String url, Object... objects) {
                         super.onPrepared (url, objects);
                         //开始播放了才能旋转和全屏
@@ -159,7 +164,6 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
                     }
                 });
         gsyVideoOptionBuilder.build (detailPlayer);
-        detailPlayer.getStartButton ( ).setVisibility (View.GONE);
         detailPlayer.getFullscreenButton ( ).setOnClickListener (new View.OnClickListener ( ) {
             @Override
             public void onClick(View v) {
@@ -226,6 +230,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     private void playVideo() {
         if (TextUtils.isEmpty (videoUrl) || detailPlayer == null) {
+            detailPlayer.onLoadError();
             return;
         }
         detailPlayer.release ( );
@@ -256,10 +261,11 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     public void switchLine(String videoUrl) {
+        detailPlayer.onLoading();
         String finalSite_url = "http://www.1717yun.com/jx/ty.php?url=" + videoUrl;
         webView.setInterceptRequest ((view, url) -> {
             //判断是否是广告相关的资源链接
-            if (AdFilterTool.isAd ("www.1717yun.com", url)) {
+            if (AdFilterTool.isAd("www.1717yun.com", url)) {
                 //有广告的请求数据，我们直接返回空数据，注：不能直接返回null
                 return new WebResourceResponse (null, null, null);
             }

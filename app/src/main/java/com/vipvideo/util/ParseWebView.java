@@ -174,7 +174,6 @@ public class ParseWebView extends FrameLayout {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            mProgressBar.setVisibility (View.VISIBLE);
             super.onPageStarted (view, url, favicon);
         }
 
@@ -182,7 +181,6 @@ public class ParseWebView extends FrameLayout {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished (view, url);
             // 获取页面内容
-            mProgressBar.setVisibility (View.GONE);
             if (parseWebUrlListener != null) {
                 Log.e ("onPageFinished", finalUrl + "");
                 parseWebUrlListener.onFindUrl (finalUrl);
