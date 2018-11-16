@@ -322,7 +322,7 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      * 控制加载更多的开关, 作为 {@link OnLoadMoreListener#onLoadMore(Enabled enabled) 的参数}
      */
     public static class Enabled {
-        private boolean mLoadMoreEnabled = true;
+        private boolean mLoadMoreEnabled ;
         private OnEnabledListener mListener;
 
         public Enabled(OnEnabledListener listener) {

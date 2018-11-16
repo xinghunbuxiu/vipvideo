@@ -7,7 +7,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.vipvideo.app.UApplication;
-import com.vipvideo.jscrawler.JsCrawler;
+import com.vipvideo.util.web.jscrawler.JsCrawler;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

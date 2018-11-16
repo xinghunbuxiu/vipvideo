@@ -4,9 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebResourceResponse;
 import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -27,7 +25,6 @@ import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.VideoTopDesHolder;
 import com.vipvideo.ui.adpter.VideoTopShareHolder;
-import com.vipvideo.util.AdFilterTool;
 import com.vipvideo.util.ParseWebView;
 import com.vipvideo.view.LandLayoutVideo;
 
@@ -230,7 +227,6 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     private void playVideo() {
         if (TextUtils.isEmpty (videoUrl) || detailPlayer == null) {
-            detailPlayer.onLoadError();
             return;
         }
         detailPlayer.release ( );
@@ -263,22 +259,43 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     public void switchLine(String videoUrl) {
         detailPlayer.onLoading();
         String finalSite_url = "http://www.1717yun.com/jx/ty.php?url=" + videoUrl;
-        webView.setInterceptRequest ((view, url) -> {
-            //判断是否是广告相关的资源链接
-            if (AdFilterTool.isAd("www.1717yun.com", url)) {
-                //有广告的请求数据，我们直接返回空数据，注：不能直接返回null
-                return new WebResourceResponse (null, null, null);
-            }
-            Log.e ("setInterceptRequest11", url);
-            //这里是不做处理的数据
-            return null;
-        });
-        webView.setOnParseListener (url -> setRealPath (url));
-        webView.loadUrl (finalSite_url);
+//        webView.setInterceptRequest ((view, url) -> {
+//            //判断是否是广告相关的资源链接
+//            if (AdFilterTool.isAd("www.1717yun.com", url)) {
+//                //有广告的请求数据，我们直接返回空数据，注：不能直接返回null
+//                return new WebResourceResponse(null, null, null);
+//            }
+//            Log.e ("setInterceptRequest11", url);
+//            //这里是不做处理的数据
+//            return null;
+//        });
+//        webView.setOnParseListener(new ParseWebView.OnParseWebUrlListener() {
+//            @Override
+//            public void onFindUrl(String finalUrl) {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        setRealPath(finalUrl);
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onError(String msg) {
+//                runOnUiThread(() -> {
+//                    if (detailPlayer != null) {
+//                        detailPlayer.onLoadError();
+//                    }
+//                });
+//
+//            }
+//        });
+//        webView.loadUrl (finalSite_url);
     }
 
     public void setRealPath(String realPath) {
         this.videoUrl = realPath;
+        webView.onDestroy();
         playVideo ( );
     }
 

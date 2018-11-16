@@ -28,7 +28,7 @@ import com.lixh.view.LoadView.Builder;
 import com.lixh.view.UToolBar;
 
 import butterknife.ButterKnife;
-import rx.subjects.BehaviorSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * 基类Activity

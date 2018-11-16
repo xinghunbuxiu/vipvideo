@@ -11,9 +11,9 @@ import com.lixh.utils.Alert;
 import com.lixh.utils.UNetWork;
 import com.lixh.utils.UToast;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
 
-public abstract class RxSubscriber<T> extends Subscriber<T> {
+public abstract class RxSubscriber<T> extends DisposableObserver<T> {
 
     private Activity mContext;
     private String msg;
@@ -45,7 +45,7 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     }
 
     @Override
-    public void onCompleted() {
+    public void onComplete() {
         if (showDialog)
             Alert.dismiss();
 
@@ -121,8 +121,8 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     }
 
     public void cancelProgress() {
-        if (!this.isUnsubscribed()) {
-            this.unsubscribe();
+        if (!this.isDisposed()) {
+            this.dispose();
         }
     }
 }

@@ -25,7 +25,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import rx.functions.Func2;
+import io.reactivex.functions.BiFunction;
+
 
 /**
  * <option value="http://jqaaa.com/jx.php?url=">线路一</option>
@@ -80,7 +81,7 @@ public class VideoPresenter extends BasePresenter {
     public void getMovieByWhere(int page, Map<String, String> map) {
         AllVideoActivity videoActivity = getActivity ( );
         if (page == 0) {
-            rxHelper.createZipSubscriber (apiService.getAllMovieType ( ), apiService.getMovieByWhere (map), (Func2<MovieTypeBean, AllVideoInfo, AllVideoInfoBean>) (bean, allVideoInfo) -> {
+            rxHelper.createZipSubscriber (apiService.getAllMovieType ( ), apiService.getMovieByWhere (map), (BiFunction<MovieTypeBean, AllVideoInfo, AllVideoInfoBean>) (bean, allVideoInfo) -> {
                 AllVideoInfoBean bean1 = new AllVideoInfoBean ( );
                 bean1.setAllVideoInfo (allVideoInfo);
                 bean1.setMovieTypeBean (bean);

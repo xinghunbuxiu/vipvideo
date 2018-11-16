@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="read.bar.translucent">#88000000</color>
+    <color name="read.bg.night">#191919</color>
+    <color name="read.bg_1">#ffffff</color>
+    <color name="read.bg_2">#f7f2e5</color>
+    <color name="read.bg_3">#b9e0c3</color>
+    <color name="read.bg_4">#e6d3a3</color>
+    <color name="read.bg_5">#191919</color>
+    <color name="read.font_1">#4b4b4b</color>
+    <color name="read.font_2">#4b4b4b</color>
+    <color name="read.font_3">#4b4b4b</color>
+    <color name="read.font_4">#4b4b4b</color>
+    <color name="read.font_5">#696969</color>
+    <color name="read.font_night">#696969</color>
+    <color name="read.menu.bg">#191919</color>
+    <color name="read.menu.text">#cbcbcb</color>
+    <color name="read_normal_text_color">#666666</color>
 </resources>

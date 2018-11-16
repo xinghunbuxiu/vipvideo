@@ -208,7 +208,7 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
 
     private void addTopNavView() {
         lastType = new TextView (getApplicationContext ( ));
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams (ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px (getApplicationContext ( ), 40));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams (ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px (40));
         lp.addRule (RelativeLayout.CENTER_HORIZONTAL);
         layout.addView (lastType, lp, true);
     }

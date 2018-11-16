@@ -23,7 +23,7 @@ import com.lixh.view.LoadView;
 import com.lixh.view.UToolBar;
 
 import butterknife.ButterKnife;
-import rx.subjects.BehaviorSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message> {
     T mPresenter; //当前类需要的操作类

@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 
 import com.vipvideo.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 /**
@@ -36,7 +38,7 @@ public class ParseWebView extends FrameLayout {
     InterceptRequest interceptRequest;
 
     String finalUrl;
-
+    boolean isFinish;
     public interface InterceptRequest {
         WebResourceResponse shouldInterceptRequest(WebView view, String url);
 
@@ -44,6 +46,8 @@ public class ParseWebView extends FrameLayout {
 
     public interface OnParseWebUrlListener {
         void onFindUrl(String finalUrl);
+
+        void onError(String msg);
     }
 
     public void setOnParseListener(OnParseWebUrlListener parseListener) {
@@ -117,7 +121,7 @@ public class ParseWebView extends FrameLayout {
         mWebSettings.setGeolocationEnabled (false);
         enabledCookie (mWebView);//启用cookie
         mWebView.setWebViewClient (new MyWebViewClient ( ));
-        mWebView.setWebChromeClient (new WebChromeClient ( ));
+        mWebView.setWebChromeClient(new WebChromeClient());
 
 
     }
@@ -145,10 +149,10 @@ public class ParseWebView extends FrameLayout {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (url.startsWith ("intent") || url.startsWith ("youku")) {
+            if (url.startsWith("intent") || url.startsWith("youku")) {
                 return true;
             } else {
-                return super.shouldOverrideUrlLoading (view, url);
+                return super.shouldOverrideUrlLoading(view, url);
             }
 
         }
@@ -156,41 +160,68 @@ public class ParseWebView extends FrameLayout {
         /*解决ssl证书问题*/
         @Override
         public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed ( );
+            handler.proceed();
         }
 
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            Log.e ("shouldInterceptRequest", url);
+            Log.e("shouldInterceptRequest", url);
 
-            if (Pattern.matches (mideaReg, url)) {
+            if (Pattern.matches(mideaReg, url)) {
                 finalUrl = url;
+                isFinish = true;
+                // 获取页面内容
+                if (parseWebUrlListener != null) {
+                    Log.e("onProgressChanged", finalUrl + "");
+                    parseWebUrlListener.onFindUrl(finalUrl);
+                }
             }
             if (interceptRequest != null) {
-                return interceptRequest.shouldInterceptRequest (view, url);
+                return interceptRequest.shouldInterceptRequest(view, url);
             }
-            return super.shouldInterceptRequest (view, url);
+            return super.shouldInterceptRequest(view, url);
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted (view, url, favicon);
+            super.onPageStarted(view, url, favicon);
+            startCount();//加载超时处理
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            super.onPageFinished (view, url);
-            // 获取页面内容
-            if (parseWebUrlListener != null) {
-                Log.e ("onPageFinished", finalUrl + "");
-                parseWebUrlListener.onFindUrl (finalUrl);
-            }
+            super.onPageFinished(view, url);
+            Log.e("onPageFinished", finalUrl + "");
         }
     }
 
+    /*解决webview加载超时问题*/
 
+    private void startCount() {
+        final Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                timer.purge();
+                if (parseWebUrlListener != null && !isFinish) {
+                    parseWebUrlListener.onError(null);
+                }
+
+            }
+        };
+        timer.schedule(timerTask, 20 * 1000, 1);
+    }
+
+    public void onDestroy() {
+        if (mWebView != null) {
+            mWebView.stopLoading();
+            mWebView.destroy();
+            mWebView.clearHistory();
+
+        }
+    }
     public void setInterceptRequest(ParseWebView.InterceptRequest interceptRequest) {
         this.interceptRequest = interceptRequest;
     }
-
 }

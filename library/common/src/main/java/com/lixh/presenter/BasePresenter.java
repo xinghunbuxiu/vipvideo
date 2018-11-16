@@ -11,7 +11,7 @@ import com.lixh.utils.LoadingTip;
 import com.lixh.utils.UIntent;
 import com.lixh.view.UToolBar;
 
-import rx.subjects.BehaviorSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 
 /**

@@ -35,11 +35,12 @@ public class LandLayoutVideo extends StandardGSYVideoPlayer {
     }
 
     public void onLoading() {
-        setStateAndUi(CURRENT_STATE_PREPAREING);
+        changeUiToPreparingShow();
+
     }
 
     public void onLoadError() {
-        setStateAndUi(CURRENT_STATE_ERROR);
+        changeUiToError();
     }
     //这个必须配置最上面的构造才能生效
     @Override

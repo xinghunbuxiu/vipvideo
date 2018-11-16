@@ -11,7 +11,8 @@
         android:hardwareAccelerated="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DayTheme">
+        android:theme="@style/DayTheme"
+        tools:replace="android:icon">
 
         <activity
             android:name=".ui.WelcomeActivity"

@@ -33,7 +33,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     View rootView;
     RecyclerView recyclerView;
     SpringView springView;
-    int page = 1;
+    int page = 0;
     LoadingTip loadingTip;
     private MyOnLoadFinish onLoadFinish;
     LoadMoreAdapter moreAdapter;
@@ -221,7 +221,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
             if (isAutoLoadMore) {
                 loadMoreAdapter = LoadMoreWrapper.with (mAdapters)
                         .setLoadMoreEnabled(false)
-                        .setShowNoMoreEnabled (true) // enable show NoMoreView，default false
+                        .setShowNoMoreEnabled(false) // enable show NoMoreView，default false
                         .setListener (this).into (recyclerView);
             } else {
                 recyclerView.setAdapter (mAdapters);

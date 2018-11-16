@@ -9,10 +9,10 @@ import com.vipvideo.bean.VideoInfoBean;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 
 /**
  * Created by helin on 2016/10/9 17:09.

@@ -3,7 +3,7 @@ package com.vipvideo.app;
 import com.lixh.BuildConfig;
 import com.lixh.app.BaseApplication;
 import com.lixh.utils.ULog;
-import com.vipvideo.jscrawler.JsCrawler;
+import com.vipvideo.util.web.jscrawler.JsCrawler;
 
 /**
  * APPLICATION
