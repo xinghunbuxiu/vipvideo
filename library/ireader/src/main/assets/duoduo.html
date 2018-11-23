@@ -1,27 +1,20 @@
 <html lang="zh-CN">
 <head>
-    <meta charset="utf-8" />
-    <meta name="author" content="duokan" />
-    <link type="text/css" rel="stylesheet" href="css/global.css" />
-    <link type="text/css" rel="stylesheet" href="css/reader_horizontal.css" />
-    <link type="text/css" rel="stylesheet" href="css/fonts.css" />
+    <meta charset="utf-8"/>
+    <meta name="author" content="duokan"/>
+    <link type="text/css" rel="stylesheet" href="css/global.css"/>
+    <link type="text/css" rel="stylesheet" href="css/reader_mobile.css"/>
+    <link type="text/css" rel="stylesheet" href="css/fonts.css"/>
     <script charset="utf-8" src="./jquery-3.2.1.min.js"></script>
     <script charset="utf-8" src="./duoduo.js"></script>
     <script charset="utf-8" src="./page.js"></script>
     <script>
-    var bbb="BkFpdGVtcwABQAkgc3JjAFFodHRwczovL2Nkbi5jbmJqMS5mZHMuYXBpLm1pLWltZy5jb20vYm9vay9pbWFnZXMvM2FjOWU4MjUzMjcyNmQwNTg1YmE0YzhlYWI5M2RjOGNAdG1hdAAGEG0yMQAAAAAAEG0yMgAAAHA/EG0xMQAAAHA/EG0xMgAAAAAAEGR4AAAAIMIQZHkAAAAAABBoZWlnaHQAAABwRBB3aWR0aAAAADREEHkxAAAAcEQQeTAAAAAAABB4MAAAACDCEHgxAAAAKkQgdHlwZQAFaW1hZ2VBcGFnZV9zaXplAAICgAICwAMBcGFnZV9udW1iZXIAJkFwb3NpdGlvbgAEAQcBAAEAAlEBIHR5cGUACmZ1bGxzY3JlZW4wbm9wYWRkaW5nAAE=";
 function drawPageView(id,info) {
-     alert(bbb.length)
-	 	window.controller.log(bbb.length);
 	 	window.controller.log(info.length);
-	var pageInfo=dkbson.decode(bbb);
-	<!--window.controller.log('dd'+pageInfo);-->
+	var pageInfo=dkbson.decode(info);
+	window.controller.log('dd'+pageInfo);
  drawPage(id,pageInfo);
 }
-
-
-
-
 
     </script>
 </head>
