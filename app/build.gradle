@@ -89,7 +89,6 @@ dependencies {
     implementation project(':library:common')
     implementation project(':library:ireader')
     implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'com.github.evgenyneu:js-evaluator-for-android:v2.0.0'
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     //Optional: see how to use the utility.
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'

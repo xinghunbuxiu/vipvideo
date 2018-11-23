@@ -9,6 +9,26 @@ RequestBuilder.prototype.build = function() {
     return JSON.stringify(request);
 }
 
+function getduoduo(url) {
+    // 定义抓取url
+    var url = "http://www.duokan.com/reader/book_info/"+url+"/medium";
+    // 通过RequestBuilder构造请求
+    var request = new RequestBuilder().url(url).method("GET")
+        .timeout(10000).build();
+
+    // 调用RequestEngine.executeByRequest()传入构造好的request对象
+    var response = RequestEngine.executeByRequest(request);
+    // 得到response对象的json字符串,格式如下:
+    // {"code":"200", "message":"OK", "body":"请求获取的内容"}
+    // {"code":"404", "message":"NOT FOUND", "body":"请求获取的内容"}
+    // {"code":"-1", "message":"Request Exception", "body":""}
+    // 通过eval函数, 转成js对象
+    // 得到正确内容后, 获取相应的body并通过JQuery对内容进行处理
+    // 把js数组对象转成json字符串返回
+// var data = dkbson.decode(response);
+ return JSON.stringify(response);
+ }
+
 function getLineBy163ren(url) {
     // 定义抓取url
     var url = "http://jx.api.163ren.com/vod.php?url="+url;

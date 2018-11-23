@@ -16,7 +16,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
 import com.vipvideo.R;
 
@@ -30,7 +29,6 @@ import java.util.regex.Pattern;
 
 public class ParseWebView extends FrameLayout {
     private WebView mWebView;
-    ProgressBar mProgressBar;
     private final static String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.119 Safari/537.36";
     public String mideaReg = ".*(.+\\.m3u8|.+\\.mp4|.+\\.flv).*";
 
@@ -70,9 +68,8 @@ public class ParseWebView extends FrameLayout {
 
     private void initView(Context context) {
         if (!isInEditMode ( )) {
-            View view = View.inflate (context, R.layout.layout_web_progress, null);
+            View view = View.inflate(context, R.layout.item_parse_webview, null);
             mWebView = view.findViewById (R.id.web_view);
-            mProgressBar = view.findViewById (R.id.progress_bar);
             addView (view);
             initWebSettings ( );
 

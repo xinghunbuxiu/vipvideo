@@ -33,7 +33,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:label="电影播放" />
-
+        <activity android:name=".ui.reader.ReadActivityNew" />
     </application>
 
 </manifest>

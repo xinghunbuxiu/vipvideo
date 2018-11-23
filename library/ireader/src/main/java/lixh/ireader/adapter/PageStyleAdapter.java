@@ -1,47 +1,38 @@
 package lixh.ireader.adapter;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import com.lixh.base.adapter.BaseListAdapter;
-import com.lixh.base.adapter.IViewHolder;
-import com.lixh.base.adapter.recycleview.IBaseViewHolder;
+import com.lixh.base.adapter.recycleview.EasyRVAdapter;
+import com.lixh.base.adapter.recycleview.EasyRVHolder;
 
-import lixh.ireader.adapter.holder.PageStyleHolder;
-import lixh.ireader.config.PageStyle;
+import java.util.List;
+
+import lixh.ireader.widget.page.PageStyle;
 
 
 /**
  * Created by newbiechen on 17-5-19.
  */
 
-public class PageStyleAdapter extends BaseListAdapter<Drawable> {
+public class PageStyleAdapter extends EasyRVAdapter<Drawable> {
     private int currentChecked;
 
-    @Override
-    protected IViewHolder<Drawable> createViewHolder(int viewType) {
-        return new PageStyleHolder();
+    public PageStyleAdapter(Context context, List<Drawable> list) {
+        super(context, list);
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        IViewHolder iHolder = ((IBaseViewHolder) holder).holder;
-        PageStyleHolder pageStyleHolder = (PageStyleHolder) iHolder;
-        if (currentChecked == position) {
-            pageStyleHolder.setChecked();
-        }
-    }
 
     public void setPageStyleChecked(PageStyle pageStyle) {
         currentChecked = pageStyle.ordinal();
     }
 
+
     @Override
-    protected void onItemClick(View v, int pos) {
-        super.onItemClick(v, pos);
-        currentChecked = pos;
-        notifyDataSetChanged();
+    protected void onBindData(EasyRVHolder viewHolder, int position, Drawable item) {
+        viewHolder.setOnItemViewClickListener(v -> {
+
+        });
+
     }
 }

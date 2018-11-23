@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 
-import com.evgenii.jsevaluator.JsEvaluator;
-import com.evgenii.jsevaluator.interfaces.JsCallback;
+import com.vipvideo.util.web.jsevaluator.JsEvaluator;
+import com.vipvideo.util.web.jsevaluator.interfaces.JsCallback;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +17,11 @@ import java.util.Scanner;
 public class JsCrawler {
 
     private static JsCrawler singleton;
-
+    public static final String REQUEST_MODEL = "request-model.js";
+    public static final String JQUERY = "jquery-3.2.1.min.js";
     private Context mContext;
     private JsEvaluator mJsEvaluator;
-    private boolean jQueryEnabled = false;
-    private String jQueryCode;
-    private String requestModelCode;
+    private String jsLibCode = "";
 
     public static void initialize(Context context) {
         if (singleton == null) {
@@ -59,54 +58,42 @@ public class JsCrawler {
         return mJsEvaluator;
     }
 
-    public void setJQueryEnabled(boolean enabled) {
-        jQueryEnabled = enabled;
-    }
-
     public void setRequestEngine(RequestEngine requestEngine) {
         mJsEvaluator.getWebView().addJavascriptInterface(requestEngine, "RequestEngine");
     }
 
-    protected String loadJquery() {
-        if (jQueryCode != null) {
-            return jQueryCode;
-        }
+    public String loadJs(String name) {
+        String jsCode;
         try {
             final AssetManager am = mContext.getAssets();
-            final InputStream inputStream = am.open("jquery-3.2.1.min.js");
-            jQueryCode = getFileString(inputStream);
-            return jQueryCode;
+            final InputStream inputStream = am.open(name);
+            jsCode = getFileString(inputStream);
+            return jsCode;
         } catch (final IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
-    protected String loadRequestModel() {
-        if (requestModelCode != null) {
-            return requestModelCode;
-        }
-        try {
-            final AssetManager am = mContext.getAssets();
-            final InputStream inputStream = am.open("request-model.js");
-            requestModelCode = getFileString(inputStream);
-            return requestModelCode;
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
+    public JsCrawler init(String... names) {
+        jsLibCode = "";
+        for (String name : names) {
+            jsLibCode += loadJs(name) + ";\u2000";
+        }
+        return this;
+    }
     private String getFileString(InputStream inputStream) {
         Scanner scanner = new Scanner(inputStream, "UTF-8");
         return scanner.useDelimiter("\\A").next();
     }
 
+    public void callFunction(String jsCode, JsCallback resultCallback) {
+        jsCode = jsLibCode + ";\u2000" + jsCode;
+        mJsEvaluator.callFunction(jsCode, resultCallback, "", new Object[]{});
+    }
     public void callFunction(String jsCode, JsCallback resultCallback, String name, Object... args) {
-        jsCode = loadRequestModel() + ";" + jsCode;
-        if (jQueryEnabled) {
-            jsCode = loadJquery() + ";" + jsCode;
-        }
+        jsCode = jsLibCode + ";\u2000" + jsCode;
         mJsEvaluator.callFunction(jsCode, resultCallback, name, args);
     }
 

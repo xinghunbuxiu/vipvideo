@@ -18,6 +18,9 @@ package com.vipvideo.api;
 
 public class ApiConstants {
     public static final String BASE_URL = "http://app.video.baidu.com";
+    public static final String BASE_DUOKAN_URL = "http://www.duokan.com";
+    public static final String BASE_DUOKAN_INFO_URL = "https://cdn.cnbj1.fds.api.mi-img.com/";
+
     /**
      * 获取对应的host
      *
@@ -29,6 +32,12 @@ public class ApiConstants {
         switch (hostType) {
             case HostType.BASE_URL:
                 host = BASE_URL;
+                break;
+            case HostType.BASE_DUOKAN_URL:
+                host = BASE_DUOKAN_URL;
+                break;
+            case HostType.BASE_DUOKAN_INFO_URL:
+                host = BASE_DUOKAN_INFO_URL;
                 break;
             default:
                 host = "";

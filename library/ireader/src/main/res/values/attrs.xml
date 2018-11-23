@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StyleableTextView">
+        <attr name="styleFont" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="DirectionalViewpager">
+        <attr name="direction" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="UnderlinedTextView">
+        <attr name="underlineWidth" format="dimension" />
+        <attr name="underlineColor" format="color" />
+    </declare-styleable>
+</resources>

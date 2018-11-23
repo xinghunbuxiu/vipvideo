@@ -3,6 +3,8 @@ package lixh.ireader.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 
 /**
  * Created by newbiechen on 17-5-8.
@@ -45,6 +47,8 @@ public class CollBookBean implements Parcelable {
     private boolean isUpdate = true;
     //是否是本地文件
     private boolean isLocal = false;
+    private boolean local;
+    private List<BookChapterBean> bookChapters;
 
 
     public void setIsLocal(boolean isLocal) {
@@ -117,5 +121,65 @@ public class CollBookBean implements Parcelable {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public boolean isLocal() {
+        return local;
+    }
+
+    public void setLocal(boolean local) {
+        this.local = local;
+    }
+
+    public List<BookChapterBean> getBookChapters() {
+        return bookChapters;
+    }
+
+    public void setBookChapters(List<BookChapterBean> bookChapters) {
+        this.bookChapters = bookChapters;
+    }
+
+    public void setIsUpdate(boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
+
+    public boolean isUpdate() {
+        return isUpdate;
+    }
+
+    public void setUpdate(boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
+
+    public void setLastRead(String lastRead) {
+        this.lastRead = lastRead;
+    }
+
+    public String getLastRead() {
+        return lastRead;
+    }
+
+    public void setUpdated(String updated) {
+        this.updated = updated;
+    }
+
+    public String getUpdated() {
+        return updated;
+    }
+
+    public void setLastChapter(String lastChapter) {
+        this.lastChapter = lastChapter;
+    }
+
+    public String getLastChapter() {
+        return lastChapter;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }

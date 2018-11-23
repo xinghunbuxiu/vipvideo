@@ -47,7 +47,7 @@ public class UIntent {
     }
 
     public UIntent getNewBundle() {
-        mBundle = new Bundle ( );
+        mBundle = new Bundle();
         return this;
     }
 
@@ -76,7 +76,7 @@ public class UIntent {
      * @param value a String, or null
      */
     public UIntent withString(@Nullable String key, @Nullable String value) {
-        mBundle.putString (key, value);
+        mBundle.putString(key, value);
         return this;
     }
 
@@ -88,7 +88,7 @@ public class UIntent {
      * @param value a boolean
      */
     public UIntent withBoolean(@Nullable String key, boolean value) {
-        mBundle.putBoolean (key, value);
+        mBundle.putBoolean(key, value);
         return this;
     }
 
@@ -100,7 +100,7 @@ public class UIntent {
      * @param value a short
      */
     public UIntent withShort(@Nullable String key, short value) {
-        mBundle.putShort (key, value);
+        mBundle.putShort(key, value);
         return this;
     }
 
@@ -112,7 +112,7 @@ public class UIntent {
      * @param value an int
      */
     public UIntent withInt(@Nullable String key, int value) {
-        mBundle.putInt (key, value);
+        mBundle.putInt(key, value);
         return this;
     }
 
@@ -124,7 +124,7 @@ public class UIntent {
      * @param value a long
      */
     public UIntent withLong(@Nullable String key, long value) {
-        mBundle.putLong (key, value);
+        mBundle.putLong(key, value);
         return this;
     }
 
@@ -136,7 +136,7 @@ public class UIntent {
      * @param value a double
      */
     public UIntent withDouble(@Nullable String key, double value) {
-        mBundle.putDouble (key, value);
+        mBundle.putDouble(key, value);
         return this;
     }
 
@@ -148,7 +148,7 @@ public class UIntent {
      * @param value a byte
      */
     public UIntent withByte(@Nullable String key, byte value) {
-        mBundle.putByte (key, value);
+        mBundle.putByte(key, value);
         return this;
     }
 
@@ -160,7 +160,7 @@ public class UIntent {
      * @param value a char
      */
     public UIntent withChar(@Nullable String key, char value) {
-        mBundle.putChar (key, value);
+        mBundle.putChar(key, value);
         return this;
     }
 
@@ -172,7 +172,7 @@ public class UIntent {
      * @param value a float
      */
     public UIntent withFloat(@Nullable String key, float value) {
-        mBundle.putFloat (key, value);
+        mBundle.putFloat(key, value);
         return this;
     }
 
@@ -184,7 +184,7 @@ public class UIntent {
      * @param value a CharSequence, or null
      */
     public UIntent withCharSequence(@Nullable String key, @Nullable CharSequence value) {
-        mBundle.putCharSequence (key, value);
+        mBundle.putCharSequence(key, value);
         return this;
     }
 
@@ -196,7 +196,7 @@ public class UIntent {
      * @param value a Parcelable object, or null
      */
     public UIntent withParcelable(@Nullable String key, @Nullable Parcelable value) {
-        mBundle.putParcelable (key, value);
+        mBundle.putParcelable(key, value);
         return this;
     }
 
@@ -209,7 +209,7 @@ public class UIntent {
      * @param value an array of Parcelable objects, or null
      */
     public UIntent withParcelableArray(@Nullable String key, @Nullable Parcelable[] value) {
-        mBundle.putParcelableArray (key, value);
+        mBundle.putParcelableArray(key, value);
         return this;
     }
 
@@ -222,7 +222,7 @@ public class UIntent {
      * @param value an ArrayList of Parcelable objects, or null
      */
     public UIntent withParcelableArrayList(@Nullable String key, @Nullable ArrayList<? extends Parcelable> value) {
-        mBundle.putParcelableArrayList (key, value);
+        mBundle.putParcelableArrayList(key, value);
         return this;
     }
 
@@ -235,7 +235,7 @@ public class UIntent {
      * @param value a SparseArray of Parcelable objects, or null
      */
     public UIntent withSparseParcelableArray(@Nullable String key, @Nullable SparseArray<? extends Parcelable> value) {
-        mBundle.putSparseParcelableArray (key, value);
+        mBundle.putSparseParcelableArray(key, value);
         return this;
     }
 
@@ -247,7 +247,7 @@ public class UIntent {
      * @param value an ArrayList object, or null
      */
     public UIntent withIntegerArrayList(@Nullable String key, @Nullable ArrayList<Integer> value) {
-        mBundle.putIntegerArrayList (key, value);
+        mBundle.putIntegerArrayList(key, value);
         return this;
     }
 
@@ -259,7 +259,7 @@ public class UIntent {
      * @param value an ArrayList object, or null
      */
     public UIntent withStringArrayList(@Nullable String key, @Nullable ArrayList<String> value) {
-        mBundle.putStringArrayList (key, value);
+        mBundle.putStringArrayList(key, value);
         return this;
     }
 
@@ -271,7 +271,7 @@ public class UIntent {
      * @param value an ArrayList object, or null
      */
     public UIntent withCharSequenceArrayList(@Nullable String key, @Nullable ArrayList<CharSequence> value) {
-        mBundle.putCharSequenceArrayList (key, value);
+        mBundle.putCharSequenceArrayList(key, value);
         return this;
     }
 
@@ -283,7 +283,7 @@ public class UIntent {
      * @param value a Serializable object, or null
      */
     public UIntent withSerializable(@Nullable String key, @Nullable Serializable value) {
-        mBundle.putSerializable (key, value);
+        mBundle.putSerializable(key, value);
         return this;
     }
 
@@ -295,7 +295,7 @@ public class UIntent {
      * @param value a byte array object, or null
      */
     public UIntent withByteArray(@Nullable String key, @Nullable byte[] value) {
-        mBundle.putByteArray (key, value);
+        mBundle.putByteArray(key, value);
         return this;
     }
 
@@ -307,7 +307,7 @@ public class UIntent {
      * @param value a short array object, or null
      */
     public UIntent withShortArray(@Nullable String key, @Nullable short[] value) {
-        mBundle.putShortArray (key, value);
+        mBundle.putShortArray(key, value);
         return this;
     }
 
@@ -319,7 +319,7 @@ public class UIntent {
      * @param value a char array object, or null
      */
     public UIntent withCharArray(@Nullable String key, @Nullable char[] value) {
-        mBundle.putCharArray (key, value);
+        mBundle.putCharArray(key, value);
         return this;
     }
 
@@ -331,7 +331,7 @@ public class UIntent {
      * @param value a float array object, or null
      */
     public UIntent withFloatArray(@Nullable String key, @Nullable float[] value) {
-        mBundle.putFloatArray (key, value);
+        mBundle.putFloatArray(key, value);
         return this;
     }
 
@@ -343,7 +343,7 @@ public class UIntent {
      * @param value a CharSequence array object, or null
      */
     public UIntent withCharSequenceArray(@Nullable String key, @Nullable CharSequence[] value) {
-        mBundle.putCharSequenceArray (key, value);
+        mBundle.putCharSequenceArray(key, value);
         return this;
     }
 
@@ -355,31 +355,31 @@ public class UIntent {
      * @param value a Bundle object, or null
      */
     public UIntent withBundle(@Nullable String key, @Nullable Bundle value) {
-        mBundle.putBundle (key, value);
+        mBundle.putBundle(key, value);
         return this;
     }
 
     public UIntent(Activity mContext) {
         this.mContext = mContext;
-        mBundle = mContext.getIntent ( ).getExtras ( );
+        mBundle = mContext.getIntent().getExtras();
         if (mBundle == null) {
-            mBundle = new Bundle ( );
+            mBundle = new Bundle();
         }
     }
 
 
     public void goSetActivity() {
-        Intent localIntent = new Intent ( );
+        Intent localIntent = new Intent();
         if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction ("android.settings.APPLICATION_DETAILS_SETTINGS")
-                    .setData (Uri.fromParts ("package", mContext.getPackageName ( ), null));
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS")
+                    .setData(Uri.fromParts("package", mContext.getPackageName(), null));
         } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction (Intent.ACTION_VIEW).
-                    setClassName ("com.android.settings", "com.android.settings.InstalledAppDetails")
-                    .putExtra ("com.android.settings.ApplicationPkgName", mContext.getPackageName ( ));
+            localIntent.setAction(Intent.ACTION_VIEW).
+                    setClassName("com.android.settings", "com.android.settings.InstalledAppDetails")
+                    .putExtra("com.android.settings.ApplicationPkgName", mContext.getPackageName());
         }
-        localIntent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity (localIntent);
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(localIntent);
     }
 
     /**
@@ -390,7 +390,7 @@ public class UIntent {
      * @return a byte value
      */
     public byte getByte(String key) {
-        return mBundle.getByte (key);
+        return mBundle.getByte(key);
     }
 
     /**
@@ -402,7 +402,7 @@ public class UIntent {
      * @return a byte value
      */
     public Byte getByte(String key, byte defaultValue) {
-        return mBundle.getByte (key, defaultValue);
+        return mBundle.getByte(key, defaultValue);
     }
 
     /**
@@ -413,7 +413,7 @@ public class UIntent {
      * @return a char value
      */
     public char getChar(String key) {
-        return mBundle.getChar (key);
+        return mBundle.getChar(key);
     }
 
     /**
@@ -426,7 +426,15 @@ public class UIntent {
      */
 
     public char getChar(String key, char defaultValue) {
-        return mBundle.getChar (key, defaultValue);
+        return mBundle.getChar(key, defaultValue);
+    }
+
+    public int getInt(String key) {
+        return mBundle.getInt(key);
+    }
+
+    public int getInt(String key, int defaultValue) {
+        return mBundle.getInt(key, defaultValue);
     }
 
     /**
@@ -438,7 +446,7 @@ public class UIntent {
      */
 
     public short getShort(String key) {
-        return mBundle.getShort (key);
+        return mBundle.getShort(key);
     }
 
     /**
@@ -450,7 +458,7 @@ public class UIntent {
      * @return a short value
      */
     public short getShort(String key, short defaultValue) {
-        return mBundle.getShort (key, defaultValue);
+        return mBundle.getShort(key, defaultValue);
     }
 
     /**
@@ -461,7 +469,7 @@ public class UIntent {
      * @return a float value
      */
     public float getFloat(String key) {
-        return mBundle.getFloat (key);
+        return mBundle.getFloat(key);
     }
 
     /**
@@ -473,7 +481,7 @@ public class UIntent {
      * @return a float value
      */
     public float getFloat(String key, float defaultValue) {
-        return mBundle.getFloat (key, defaultValue);
+        return mBundle.getFloat(key, defaultValue);
     }
 
     /**
@@ -486,7 +494,7 @@ public class UIntent {
      */
     @Nullable
     public CharSequence getCharSequence(@Nullable String key) {
-        return mBundle.getCharSequence (key);
+        return mBundle.getCharSequence(key);
     }
 
     /**
@@ -501,7 +509,7 @@ public class UIntent {
      * if no valid CharSequence object is currently mapped to that key.
      */
     public CharSequence getCharSequence(@Nullable String key, CharSequence defaultValue) {
-        return mBundle.getCharSequence (key, defaultValue);
+        return mBundle.getCharSequence(key, defaultValue);
     }
 
     /**
@@ -515,7 +523,7 @@ public class UIntent {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     public Size getSize(@Nullable String key) {
-        return mBundle.getSize (key);
+        return mBundle.getSize(key);
     }
 
     /**
@@ -529,7 +537,7 @@ public class UIntent {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     public SizeF getSizeF(@Nullable String key) {
-        return mBundle.getSizeF (key);
+        return mBundle.getSizeF(key);
     }
 
     /**
@@ -542,7 +550,7 @@ public class UIntent {
      */
     @Nullable
     public Bundle getBundle(@Nullable String key) {
-        return mBundle.getBundle (key);
+        return mBundle.getBundle(key);
     }
 
     /**
@@ -555,7 +563,7 @@ public class UIntent {
      */
     @Nullable
     public <T extends Parcelable> T getParcelable(@Nullable String key) {
-        return mBundle.getParcelable (key);
+        return mBundle.getParcelable(key);
     }
 
     /**
@@ -568,7 +576,7 @@ public class UIntent {
      */
     @Nullable
     public Parcelable[] getParcelableArray(@Nullable String key) {
-        return mBundle.getParcelableArray (key);
+        return mBundle.getParcelableArray(key);
     }
 
     /**
@@ -581,7 +589,7 @@ public class UIntent {
      */
     @Nullable
     public <T extends Parcelable> ArrayList<T> getParcelableArrayList(@Nullable String key) {
-        return mBundle.getParcelableArrayList (key);
+        return mBundle.getParcelableArrayList(key);
     }
 
     /**
@@ -594,7 +602,7 @@ public class UIntent {
      */
     @Nullable
     public <T extends Parcelable> SparseArray<T> getSparseParcelableArray(@Nullable String key) {
-        return mBundle.getSparseParcelableArray (key);
+        return mBundle.getSparseParcelableArray(key);
     }
 
     /**
@@ -607,7 +615,7 @@ public class UIntent {
      */
     @Nullable
     public Serializable getSerializable(@Nullable String key) {
-        return mBundle.getSerializable (key);
+        return mBundle.getSerializable(key);
     }
 
     /**
@@ -620,7 +628,7 @@ public class UIntent {
      */
     @Nullable
     public ArrayList<Integer> getIntegerArrayList(@Nullable String key) {
-        return mBundle.getIntegerArrayList (key);
+        return mBundle.getIntegerArrayList(key);
     }
 
     /**
@@ -633,7 +641,7 @@ public class UIntent {
      */
     @Nullable
     public ArrayList<String> getStringArrayList(@Nullable String key) {
-        return mBundle.getStringArrayList (key);
+        return mBundle.getStringArrayList(key);
     }
 
     public String getString(@Nullable String key) {
@@ -643,6 +651,7 @@ public class UIntent {
     public String getString(@Nullable String key, String value) {
         return TextUtils.isEmpty(mBundle.getString(key)) ? value : mBundle.getString(key);
     }
+
     /**
      * Returns the value associated with the given key, or null if
      * no mapping of the desired type exists for the given key or a null
@@ -653,7 +662,7 @@ public class UIntent {
      */
     @Nullable
     public ArrayList<CharSequence> getCharSequenceArrayList(@Nullable String key) {
-        return mBundle.getCharSequenceArrayList (key);
+        return mBundle.getCharSequenceArrayList(key);
     }
 
     /**
@@ -666,7 +675,7 @@ public class UIntent {
      */
     @Nullable
     public byte[] getByteArray(@Nullable String key) {
-        return mBundle.getByteArray (key);
+        return mBundle.getByteArray(key);
     }
 
     /**
@@ -679,7 +688,7 @@ public class UIntent {
      */
     @Nullable
     public short[] getShortArray(@Nullable String key) {
-        return mBundle.getShortArray (key);
+        return mBundle.getShortArray(key);
     }
 
     /**
@@ -692,7 +701,7 @@ public class UIntent {
      */
     @Nullable
     public char[] getCharArray(@Nullable String key) {
-        return mBundle.getCharArray (key);
+        return mBundle.getCharArray(key);
     }
 
     /**
@@ -705,7 +714,7 @@ public class UIntent {
      */
     @Nullable
     public float[] getFloatArray(@Nullable String key) {
-        return mBundle.getFloatArray (key);
+        return mBundle.getFloatArray(key);
     }
 
     /**
@@ -718,7 +727,7 @@ public class UIntent {
      */
     @Nullable
     public CharSequence[] getCharSequenceArray(@Nullable String key) {
-        return mBundle.getCharSequenceArray (key);
+        return mBundle.getCharSequenceArray(key);
     }
 
     /**
@@ -732,7 +741,7 @@ public class UIntent {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Nullable
     public IBinder getBinder(@Nullable String key) {
-        return mBundle.getBinder (key);
+        return mBundle.getBinder(key);
     }
 
 
@@ -740,17 +749,17 @@ public class UIntent {
      * 跳转到父Activity
      */
     public static void backToParent(Activity activity) {
-        Intent upIntent = NavUtils.getParentActivityIntent (activity);
+        Intent upIntent = NavUtils.getParentActivityIntent(activity);
         if (upIntent == null) {
-            activity.finish ( );
+            activity.finish();
             return;
         }
-        if (NavUtils.shouldUpRecreateTask (activity, upIntent)) {
-            TaskStackBuilder.create (activity)
-                    .addNextIntentWithParentStack (upIntent)
-                    .startActivities ( );
+        if (NavUtils.shouldUpRecreateTask(activity, upIntent)) {
+            TaskStackBuilder.create(activity)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
         } else {
-            NavUtils.navigateUpTo (activity, upIntent);
+            NavUtils.navigateUpTo(activity, upIntent);
         }
     }
 
@@ -758,22 +767,22 @@ public class UIntent {
      * 通过Class跳转界面
      **/
     public void go(Class<?> cls) {
-        Intent mIntent = new Intent (mContext, cls);
+        Intent mIntent = new Intent(mContext, cls);
         if (mBundle != null) {
-            mIntent.putExtras (mBundle);
+            mIntent.putExtras(mBundle);
         }
-        mContext.startActivity (mIntent);
+        mContext.startActivity(mIntent);
     }
 
     /**
      * &#x542b;&#x6709;Bundle&#x901a;&#x8fc7;Class&#x8df3;&#x8f6c;&#x754c;&#x9762;
      **/
     public void goForResult(Class<?> cls, int requestCode) {
-        Intent mIntent = new Intent (mContext, cls);
+        Intent mIntent = new Intent(mContext, cls);
         if (mBundle != null) {
-            mIntent.putExtras (mBundle);
+            mIntent.putExtras(mBundle);
         }
-        mContext.startActivityForResult (mIntent, requestCode);
+        mContext.startActivityForResult(mIntent, requestCode);
     }
 
 

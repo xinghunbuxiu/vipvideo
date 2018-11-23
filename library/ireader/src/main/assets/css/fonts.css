@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'DK-SERIF';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-serif-palatino-regular.woff) format('woff');
+}
+@font-face {
+  font-family: 'DK-SERIF-BOLD';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-serif-palatino-bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'DK-SERIF-ITALIC';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-serif-palatino-italic.woff) format('woff');
+}
+@font-face {
+  font-family: 'DK-SERIF-BOLD-ITALIC';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-serif-palatino-bold-italic.woff) format('woff');
+}
+@font-face {
+  font-family: 'DK-CODE';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-code.woff) format('woff');
+}
+@font-face {
+  font-family: 'Lucida Console';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/lucon.woff) format('woff');
+}
+@font-face {
+  font-family: 'Symbol';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-symbol.woff) format('woff');
+}
+@font-face {
+  font-family: 'DK-SYMBOL';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../fonts/dk-symbol.woff) format('woff');
+}

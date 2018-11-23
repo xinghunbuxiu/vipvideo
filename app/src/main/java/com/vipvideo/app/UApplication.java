@@ -16,10 +16,6 @@ public class UApplication extends BaseApplication {
     public void init() {
         instance = this;
         JsCrawler.initialize(this);
-        // 获取JsCrawler实例
-        JsCrawler jsCrawler = JsCrawler.getInstance();
-        // 设置是否开启使用JQuery
-        jsCrawler.setJQueryEnabled(true);
         ULog.logInit(BuildConfig.LOG_DEBUG);
 
     }

@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message> {
-    T mPresenter; //当前类需要的操作类
+    public T mPresenter; //当前类需要的操作类
     public FragmentActivity activity;
     public LoadingTip tip;
     public LoadView layout;
@@ -34,7 +34,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public View mContentView;
     public UIntent intent;
 
-    protected  void init(Bundle savedInstanceState){
+    protected void init(Bundle savedInstanceState) {
 
     }
 
@@ -52,6 +52,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public <T> T getPresenter() {
         return (T) mPresenter.getPresenter();
     }
+
     public void initLoad(LoadView.Builder builder) {
 
     }
@@ -72,6 +73,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
             }
         }.createFragment();
         intent = layout.getIntent();
+        intent.with(getArguments());
         tip = layout.getEmptyView();
     }
 

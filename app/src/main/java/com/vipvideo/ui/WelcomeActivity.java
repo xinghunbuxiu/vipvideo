@@ -1,8 +1,8 @@
 package com.vipvideo.ui;
 
 import com.lixh.base.LaunchActivity;
-import com.lixh.ireader.MainActivity;
 import com.vipvideo.R;
+import com.vipvideo.ui.reader.ReadActivityNew;
 
 
 /**
@@ -35,7 +35,7 @@ public class WelcomeActivity extends LaunchActivity {
     @Override
     public Class toActivity(int what) {
 
-        return what == GO_HOME ? MainActivity.class : TabsActivity.class;
+        return what == GO_HOME ? ReadActivityNew.class : TabsActivity.class;
     }
 
 }

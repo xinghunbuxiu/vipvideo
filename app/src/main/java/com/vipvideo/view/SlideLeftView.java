@@ -1,11 +1,12 @@
 package com.vipvideo.view;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.TextView;
 
-import com.vipvideo.R;
 import com.lixh.view.BaseSlideView;
+import com.vipvideo.R;
+
+import butterknife.Bind;
 
 /**
  * Created by LIXH on 2017/5/15.
@@ -15,6 +16,8 @@ import com.lixh.view.BaseSlideView;
 
 public class SlideLeftView extends BaseSlideView {
 
+    @Bind(R.id.textView)
+    TextView textView;
     public SlideLeftView(Activity activity) {
         super(activity);
     }
@@ -28,13 +31,7 @@ public class SlideLeftView extends BaseSlideView {
     public void init() {
         isAnim = false;
         following = false;
-    }
-
-    @Override
-    public void initView(View slideView) {
-        TextView textView = $(R.id.textView);
         textView.setText("dddddddd");
     }
-
 
 }

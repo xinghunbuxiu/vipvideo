@@ -11,6 +11,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -32,4 +33,10 @@ public interface ApiService {
     @GET("/xqinfo/")
     Observable<BaseResPose<VideoInfoBean>> getMovieByWorkId(@QueryMap Map<String, String> where);
 
+    //reader  目录
+    @GET("/reader/book_info/{id}/mobile960")
+    Observable<BaseResPose<String>> getChapterInfoPackage(@Path("id") String id);
+    //章节
+    @GET("/book/{id}/mobile960/{page}")
+    Observable<BaseResPose<String>> getChapterInfo(@Path("id") String id, @Path("page") String page);
 }

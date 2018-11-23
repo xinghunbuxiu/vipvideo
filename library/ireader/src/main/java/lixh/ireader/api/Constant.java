@@ -46,6 +46,9 @@ public class Constant {
             + "book_record" + File.separator;
 
 
+    public static final String BOOK_ID = "bookId";
+    public static final String BOOK_PAGE_INDEX = "book_page_index";
+
     @StringDef({
             BookSuffix.SUFFIX_NB,
             BookSuffix.SUFFIX_TXT,

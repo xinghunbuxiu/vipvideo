@@ -40,4 +40,6 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'org.jsoup:jsoup:1.10.2'
     implementation project(':library:common')
+    implementation 'com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar'
+
 }

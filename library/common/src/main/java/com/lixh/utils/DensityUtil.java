@@ -1,6 +1,5 @@
 package com.lixh.utils;
 
-import android.content.res.Resources;
 import android.util.TypedValue;
 
 import com.lixh.app.BaseApplication;
@@ -50,7 +49,7 @@ public class DensityUtil {
         return (int) (spValue * fontScale + 0.5f);
     }
 
-    public static int dpToPx(Resources res, int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+    public static int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, BaseApplication.getAppResources().getDisplayMetrics());
     }
 }

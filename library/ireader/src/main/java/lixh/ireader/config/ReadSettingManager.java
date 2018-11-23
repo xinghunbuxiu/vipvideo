@@ -3,6 +3,9 @@ package lixh.ireader.config;
 import com.lixh.utils.DensityUtil;
 import com.lixh.utils.SharedPreferencesUtil;
 
+import lixh.ireader.widget.page.PageMode;
+import lixh.ireader.widget.page.PageStyle;
+
 /**
  * Created by newbiechen on 17-5-17.
  * 阅读器的配置管理
