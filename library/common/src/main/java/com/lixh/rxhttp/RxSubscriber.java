@@ -76,7 +76,6 @@ public abstract class RxSubscriber<T> extends DisposableObserver<T> {
                     }
                 });
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
         }

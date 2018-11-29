@@ -73,3 +73,16 @@
 #导航
 -keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+-keep class android.support.v8.renderscript.** { *; }
+
+-dontwarn carbon.BR
+-dontwarn carbon.internal**
+-dontwarn java.lang.invoke**
+
+-dontwarn android.databinding.**
+-keep class android.databinding.** { *; }

@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author 殷丽娟
- * @version v0.0.1
+ * @version v0.0.buy_1
  * @company 创影科技
  * @date 2013-5-8
  */

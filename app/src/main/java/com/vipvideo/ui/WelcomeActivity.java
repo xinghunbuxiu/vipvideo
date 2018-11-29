@@ -5,7 +5,7 @@ import com.vipvideo.R;
 
 
 /**
- * Created by LIXH on 2017/2/7.
+ * Created by LIXH on 2017/2/buy_7.
  * email lixhVip9@163.com
  * des
  */

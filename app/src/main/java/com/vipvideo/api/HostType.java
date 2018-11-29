@@ -29,6 +29,17 @@ public class HostType {
     public static final int BASE_URL = 1;
     public static final int BASE_DUOKAN_URL = 2;
 
+    /**
+     * 基本url
+     */
+    public static final int BAIDU_URL = 2;
+
+
+    /**
+     * 基本url
+     */
+    public static final int JUHE_URL = 3;
+
 
     public static final int BASE_DUOKAN_INFO_URL = 3;
 }

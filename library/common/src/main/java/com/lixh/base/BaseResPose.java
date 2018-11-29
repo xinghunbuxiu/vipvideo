@@ -13,7 +13,7 @@ public class BaseResPose<T> implements Serializable {
     public String msg;
     public T data;
     public boolean success() {
-        return 200 == code || 0 == code;
+        return 200 == code || 1 == code;
     }
 
     public int getCode() {

@@ -5,12 +5,14 @@ import com.lixh.base.BaseResPose;
 import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.GroupVideoInfo;
 import com.vipvideo.bean.MovieTypeBean;
+import com.vipvideo.bean.UserBean;
 import com.vipvideo.bean.VideoInfoBean;
 
 import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -39,4 +41,19 @@ public interface ApiService {
     //章节
     @GET("/book/{id}/small/{page}")
     Observable<BaseResPose<String>> getChapterInfo(@Path("id") String id, @Path("page") String page);
+    @GET("/login/login/veifys.html")
+    Observable<BaseResPose<UserBean>> login(@Query("username") String username, @Query("passwd") String passwd, @Query("imei") String imei);
+
+    @GET("/login/login/create.html")
+    Observable<BaseResPose<String>> register(@Query("username") String username, @Query("passwd") String passwd);
+
+    @GET("/login/login/repass.html")
+    Observable<BaseResPose<String>> forgetPwd(@QueryMap Map<String, String> where);
+
+    @GET("/sms/send?tpl_id=107511")
+    Observable<BaseResPose<String>> sendMobileCode(@QueryMap Map<String, String> where);
+
+    @GET("/login/login/yzcode.html")
+    Observable<BaseResPose<String>> validateCode(@QueryMap Map<String, String> where);
+
 }

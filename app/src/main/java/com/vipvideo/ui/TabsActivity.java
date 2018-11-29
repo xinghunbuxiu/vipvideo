@@ -8,8 +8,12 @@ import com.lixh.view.LoadView;
 import com.lixh.view.UToolBar;
 import com.vipvideo.R;
 import com.vipvideo.presenter.TabPresenter;
+import com.vipvideo.ui.fragment.FoundFragment;
 import com.vipvideo.ui.fragment.HomeFragment;
+import com.vipvideo.ui.fragment.LiveStreamingFragment;
 import com.vipvideo.ui.fragment.MyFragment;
+import com.vipvideo.ui.login.LoginActivity;
+import com.vipvideo.util.UserInfoUtils;
 
 /**
  * Created by LIXH on 2016/12/21.
@@ -44,13 +48,21 @@ public class TabsActivity extends BaseActivity<TabPresenter> {
         builder.swipeBack = false;
         builder.hasToolbar = false;
         builder.hasBottomBar = true;
-        builder.addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "首页").setActiveColorResource(R.color.colorAccent)
-                , new BottomNavigationItem(R.mipmap.ic_launcher, "我的").setActiveColorResource(R.color.blue));
-        builder.addFragment(new HomeFragment(), new MyFragment());
+        builder.addItem(new BottomNavigationItem(R.drawable.shouye, "首页")
+                        .setActiveColorResource(R.color.colorAccent)
+                , new BottomNavigationItem(R.drawable.zhibo, "直播")
+                        .setActiveColorResource(R.color.colorAccent)
+                , new BottomNavigationItem(R.drawable.faxian, "福利社")
+                        .setActiveColorResource(R.color.colorAccent)
+                , new BottomNavigationItem(R.drawable.wode, "我的")
+                        .setActiveColorResource(R.color.colorAccent));
+        builder.addFragment(new HomeFragment(), new LiveStreamingFragment(), new FoundFragment(), new MyFragment());
         builder.setOnTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
-
+                if (position == 3 && !UserInfoUtils.isLogin()) {
+                    intent.go(LoginActivity.class);
+                }
             }
 
             @Override

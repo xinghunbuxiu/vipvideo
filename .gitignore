@@ -66,3 +66,9 @@ fastlane/readme.md
 app/libs/
 library/common/src/main/res/mipmap-mdpi/
 library/common/src/main/res/mipmap-xxxhdpi/
+.idea/encodings.xml
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml

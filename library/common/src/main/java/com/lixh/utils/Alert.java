@@ -53,6 +53,55 @@ public class Alert {
         }
     }
 
+    /**
+     * 普通对话框
+     *
+     * @param context
+     * @param message
+     */
+    public static void displayAlertDialog(Activity context,String message) {
+        displayAlertDialog(context, "温馨提示", message, (OnBtnClickL) null);
+    }
+
+    /**
+     * 普通对话框
+     *
+     * @param context
+     * @param title
+     * @param message
+     */
+    public static void displayAlertDialog(Activity context, String title, String message) {
+        displayAlertDialog(context, title, message, (OnBtnClickL) null);
+    }
+
+    /**
+     * 普通对话框
+     *
+     * @param context
+     * @param title
+     * @param message
+     */
+    public static void displayAlertDialog(Activity context, String title, String message, OnBtnClickL... onBtnClickL) {
+        NormalDialog dialog = new NormalDialog(context);
+        dialog.content(message)//
+                .style(NormalDialog.STYLE_ONE)//
+                .title(title)
+                .btnNum(1)
+                .showAnim(bas_in)//
+                .dismissAnim(bas_out);//
+        if (onBtnClickL != null) {
+            dialog.setOnBtnClickL(onBtnClickL);
+        } else {
+            dialog.setOnBtnClickL(new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    dismiss();
+                }
+            });
+        }
+        showDialog(dialog);
+    }
+
     public static void displayAlertDialog(Activity context, String warn, String message, String okStr, String cancelStr, OnBtnClickL okOnClickListener, OnBtnClickL cancelOnClickListener) {
         NormalDialog dialog = new NormalDialog(context);
         dialog.content(message)//
@@ -100,7 +149,7 @@ public class Alert {
 
     public static void displayLoading(Activity context, int layoutId, DialogInterface.OnDismissListener dismissListener) {
         MaterialDialog dialog = new MaterialDialog.Builder(context)
-                .customView(layoutId,false)
+                .customView(layoutId, false)
                 .dismissListener(dismissListener).build();
         showDialog(dialog);
     }

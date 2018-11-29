@@ -1,12 +1,16 @@
 package com.lixh.base;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.Window;
 
+import com.lixh.R;
 import com.lixh.app.AppManager;
 import com.lixh.bean.Message;
 import com.lixh.presenter.BasePresenter;
@@ -134,6 +138,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         if (toolBar != null) {
             toolBar.setDisplayShowTitleEnabled(false);
             toolBar.setDisplayHomeAsUpEnabled(isShowBack());
+            toolBar.setTitleTextColor(Color.WHITE);
+            final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+            upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+            toolBar.setNavigationIcon(upArrow);
             initTitle(toolBar);
             if (mPresenter != null) {
                 mPresenter.setToolBar(toolBar);
