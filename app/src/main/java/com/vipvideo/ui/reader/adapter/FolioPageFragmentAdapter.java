@@ -7,8 +7,6 @@ import android.util.Log;
 
 import com.vipvideo.ui.reader.fragment.FolioPageFragment;
 
-import lixh.ireader.bean.BookChapterBean;
-
 /**
  * Created by mahavir on 4/2/16.
  */

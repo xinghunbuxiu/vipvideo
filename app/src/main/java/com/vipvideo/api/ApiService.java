@@ -34,9 +34,9 @@ public interface ApiService {
     Observable<BaseResPose<VideoInfoBean>> getMovieByWorkId(@QueryMap Map<String, String> where);
 
     //reader  目录
-    @GET("/reader/book_info/{id}/mobile960")
+    @GET("/reader/book_info/{id}/small")
     Observable<BaseResPose<String>> getChapterInfoPackage(@Path("id") String id);
     //章节
-    @GET("/book/{id}/mobile960/{page}")
+    @GET("/book/{id}/small/{page}")
     Observable<BaseResPose<String>> getChapterInfo(@Path("id") String id, @Path("page") String page);
 }

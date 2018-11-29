@@ -1,22 +1,20 @@
 package com.vipvideo.ui.reader;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.lixh.base.BasePageView;
 import com.lixh.ireader.R;
-import com.vipvideo.ui.reader.category.CategoryLayout;
 import com.vipvideo.ui.reader.dialog.ReadSettingDialog;
 
 import butterknife.Bind;
-import lixh.ireader.widget.page.PageLoader;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -44,19 +42,24 @@ public class ReadBottomView extends BasePageView {
     TextView mTvNightMode;
     @Bind(R.id.read_tv_setting)
     TextView mTvSetting;
-    PageLoader mPageLoader;
-    CategoryLayout categoryLayout;
     private boolean isNightMode = false;
-    private Animation mTopInAnim;
-    private Animation mTopOutAnim;
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
     private ReadSettingDialog mSettingDialog;
+    ReadBottomView.IConfigChangedListener iConfigChangedListener;
 
-    public ReadBottomView(Activity activity, CategoryLayout categoryLayout, PageLoader mPageLoad) {
-        super(activity);
-        this.mPageLoader = mPageLoad;
-        this.categoryLayout = categoryLayout;
+    public interface IConfigChangedListener {
+        void OnClick(View v);
+
+        void onStopTrackingTouch(SeekBar seekBar);
+    }
+
+    public void setConfigChangedListener(IConfigChangedListener iConfigChangedListener) {
+        this.iConfigChangedListener = iConfigChangedListener;
+    }
+
+    public ReadBottomView(ReadActivityNew readActivityNew, FrameLayout bottomView) {
+        super(readActivityNew, bottomView);
     }
 
     @Override
@@ -69,12 +72,12 @@ public class ReadBottomView extends BasePageView {
         mBottomInAnim = AnimationUtils.loadAnimation(activity, R.anim.slide_bottom_in);
         mBottomOutAnim = AnimationUtils.loadAnimation(activity, R.anim.slide_bottom_out);
         mBottomOutAnim.setDuration(200);
-        mSettingDialog = new ReadSettingDialog(activity, mPageLoader);
+        mSettingDialog = new ReadSettingDialog(activity);
         mSbChapterProgress.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        if (mLlBottomMenu.getVisibility() == VISIBLE) {
+                        if (root.getVisibility() == VISIBLE) {
                             //显示标题
                             mTvPageTip.setText((progress + 1) + "/" + (mSbChapterProgress.getMax() + 1));
                             mTvPageTip.setVisibility(VISIBLE);
@@ -88,10 +91,7 @@ public class ReadBottomView extends BasePageView {
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         //进行切换
-                        int pagePos = mSbChapterProgress.getProgress();
-                        if (pagePos != mPageLoader.getPagePos()) {
-                            mPageLoader.skipToPage(pagePos);
-                        }
+                        iConfigChangedListener.onStopTrackingTouch(seekBar);
                         //隐藏提示
                         mTvPageTip.setVisibility(GONE);
                     }
@@ -100,37 +100,30 @@ public class ReadBottomView extends BasePageView {
 
         mTvCategory.setOnClickListener(
                 (v) -> {
-                    //移动到指定位置
-                    categoryLayout.setSelection(mPageLoader.getChapterPos());
-                    categoryLayout.slideMenu.open();
+                    iConfigChangedListener.OnClick(v);
                 }
         );
         mTvSetting.setOnClickListener(
                 (v) -> {
-                    categoryLayout.slideMenu.close();
-                    mSettingDialog.show();
+                    iConfigChangedListener.OnClick(v);
                 }
         );
 
         mTvPreChapter.setOnClickListener(
                 (v) -> {
-                    if (mPageLoader.skipPreChapter()) {
-                        categoryLayout.setChapter(mPageLoader.getChapterPos());
-                    }
+                    iConfigChangedListener.OnClick(v);
                 }
         );
 
         mTvNextChapter.setOnClickListener(
                 (v) -> {
-                    if (mPageLoader.skipNextChapter()) {
-                        categoryLayout.setChapter(mPageLoader.getChapterPos());
-                    }
+                    iConfigChangedListener.OnClick(v);
                 }
         );
 
         mTvNightMode.setOnClickListener(
                 (v) -> {
-                    mPageLoader.setNightMode(!isNightMode);
+                    iConfigChangedListener.OnClick(v);
                     toggleNightMode(!isNightMode);
                 }
         );
@@ -153,17 +146,6 @@ public class ReadBottomView extends BasePageView {
         mTvPageTip.setVisibility(GONE);
     }
 
-    public void setPageCountChange(int count) {
-        mSbChapterProgress.setMax(Math.max(0, count - 1));
-        mSbChapterProgress.setProgress(0);
-        // 如果处于错误状态，那么就冻结使用
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING
-                || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
-            mSbChapterProgress.setEnabled(false);
-        } else {
-            mSbChapterProgress.setEnabled(true);
-        }
-    }
 
     public void onPageChange(int pos) {
         mSbChapterProgress.post(
@@ -171,14 +153,21 @@ public class ReadBottomView extends BasePageView {
         );
     }
 
-    public void setVisible(int visible) {
-        if (visible == GONE) {
-            mLlBottomMenu.startAnimation(mBottomOutAnim);
-            mLlBottomMenu.setVisibility(GONE);
+    public void toggleMenu() {
+        if (mSettingDialog.isShowing()) {
+            mSettingDialog.dismiss();
+        }
+        if (root.getVisibility() == VISIBLE) {
+            root.startAnimation(mBottomOutAnim);
+            root.setVisibility(GONE);
             mTvPageTip.setVisibility(GONE);
         } else {
-            mLlBottomMenu.startAnimation(mBottomInAnim);
-            mLlBottomMenu.setVisibility(View.VISIBLE);
+            root.startAnimation(mBottomInAnim);
+            root.setVisibility(View.VISIBLE);
         }
+    }
+
+    public boolean isVisible() {
+        return root.getVisibility() == VISIBLE || mSettingDialog.isShowing();
     }
 }

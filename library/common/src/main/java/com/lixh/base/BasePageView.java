@@ -3,6 +3,7 @@ package com.lixh.base;
 import android.app.Activity;
 import android.support.annotation.IdRes;
 import android.view.View;
+import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 
@@ -16,12 +17,14 @@ import butterknife.ButterKnife;
 public abstract class BasePageView implements IPageView {
     public View baseView;
     public Activity activity;
+    public ViewGroup root;
 
     public <T> T getActivity() {
         return (T) activity;
     }
 
-    public BasePageView(Activity activity) {
+    public BasePageView(Activity activity, ViewGroup root) {
+        this.root = root;
         this.activity = activity;
         initView();
         init();
@@ -30,8 +33,8 @@ public abstract class BasePageView implements IPageView {
     @Override
     public void initView() {
         if (baseView == null) {
-            baseView = View.inflate(activity, getLayoutId(), null);
-            ButterKnife.bind(baseView);
+            baseView = View.inflate(activity, getLayoutId(), root);
+            ButterKnife.bind(this,baseView);
         }
     }
 

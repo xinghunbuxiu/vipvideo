@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 import lixh.ireader.adapter.PageStyleAdapter;
 import lixh.ireader.config.ReadSettingManager;
 import lixh.ireader.util.BrightnessUtils;
-import lixh.ireader.widget.page.PageLoader;
 import lixh.ireader.widget.page.PageMode;
 import lixh.ireader.widget.page.PageStyle;
 
@@ -90,7 +89,7 @@ public class ReadSettingDialog extends Dialog {
     private boolean isTextDefault;
 
 
-    public ReadSettingDialog(@NonNull Activity activity, PageLoader mPageLoader) {
+    public ReadSettingDialog(@NonNull Activity activity) {
         super(activity, R.style.ReadSettingDialog);
         mActivity = activity;
     }
@@ -303,7 +302,7 @@ public class ReadSettingDialog extends Dialog {
         mTvMore.setOnClickListener(
                 (v) -> {
                     Intent intent = new Intent(getContext(), MoreSettingActivity.class);
-                    mActivity.startActivityForResult(intent,1);
+                    mActivity.startActivityForResult(intent, 1);
                     //关闭当前设置
                     dismiss();
                 }

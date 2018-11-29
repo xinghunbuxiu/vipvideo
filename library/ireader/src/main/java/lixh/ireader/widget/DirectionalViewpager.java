@@ -150,7 +150,7 @@ public class DirectionalViewpager extends ViewGroup {
 
     private boolean mIsBeingDragged;
     private boolean mIsUnableToDrag;
-    private boolean mIgnoreGutter;
+
     private int mDefaultGutterSize;
     private int mGutterSize;
     private int mTouchSlop;
@@ -3577,6 +3577,10 @@ public class DirectionalViewpager extends ViewGroup {
             }
         }
         return false;
+    }
+
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

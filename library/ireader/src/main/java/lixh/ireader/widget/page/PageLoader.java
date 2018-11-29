@@ -28,7 +28,6 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import lixh.ireader.api.Constant;
 import lixh.ireader.bean.BookRecordBean;
-import lixh.ireader.bean.CollBookBean;
 import lixh.ireader.config.ReadSettingManager;
 import lixh.ireader.util.StringUtils;
 
@@ -36,7 +35,7 @@ import lixh.ireader.util.StringUtils;
  * Created by newbiechen on 17-7-1.
  */
 
-public abstract class PageLoader {
+public abstract class PageLoader<T> {
     private static final String TAG = "PageLoader";
 
     // 当前页面的状态
@@ -55,8 +54,7 @@ public abstract class PageLoader {
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
-    // 书本对象
-    protected CollBookBean mCollBook;
+
     // 监听器
     protected OnPageChangeListener mPageChangeListener;
 
@@ -86,17 +84,12 @@ public abstract class PageLoader {
     private ReadSettingManager mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
-    // 存储阅读记录类
-    private BookRecordBean mBookRecord;
-
-    private Disposable mPreLoadDisp;
-
     /*****************params**************************/
     // 当前的状态
     protected int mStatus = STATUS_LOADING;
     // 判断章节列表是否加载完成
     protected boolean isChapterListPrepare;
-
+    private Disposable mPreLoadDisp;
     // 是否打开过章节
     private boolean isChapterOpen;
     private boolean isFirstOpen = true;
@@ -138,14 +131,14 @@ public abstract class PageLoader {
     protected int mCurChapterPos = 0;
     //上一章的记录
     private int mLastChapterPos = 0;
+    BookRecordBean mBookRecord;
+
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, CollBookBean collBook) {
+    public void bind(PageView pageView) {
         mPageView = pageView;
         mContext = pageView.getContext();
-        mCollBook = collBook;
         mChapterList = new ArrayList<>(1);
-
         // 初始化数据
         initData();
         // 初始化画笔
@@ -497,15 +490,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 获取书籍信息
-     *
-     * @return
-     */
-    public CollBookBean getCollBook() {
-        return mCollBook;
-    }
-
-    /**
      * 获取章节目录。
      *
      * @return
@@ -549,28 +533,12 @@ public abstract class PageLoader {
         if (mChapterList.isEmpty()) {
             return;
         }
-
-        mBookRecord.setBookId(mCollBook.get_id());
-        mBookRecord.setChapter(mCurChapterPos);
-
-        if (mCurPage != null) {
-            mBookRecord.setPagePos(mCurPage.position);
-        } else {
-            mBookRecord.setPagePos(0);
-        }
-
-        //存储到数据库
-//        BookRepository.getInstance()
-//                .saveBookRecord(mBookRecord);
     }
 
     /**
      * 初始化书籍
      */
     private void prepareBook() {
-//        mBookRecord = BookRepository.getInstance()
-//                .getBookRecord(mCollBook.get_id());
-
         if (mBookRecord == null) {
             mBookRecord = new BookRecordBean();
         }
@@ -970,7 +938,7 @@ public abstract class PageLoader {
      *
      * @return:数据是否解析成功
      */
-    boolean parsePrevChapter() {
+    public boolean parsePrevChapter() {
         // 加载上一章数据
         int prevChapter = mCurChapterPos - 1;
 
@@ -1046,7 +1014,7 @@ public abstract class PageLoader {
         return true;
     }
 
-    boolean parseCurChapter() {
+    public boolean parseCurChapter() {
         // 解析数据
         dealLoadPageList(mCurChapterPos);
         // 预加载下一页面
@@ -1059,7 +1027,7 @@ public abstract class PageLoader {
      *
      * @return:返回解析成功还是失败
      */
-    boolean parseNextChapter() {
+    public boolean parseNextChapter() {
         int nextChapter = mCurChapterPos + 1;
 
         mLastChapterPos = mCurChapterPos;
@@ -1406,9 +1374,11 @@ public abstract class PageLoader {
         return true;
     }
 
+    public abstract void setCategoryInfo(T categoryInfo);
+
     /*****************************************interface*****************************************/
 
-    public interface OnPageChangeListener {
+    public interface OnPageChangeListener<T> {
         /**
          * 作用：章节切换的时候进行回调
          *
@@ -1421,14 +1391,14 @@ public abstract class PageLoader {
          *
          * @param requestChapters:需要下载的章节列表
          */
-        void requestChapters(List<TxtChapter> requestChapters);
+        void requestChapters(List<T> requestChapters);
 
         /**
          * 作用：章节目录加载完成时候回调
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<TxtChapter> chapters);
+        void onCategoryFinish(List<T> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

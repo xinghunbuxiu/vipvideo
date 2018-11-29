@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import lixh.ireader.bean.CollBookBean;
 import lixh.ireader.widget.animation.CoverPageAnim;
 import lixh.ireader.widget.animation.HorizonPageAnim;
 import lixh.ireader.widget.animation.NonePageAnim;
@@ -93,7 +92,7 @@ public class PageView extends View {
     }
 
     //设置翻页的模式
-    void setPageMode(PageMode pageMode) {
+    public void setPageMode(PageMode pageMode) {
         mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0) return;
@@ -349,30 +348,14 @@ public class PageView extends View {
         mPageAnim = null;
     }
 
-    /**
-     * 获取 PageLoader
-     *
-     * @param collBook
-     * @return
-     */
-    public PageLoader getPageLoader(CollBookBean collBook) {
-        // 判是否已经存在
-        if (mPageLoader != null) {
-            return mPageLoader;
-        }
-        // 根据书籍类型，获取具体的加载器
-        if (collBook.isLocal()) {
-            mPageLoader = new LocalPageLoader(this, collBook);
-        } else {
-            mPageLoader = new NetPageLoader(this, collBook);
-        }
+    public void setPageLoader(PageLoader mPageLoader) {
+        this.mPageLoader = mPageLoader;
+        mPageLoader.bind(this);
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小
             mPageLoader.prepareDisplay(mViewWidth, mViewHeight);
         }
-
-        return mPageLoader;
     }
 
     public interface TouchListener {

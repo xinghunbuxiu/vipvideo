@@ -1,46 +1,52 @@
-package lixh.ireader.widget.page;
+package com.vipvideo.ui.reader;
 
+import com.lixh.utils.SharedPreferencesUtil;
+import com.vipvideo.ui.reader.duokanBook.CategoryInfo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import lixh.ireader.api.Constant;
 import lixh.ireader.bean.BookChapterBean;
-import lixh.ireader.bean.CollBookBean;
-import lixh.ireader.config.BookManager;
-import lixh.ireader.util.StringUtils;
+import lixh.ireader.util.MD5Utils;
+import lixh.ireader.widget.page.PageLoader;
+import lixh.ireader.widget.page.TxtChapter;
 
 /**
  * Created by newbiechen on 17-5-29.
  * 网络页面加载器
  */
 
-public class NetPageLoader extends PageLoader {
+public class NetPageLoader extends PageLoader<List<BookChapterBean>> {
     private static final String TAG = "PageFactory";
-
-    public NetPageLoader(PageView pageView, CollBookBean collBook) {
-        super(pageView, collBook);
-    }
 
     private List<TxtChapter> convertTxtChapter(List<BookChapterBean> bookChapters) {
         List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
         for (BookChapterBean bean : bookChapters) {
             TxtChapter chapter = new TxtChapter();
-            chapter.bookId = bean.getBookId();
-            chapter.title = bean.getTitle();
-            chapter.link = bean.getLink();
+            chapter.setBookId(bean.getBookId());
+            chapter.setTitle(bean.getTitle());
+            chapter.setLink(bean.getLink());
             txtChapters.add(chapter);
         }
         return txtChapters;
     }
 
+    public void setCategoryInfo(List<BookChapterBean> bookChapterBeen) {
+        //进行设定BookChapter所属的书的id。
+        for (BookChapterBean bookChapter : bookChapterBeen) {
+            bookChapter.setId(MD5Utils.strToMd5By16(bookChapter.getLink()));
+            bookChapter.setBookId();
+        }
+    }
+
     @Override
     public void refreshChapterList() {
-        if (mCollBook.getBookChapters() == null) return;
+        if (categoryInfo.getChapters() == null) return;
 
         // 将 BookChapter 转换成当前可用的 Chapter
         mChapterList = convertTxtChapter(mCollBook.getBookChapters());
@@ -60,23 +66,21 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.get_id()
-                + File.separator + chapter.title +  Constant.BookSuffix.SUFFIX_NB);
-        if (!file.exists()) return null;
-
-        Reader reader = new FileReader(file);
+        String path = chapter.getLink() + File.separator + chapter.title + Constant.BookSuffix.SUFFIX_NB;
+        String info = SharedPreferencesUtil.getInstance().getString(path);
+        Reader reader = new StringReader(info);
         BufferedReader br = new BufferedReader(reader);
         return br;
     }
 
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
-        return BookManager.isChapterCached(mCollBook.get_id(), chapter.title);
+        return false;
     }
 
     // 装载上一章节的内容
     @Override
-    boolean parsePrevChapter() {
+    public boolean parsePrevChapter() {
         boolean isRight = super.parsePrevChapter();
 
         if (mStatus == STATUS_FINISH) {
@@ -88,8 +92,7 @@ public class NetPageLoader extends PageLoader {
     }
 
     // 装载当前章内容。
-    @Override
-    boolean parseCurChapter() {
+    public boolean parseCurChapter() {
         boolean isRight = super.parseCurChapter();
 
         if (mStatus == STATUS_LOADING) {
@@ -99,8 +102,7 @@ public class NetPageLoader extends PageLoader {
     }
 
     // 装载下一章节的内容
-    @Override
-    boolean parseNextChapter() {
+    public boolean parseNextChapter() {
         boolean isRight = super.parseNextChapter();
 
         if (mStatus == STATUS_FINISH) {
@@ -214,8 +216,8 @@ public class NetPageLoader extends PageLoader {
             mCollBook.setLastRead(StringUtils.
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
             //直接更新
-//            BookRepository.getInstance()
-//                    .saveCollBook(mCollBook);
+            BookRepository.getInstance()
+                    .saveCollBook(mCollBook);
         }
     }
 }

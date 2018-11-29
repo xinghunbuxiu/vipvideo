@@ -4,9 +4,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,8 +16,6 @@ import com.vipvideo.R;
 import com.vipvideo.presenter.ReadPresenter;
 
 import butterknife.Bind;
-import lixh.ireader.bean.BookChapterBean;
-import lixh.ireader.bean.WebViewPosition;
 import lixh.ireader.util.Highlight;
 import lixh.ireader.util.WebViewListening;
 import lixh.ireader.widget.ObservableWebView;
@@ -38,16 +33,13 @@ public class FolioPageFragment extends BaseFragment<ReadPresenter> {
     public static final String TAG = FolioPageFragment.class.getSimpleName();
     @Bind(R.id.contentWebView)
     ObservableWebView contentWebView;
-    private WebViewPosition contentWebViewposition;
     private String mBookTitle;
     private String mBookId;
-    private String mHtmlContent;
     private TextSelectionSupport mTextSelectionSupport;
-    private int mScrollY;
     private String mSelectedText;
     private int mChapterPosition = 1;
 
-    public static FolioPageFragment newInstance(String bookId, int pageIndex, BookChapterBean bookChapterBean) {
+    public static FolioPageFragment newInstance(String bookId, int pageIndex) {
         FolioPageFragment fragment = new FolioPageFragment();
         Bundle args = new Bundle();
         args.putString(BOOK_ID, bookId);
@@ -84,35 +76,11 @@ public class FolioPageFragment extends BaseFragment<ReadPresenter> {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        float positionTopView = contentWebView.getTop();
-        float contentHeight = contentWebView.getContentHeight();
-        float currentScrollPosition = mScrollY;
-        float percentWebview = (currentScrollPosition - positionTopView) / contentHeight;
-        float webviewsize = contentWebView.getContentHeight() - contentWebView.getTop();
-        float positionInWV = webviewsize * percentWebview;
-        int positionY = Math.round(contentWebView.getTop() + positionInWV);
-        mScrollY = positionY;
     }
 
 
     private void initWebView() {
-
-        contentWebView.getViewTreeObserver().
-                addOnGlobalLayoutListener(() -> {
-                    int height =
-                            (int) Math.floor(contentWebView.getContentHeight() * contentWebView.getScale());
-                    int webViewHeight = contentWebView.getMeasuredHeight();
-                });
-        contentWebView.getSettings().setJavaScriptEnabled(true);
-        contentWebView.setVerticalScrollBarEnabled(false);
-        contentWebView.getSettings().setAllowFileAccess(true);
-        contentWebView.setHorizontalScrollBarEnabled(false);
         contentWebView.addJavascriptInterface(new WebViewListening(), "controller");
-        contentWebView.setScrollListener(new ObservableWebView.ScrollListener() {
-            @Override
-            public void onScrollChange(int percent) {
-            }
-        });
         mTextSelectionSupport = TextSelectionSupport.support(getActivity(), contentWebView);
         mTextSelectionSupport.setSelectionListener(new TextSelectionSupport.SelectionListener() {
             @Override
@@ -139,6 +107,8 @@ public class FolioPageFragment extends BaseFragment<ReadPresenter> {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                layout.getEmptyView().setLoadingTip(LoadingTip.LoadStatus.LOADING);
+
             }
 
             @Override
@@ -151,26 +121,6 @@ public class FolioPageFragment extends BaseFragment<ReadPresenter> {
                 mPresenter.loadPageInfo(mBookId, String.valueOf(mChapterPosition));
             }
         });
-        contentWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int progress) {
-                if (view.getProgress() == 100) {
-                    contentWebView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("scroll y", "Scrolly" + mScrollY);
-                            contentWebView.scrollTo(0, mScrollY);
-                        }
-                    }, 100);
-                }
-            }
-
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                return true;
-            }
-        });
-        contentWebView.getSettings().setDefaultTextEncodingName("utf-8");
         contentWebView.loadUrl("file:///android_asset/duoduo.html");
     }
 
@@ -198,8 +148,9 @@ public class FolioPageFragment extends BaseFragment<ReadPresenter> {
     public void onDrawPage(String result) {
         ULog.e("onResult1onDrawPage: " + result);
         String jsCode = "javascript:drawPageView(\"" + mChapterPosition + "\",\"" + result + "\")";
-
         ULog.e(jsCode);
         contentWebView.loadUrl(jsCode);
+        layout.getEmptyView().setLoadingTip(LoadingTip.LoadStatus.FINISH);
+
     }
 }

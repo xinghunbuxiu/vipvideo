@@ -60,7 +60,7 @@ public class ReadPresenter extends BasePresenter {
 
     public void loadPageInfo(String mBookId, String page) {
         FolioPageFragment fragment = getFragment();
-        rxHelper.createSubscriber(Api.getDefault(HostType.BASE_DUOKAN_INFO_URL).getChapterInfo(mBookId, page), new RxSubscriber<String>(fragment.getActivity(), true) {
+        rxHelper.createSubscriber(Api.getDefault(HostType.BASE_DUOKAN_INFO_URL).getChapterInfo(mBookId, page), new RxSubscriber<String>(fragment.getActivity(), false) {
             @Override
             protected void _onNext(String result) {
                 ULog.e("onResult1: " + result);

@@ -6,10 +6,24 @@
     android:background="@drawable/theme_leather_bg">
 
     <!--阅读页面-->
-    <lixh.ireader.widget.DirectionalViewpager
+    <lixh.ireader.widget.page.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:direction="vertical" />
+
+    <FrameLayout
+        android:id="@+id/fl_top_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"></FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bl_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"></FrameLayout>
 </RelativeLayout>
 

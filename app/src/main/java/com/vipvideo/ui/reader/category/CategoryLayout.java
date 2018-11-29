@@ -7,12 +7,12 @@ import android.widget.TextView;
 import com.lixh.base.adapter.abslistview.CommonExpandableListAdapter;
 import com.lixh.ireader.R;
 import com.lixh.view.BaseSlideView;
-import com.vipvideo.ui.reader.duokanBook.CategoryInfo;
-import com.vipvideo.ui.reader.duokanBook.CategoryInfo.TocBean.ChildrenBean;
 
 import java.util.List;
 
 import butterknife.Bind;
+import lixh.ireader.widget.page.ChapterTxtChapter;
+import lixh.ireader.widget.page.TxtChapter;
 
 /**
  * Created by LIXH on 2017/5/15.
@@ -57,18 +57,18 @@ public class CategoryLayout extends BaseSlideView {
     }
 
     public void setUpAdapter() {
-        mCategoryAdapter = new CommonExpandableListAdapter<ChildrenBean, ChildrenBean>(getActivity(), R.layout.item_category, R.layout.item_category) {
+        mCategoryAdapter = new CommonExpandableListAdapter<TxtChapter, ChapterTxtChapter>(getActivity(), R.layout.item_category, R.layout.item_category) {
 
             @Override
-            protected void getChildView(ViewHolder holder, int groupPositon, int childPositon, boolean isLastChild, ChildrenBean data) {
+            protected void getChildView(ViewHolder holder, int groupPositon, int childPositon, boolean isLastChild, TxtChapter data) {
                 TextView textView = holder.getView(R.id.category_tv_chapter);//分组名字
-                textView.setText(data.getName());
+                textView.setText(data.getTitle());
             }
 
             @Override
-            protected void getGroupView(ViewHolder holder, int groupPositon, boolean isExpanded, ChildrenBean data) {
+            protected void getGroupView(ViewHolder holder, int groupPositon, boolean isExpanded, ChapterTxtChapter data) {
                 TextView textView = holder.getView(R.id.category_tv_chapter);//分组名字
-                textView.setText(data.getName());
+                textView.setText(data.getTitle());
             }
         };
         mLvCategory.setAdapter(mCategoryAdapter);
@@ -78,10 +78,10 @@ public class CategoryLayout extends BaseSlideView {
     public void setChapter(int pos) {
     }
 
-    public void notifyCategory(CategoryInfo categoryInfo) {
-        mCategoryAdapter.getGroupData().addAll(categoryInfo.getToc().getChildren());
+    public void notifyCategory(List<ChapterTxtChapter> categoryInfo) {
+        mCategoryAdapter.getGroupData().addAll(categoryInfo);
         for (int i = 0; i < mCategoryAdapter.getGroupCount(); i++) {
-            List<ChildrenBean> childrenBeans = categoryInfo.getToc().getChildren().get(i).getChildren();
+            List<TxtChapter> childrenBeans = categoryInfo.get(i).getChapters();
             if (childrenBeans != null) {
                 mCategoryAdapter.getChildrenData().addAll(childrenBeans);
             }
