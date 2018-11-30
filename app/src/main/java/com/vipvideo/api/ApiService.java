@@ -12,7 +12,6 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -38,9 +37,11 @@ public interface ApiService {
     //reader  目录
     @GET("/reader/book_info/{id}/small")
     Observable<BaseResPose<String>> getChapterInfoPackage(@Path("id") String id);
+
     //章节
     @GET("/book/{id}/small/{page}")
     Observable<BaseResPose<String>> getChapterInfo(@Path("id") String id, @Path("page") String page);
+
     @GET("/login/login/veifys.html")
     Observable<BaseResPose<UserBean>> login(@Query("username") String username, @Query("passwd") String passwd, @Query("imei") String imei);
 
@@ -55,5 +56,8 @@ public interface ApiService {
 
     @GET("/login/login/yzcode.html")
     Observable<BaseResPose<String>> validateCode(@QueryMap Map<String, String> where);
+
+    @GET("https://m.baidu.com/sf?pd=happy&openapi=1&from_sf=1&resource_id=5217&group=portal&alr=1&word=tvcenter_portal")
+    Observable<BaseResPose<String>> getMainInfo();
 
 }
