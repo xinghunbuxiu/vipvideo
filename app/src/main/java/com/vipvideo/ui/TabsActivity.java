@@ -9,7 +9,7 @@ import com.lixh.view.UToolBar;
 import com.vipvideo.R;
 import com.vipvideo.presenter.TabPresenter;
 import com.vipvideo.ui.fragment.FoundFragment;
-import com.vipvideo.ui.fragment.HomeFragment;
+import com.vipvideo.ui.fragment.CategoryFragment;
 import com.vipvideo.ui.fragment.LiveStreamingFragment;
 import com.vipvideo.ui.fragment.MyFragment;
 import com.vipvideo.ui.login.LoginActivity;
@@ -56,7 +56,7 @@ public class TabsActivity extends BaseActivity<TabPresenter> {
                         .setActiveColorResource(R.color.colorAccent)
                 , new BottomNavigationItem(R.drawable.wode, "我的")
                         .setActiveColorResource(R.color.colorAccent));
-        builder.addFragment(new HomeFragment(), new LiveStreamingFragment(), new FoundFragment(), new MyFragment());
+        builder.addFragment(new CategoryFragment(), new LiveStreamingFragment(), new FoundFragment(), new MyFragment());
         builder.setOnTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {

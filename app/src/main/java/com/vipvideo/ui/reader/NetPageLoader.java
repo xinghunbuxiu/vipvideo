@@ -1,7 +1,6 @@
 package com.vipvideo.ui.reader;
 
 import com.lixh.utils.SharedPreferencesUtil;
-import com.vipvideo.ui.reader.duokanBook.CategoryInfo;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,16 +39,14 @@ public class NetPageLoader extends PageLoader<List<BookChapterBean>> {
         //进行设定BookChapter所属的书的id。
         for (BookChapterBean bookChapter : bookChapterBeen) {
             bookChapter.setId(MD5Utils.strToMd5By16(bookChapter.getLink()));
-            bookChapter.setBookId();
+            bookChapter.setBookId("");
         }
     }
 
     @Override
     public void refreshChapterList() {
-        if (categoryInfo.getChapters() == null) return;
 
         // 将 BookChapter 转换成当前可用的 Chapter
-        mChapterList = convertTxtChapter(mCollBook.getBookChapters());
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -210,15 +207,6 @@ public class NetPageLoader extends PageLoader<List<BookChapterBean>> {
     @Override
     public void saveRecord() {
         super.saveRecord();
-        if (mCollBook != null && isChapterListPrepare) {
-            //表示当前CollBook已经阅读
-            mCollBook.setIsUpdate(false);
-            mCollBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            //直接更新
-            BookRepository.getInstance()
-                    .saveCollBook(mCollBook);
-        }
     }
 }
 

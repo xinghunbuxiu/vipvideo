@@ -6,16 +6,22 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.lixh.utils.ULog;
 import com.vipvideo.app.UApplication;
+import com.vipvideo.bean.BannerBean;
+import com.vipvideo.model.HomeModel;
 import com.vipvideo.util.web.jscrawler.JsCrawler;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,8 +79,8 @@ public class UJsonp {
         }
         return null;
     }
+
     /**
-     *
      * http://jx.arpps.com/  pps解析器
      * http://rrjiexi.com/
      * http://jx.arpps.com/380k/api.php
@@ -172,7 +178,116 @@ public class UJsonp {
         return "";
     }
 
-    ;
+
+    public HomeModel jiexi(String result) {
+        List<BannerBean> bannerBeans = new ArrayList<>();
+        List<HomeModel.HotBean> hotBeans = new ArrayList<>();
+        List<HomeModel.HotTvBean> hotTipBeans = new ArrayList<>();
+        List<HomeModel.HotTvBean> hotTvBeans = new ArrayList<>();
+        List<HomeModel.HotTvBean> hotMovieBeans = new ArrayList<>();
+        List<HomeModel.HotTvBean> hotVarietys = new ArrayList<>();
+        List<HomeModel.HotTvBean> hothotComicBeans = new ArrayList<>();
+        HomeModel model = new HomeModel();
+        try {
+            Document document = Jsoup.parse(result);
+            //轮播图
+            Elements scrollImg = document.getElementsByClass("yl-video-scrollimg-wrap");
+            for (Element labelA : scrollImg) {
+                Element aEle = labelA.getElementsByTag("a").first();
+                BannerBean bannerBean = new BannerBean();
+                bannerBean.setLink(aEle.attr("href"));
+                bannerBean.setPic_url(aEle.select("img").attr("src"));
+                bannerBean.setTvLabel(aEle.select(".yl-video-scrollimg-mark div:nth-child(1)").text());
+                bannerBean.setTvDes(aEle.select(".yl-video-scrollimg-mark div:nth-child(2)").text());
+                bannerBeans.add(bannerBean);
+            }
+            model.setBannerBeans(bannerBeans);
+            Elements elements = document.getElementsByClass("yl-video-gap-top41");
+
+            //热门话题
+            Elements hotTips = elements.get(0).getElementsByClass("yl-video-hottip-box");
+            for (Element hotTip : hotTips) {
+                HomeModel.HotTvBean hotTvBean = new HomeModel.HotTvBean();
+                hotTvBean.setLink(hotTip.attr("href"));
+                String label = hotTip.select(".c-font-medium").text();
+                hotTvBean.setHotTv_label(label);
+                String hot_image_src = hotTip.select(".yl-video-hottip-img img").attr("src");
+                hotTvBean.setHotTv_img(hot_image_src);
+                hotTvBean.setHotTv_name(hotTip.getElementsByTag("span").text());
+                hotTipBeans.add(hotTvBean);
+            }
+            hotBeans.add(new HomeModel.HotBean("热门话题", hotTipBeans));
+            //热门电视剧
+            Elements hotTvs = elements.get(1).select(".c-scroll-item a");
+            int i = 0;
+            for (Element hotTv : hotTvs) {
+                ULog.e("hotTv" + i++);
+                HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
+                tvBean.setLink(hotTv.attr("href"));
+                tvBean.setHotTv_label(hotTv.select("span:first-child").text());
+                tvBean.setHotTv_name(hotTv.select(".c-line-clamp1").text());
+                tvBean.setHotTv_star(hotTv.select("span").last().text());
+                String hot_image_src = hotTv.select("img").attr("src");
+                tvBean.setHotTv_img(hot_image_src);
+                hotTvBeans.add(tvBean);
+            }
+            hotBeans.add(new HomeModel.HotBean("热门电视剧", hotTvBeans));
+
+
+            //热门电影
+            Elements hotMovie = elements.get(2).getElementsByTag(".c-scroll-item a");
+            for (Element hotTv : hotMovie) {
+                HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
+                tvBean.setLink(hotTv.attr("href"));
+                tvBean.setHotTv_label(hotTv.select("span:first-child").text());
+                tvBean.setHotTv_name(hotTv.select(".c-line-clamp1").text());
+                tvBean.setHotTv_star(hotTv.select("span").last().text());
+                String hot_image_src = hotTv.select("img").attr("src");
+                tvBean.setHotTv_img(hot_image_src);
+                hotMovieBeans.add(tvBean);
+            }
+            hotBeans.add(new HomeModel.HotBean("热门电影", hotTvBeans));
+            //大家都在搜
+            Elements loveSearchs = elements.get(3).getElementsByTag(".c-scroll-item a");
+            for (Element love : loveSearchs) {
+                HomeModel.HotTvBean tipBean = new HomeModel.HotTvBean();
+                tipBean.setLink(love.attr("href"));
+                tipBean.setHotTv_label(love.text());
+            }
+            hotBeans.add(new HomeModel.HotBean("大家都在搜", hotTvBeans));
+            //热门综艺
+            Elements hotVariety = elements.get(4).getElementsByTag(".c-scroll-item a");
+            for (Element hotTv : hotVariety) {
+                HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
+                tvBean.setLink(hotTv.attr("href"));
+                tvBean.setHotTv_label(hotTv.select("span:first-child").text());
+                tvBean.setHotTv_name(hotTv.select(".c-line-clamp1").text());
+                tvBean.setHotTv_star(hotTv.select("span").last().text());
+                String hot_image_src = hotTv.select("img").attr("src");
+                tvBean.setHotTv_img(hot_image_src);
+                hotVarietys.add(tvBean);
+            }
+            hotBeans.add(new HomeModel.HotBean("热门综艺", hotTvBeans));
+
+            //热门动漫
+            Elements hotComic = elements.get(5).getElementsByTag(".c-scroll-item a");
+            for (Element hotTv : hotComic) {
+                HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
+                tvBean.setLink(hotTv.attr("href"));
+                tvBean.setHotTv_label(hotTv.select("span:first-child").text());
+                tvBean.setHotTv_name(hotTv.select(".c-line-clamp1").text());
+                tvBean.setHotTv_star(hotTv.select("span").last().text());
+                String hot_image_src = hotTv.select("img").attr("src");
+                tvBean.setHotTv_img(hot_image_src);
+                hothotComicBeans.add(tvBean);
+            }
+            hotBeans.add(new HomeModel.HotBean("热门动漫", hotTvBeans));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.setHotBeans(hotBeans);
+        return model;
+    }
 
     /**
      * https://www.1717yun.com/1717yun/url.php

@@ -57,7 +57,7 @@ public interface ApiService {
     @GET("/login/login/yzcode.html")
     Observable<BaseResPose<String>> validateCode(@QueryMap Map<String, String> where);
 
-    @GET("https://m.baidu.com/sf?pd=happy&openapi=1&from_sf=1&resource_id=5217&group=portal&alr=1&word=tvcenter_portal")
+    @GET("/sf?pd=happy&openapi=1&from_sf=1&resource_id=5217&group=portal&alr=1&word=tvcenter_portal")
     Observable<BaseResPose<String>> getMainInfo();
 
 }

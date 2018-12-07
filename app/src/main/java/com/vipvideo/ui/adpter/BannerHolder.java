@@ -2,16 +2,13 @@ package com.vipvideo.ui.adpter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lixh.base.adapter.VBaseHolder;
 import com.vipvideo.R;
-import com.vipvideo.bean.BannerBean;
+import com.vipvideo.model.HomeModel;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.loader.ImageLoader;
+import com.youth.banner.loader.ImageLoaderInterface;
 
 import butterknife.Bind;
 
@@ -19,7 +16,7 @@ import butterknife.Bind;
  * Created by Moushao on 2017/8/30.
  */
 
-public class BannerHolder extends VBaseHolder<BannerBean> {
+public class BannerHolder extends VBaseHolder<HomeModel> {
     @Bind(R.id.banner)
     Banner mBanner;
 
@@ -28,7 +25,7 @@ public class BannerHolder extends VBaseHolder<BannerBean> {
     }
 
     @Override
-    public void setData(int ps, BannerBean data) {
+    public void setData(int ps, HomeModel data) {
         super.setData (ps, data);
         initBanner ( );
     }
@@ -36,13 +33,18 @@ public class BannerHolder extends VBaseHolder<BannerBean> {
     private void initBanner() {
         mBanner.setIndicatorGravity (BannerConfig.RIGHT);
         //设置图片集合
-        mBanner.setImages (mData.getPic_url ( ));
+        mBanner.setImages (mData.getBannerBeans ( ));
         //设置图片加载器
-        mBanner.setImageLoader (new ImageLoader ( ) {
+        mBanner.setImageLoader (new ImageLoaderInterface( ) {
+
             @Override
-            public void displayImage(Context context, Object o, ImageView imageView) {
-                Glide.with (mContext).load ((String) o).centerCrop ( ).diskCacheStrategy (DiskCacheStrategy.ALL).into
-                        (imageView);
+            public void displayImage(Context context, Object o, View view) {
+
+            }
+
+            @Override
+            public View createImageView(Context context) {
+                return null;
             }
         });
 

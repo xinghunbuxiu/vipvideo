@@ -64,7 +64,6 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
         @Override
         public void load(int page, PageView.OnLoadFinish onLoadFinish) {
             presenter.getGroupVideoInfo();
-            finish();
         }
     };
 

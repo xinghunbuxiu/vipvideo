@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
@@ -139,7 +140,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             toolBar.setDisplayShowTitleEnabled(false);
             toolBar.setDisplayHomeAsUpEnabled(isShowBack());
             toolBar.setTitleTextColor(Color.WHITE);
-            final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.abc_ic_ab_back_material);
             upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
             toolBar.setNavigationIcon(upArrow);
             initTitle(toolBar);

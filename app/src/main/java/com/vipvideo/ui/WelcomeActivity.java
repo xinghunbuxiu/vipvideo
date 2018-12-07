@@ -34,7 +34,7 @@ public class WelcomeActivity extends LaunchActivity {
     @Override
     public Class toActivity(int what) {
 
-        return what == GO_HOME ? TabsActivity.class : TabsActivity.class;
+        return what == GO_HOME ? TestActivity.class : TestActivity.class;
     }
 
 }

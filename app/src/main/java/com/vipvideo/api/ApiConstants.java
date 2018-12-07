@@ -23,6 +23,8 @@ public class ApiConstants {
 
     public static final String BAIDU_URL = "http://app.video.baidu.com";
 
+    public static final String M_BAIDU_URL = "https://m.baidu.com";
+
     public static final String BASE_URL = "http://www.wdfgm.com";
 
     public static final String JUHE_URL = "http://v.juhe.cn";
@@ -50,6 +52,9 @@ public class ApiConstants {
                 break;
             case HostType.BAIDU_URL:
                 host = BAIDU_URL;
+                break;
+            case HostType.M_BAIDU_URL:
+                host = M_BAIDU_URL;
                 break;
             default:
                 host = BASE_URL;

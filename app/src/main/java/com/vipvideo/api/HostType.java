@@ -21,7 +21,7 @@ public class HostType {
     /**
      * 多少种Host类型
      */
-    public static final int TYPE_COUNT = 3;
+    public static final int TYPE_COUNT = 5;
 
     /**
      * 基本url
@@ -32,14 +32,15 @@ public class HostType {
     /**
      * 基本url
      */
-    public static final int BAIDU_URL = 2;
+    public static final int BAIDU_URL = 3;
 
 
     /**
      * 基本url
      */
-    public static final int JUHE_URL = 3;
+    public static final int JUHE_URL = 4;
 
 
-    public static final int BASE_DUOKAN_INFO_URL = 3;
+    public static final int BASE_DUOKAN_INFO_URL = 5;
+    public static final int M_BAIDU_URL = 6;
 }

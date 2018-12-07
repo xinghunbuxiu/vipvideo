@@ -20,6 +20,8 @@ import android.widget.OverScroller;
 import com.lixh.utils.ULog;
 import com.nineoldandroids.view.ViewHelper;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
 
 /**
@@ -135,6 +137,7 @@ public class SlideMenu extends FrameLayout {
             Slide.RIGHT
     }
     )
+    @Retention(RetentionPolicy.SOURCE)
     public @interface Slide {
         int NONE = 0;
         int LEFT = 1;
@@ -146,6 +149,7 @@ public class SlideMenu extends FrameLayout {
             State.CLOSE,
     }
     )
+    @Retention(RetentionPolicy.SOURCE)
     public @interface State {
         int OPEN = 0;
         int CLOSE = 1;

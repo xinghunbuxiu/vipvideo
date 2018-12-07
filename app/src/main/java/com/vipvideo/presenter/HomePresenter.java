@@ -3,7 +3,7 @@ package com.vipvideo.presenter;
 import android.os.Bundle;
 
 import com.lixh.presenter.BasePresenter;
-import com.vipvideo.ui.fragment.HomeFragment;
+import com.vipvideo.ui.fragment.CategoryFragment;
 
 
 /**
@@ -12,7 +12,7 @@ import com.vipvideo.ui.fragment.HomeFragment;
  * des
  */
 public class HomePresenter extends BasePresenter {
-    HomeFragment homeFragment;
+    CategoryFragment homeFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

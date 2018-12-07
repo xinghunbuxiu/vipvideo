@@ -11,7 +11,6 @@ import com.lixh.view.SlideMenu;
 import com.lixh.view.UToolBar;
 import com.vipvideo.R;
 import com.vipvideo.presenter.ReadPresenter;
-import com.vipvideo.ui.reader.adapter.FolioPageFragmentAdapter;
 import com.vipvideo.ui.reader.bean.BookInfoBean;
 import com.vipvideo.ui.reader.category.CategoryLayout;
 import com.vipvideo.ui.reader.duokanBook.CategoryInfo;
@@ -52,7 +51,6 @@ public class ReadActivityNew extends BaseActivity<ReadPresenter> implements Page
 
     private boolean isNightMode;
     private int mChapterPosition;
-    private FolioPageFragmentAdapter mFolioPageFragmentAdapter;
 
 
     @Override
@@ -182,16 +180,11 @@ public class ReadActivityNew extends BaseActivity<ReadPresenter> implements Page
 
     @Override
     public void prePage() {
-        if (mChapterPosition - 1 > 0) {
-//            pageLoader.setCurrentItem(mChapterPosition - 1);
-        }
     }
 
     @Override
     public void nextPage() {
-        if (mChapterPosition + 1 < mFolioPageFragmentAdapter.getCount()) {
-//            pageLoader.setCurrentItem(mChapterPosition + 1);
-        }
+
     }
 
     @Override

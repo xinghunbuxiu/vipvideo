@@ -12,9 +12,12 @@ import com.vipvideo.bean.AllVideoInfoBean;
 import com.vipvideo.bean.GroupVideoInfo;
 import com.vipvideo.bean.MovieTypeBean;
 import com.vipvideo.bean.VideoInfoBean;
+import com.vipvideo.model.HomeModel;
+import com.vipvideo.ui.fragment.HomeFragment;
 import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
+import com.vipvideo.util.UJsonp;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -171,6 +174,17 @@ public class VideoPresenter extends BasePresenter {
             @Override
             protected void _onNext(GroupVideoInfo bean) {
                 vipFragment.setGroupVideoInfo(bean);
+            }
+        });
+    }
+
+    public void getMainInfo() {
+        HomeFragment homeFragment =getFragment();
+        rxHelper.createSubscriber(Api.getDefault(HostType.M_BAIDU_URL).getMainInfo(), new RxSubscriber<String>(activity, false) {
+            @Override
+            protected void _onNext(String result) {
+                HomeModel model = UJsonp.getInstance().jiexi(result);
+                homeFragment.setMainInfo(model);
             }
         });
     }
