@@ -23,7 +23,7 @@ public class ChannelActivity extends BaseActivity<ChannelPresenter> {
 
     @Override
     public int getLayoutId() {
-        return 0
+        return 0;
     }
 
     @Override

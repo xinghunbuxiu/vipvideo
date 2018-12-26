@@ -20,10 +20,16 @@ public class AppInfo {
     public static final String SOURCE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private Context mContext;
     private String terminal;
+    private String xAuthToken = "";
 
     public AppInfo(Context context) {
         this.mContext = context;
         this.terminal = isEmulator() ? "5" : "2";
+    }
+
+
+    public void setXAuthToken(String xAuthToken) {
+        this.xAuthToken = xAuthToken;
     }
 
     public String getSystemName() {
@@ -141,7 +147,7 @@ public class AppInfo {
         headerInfo.setXClientVersion(version);
         headerInfo.setXClientIP(RHelp.getX_Client_IP());
         headerInfo.setXClientSign(getSign(str, currentTimeMillis, generateString, version));
-        headerInfo.setXAuthToken(b.I);
+        headerInfo.setXAuthToken(xAuthToken);
         return headerInfo;
     }
 
