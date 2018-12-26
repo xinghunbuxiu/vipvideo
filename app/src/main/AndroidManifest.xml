@@ -43,7 +43,7 @@
 
 
         <activity android:name=".ui.reader.ReadActivityNew" />
-        <activity android:name=".ui.TestActivity" />
+        <activity android:name=".ui.ChannelActivity" />
     </application>
 
 </manifest>

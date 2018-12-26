@@ -11,7 +11,7 @@ import com.lixh.base.adapter.abslistview.EasyLVAdapter;
 /**
  * Created by zengd0
  */
-public class FlexBoxLayout<T> extends ViewGroup {
+public class FlexBoxLayout extends ViewGroup {
     public interface OnTagSelectedListener<T> {
         void select(View v, T obj, int position);
     }
@@ -20,7 +20,7 @@ public class FlexBoxLayout<T> extends ViewGroup {
     private int horizontalSpace, verticalSpace;
     private float mDensity;//设备密度，用于将dp转为px
     BaseAdapter adapter;
-    OnTagSelectedListener onTabSelectListner;
+    FlexBoxLayout.OnTagSelectedListener onTabSelectListner;
 
     public FlexBoxLayout(Context context) {
         this(context, null);
@@ -155,7 +155,7 @@ public class FlexBoxLayout<T> extends ViewGroup {
     /**
      * 绑定 adapter 中所有的 view
      */
-    private void bindView() {
+    private <T> void bindView() {
         if (adapter == null) {
             return;
         }
@@ -178,5 +178,10 @@ public class FlexBoxLayout<T> extends ViewGroup {
             });
             addView(v);
         }
+    }
+
+
+    public void setOnTabSelectListner(OnTagSelectedListener onTabSelectListner) {
+        this.onTabSelectListner = onTabSelectListner;
     }
 }

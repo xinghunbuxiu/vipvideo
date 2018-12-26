@@ -185,6 +185,7 @@ public class UJsonp {
         List<HomeModel.HotTvBean> hotTipBeans = new ArrayList<>();
         List<HomeModel.HotTvBean> hotTvBeans = new ArrayList<>();
         List<HomeModel.HotTvBean> hotMovieBeans = new ArrayList<>();
+        List<HomeModel.HotTvBean> hotSearchBeans = new ArrayList<>();
         List<HomeModel.HotTvBean> hotVarietys = new ArrayList<>();
         List<HomeModel.HotTvBean> hothotComicBeans = new ArrayList<>();
         HomeModel model = new HomeModel();
@@ -202,10 +203,9 @@ public class UJsonp {
                 bannerBeans.add(bannerBean);
             }
             model.setBannerBeans(bannerBeans);
-            Elements elements = document.getElementsByClass("yl-video-gap-top41");
-
+            Elements elements = document.select(".yl-video-gap-top41");
             //热门话题
-            Elements hotTips = elements.get(0).getElementsByClass("yl-video-hottip-box");
+            Elements hotTips = elements.get(0).select(".yl-video-hottip-box");
             for (Element hotTip : hotTips) {
                 HomeModel.HotTvBean hotTvBean = new HomeModel.HotTvBean();
                 hotTvBean.setLink(hotTip.attr("href"));
@@ -216,7 +216,7 @@ public class UJsonp {
                 hotTvBean.setHotTv_name(hotTip.getElementsByTag("span").text());
                 hotTipBeans.add(hotTvBean);
             }
-            hotBeans.add(new HomeModel.HotBean("热门话题", hotTipBeans));
+            hotBeans.add(new HomeModel.HotBean("热门话题", 0, hotTipBeans));
             //热门电视剧
             Elements hotTvs = elements.get(1).select(".c-scroll-item a");
             int i = 0;
@@ -231,11 +231,11 @@ public class UJsonp {
                 tvBean.setHotTv_img(hot_image_src);
                 hotTvBeans.add(tvBean);
             }
-            hotBeans.add(new HomeModel.HotBean("热门电视剧", hotTvBeans));
+            hotBeans.add(new HomeModel.HotBean("热门电视剧", 1, hotTvBeans));
 
 
             //热门电影
-            Elements hotMovie = elements.get(2).getElementsByTag(".c-scroll-item a");
+            Elements hotMovie = elements.get(2).select(".c-scroll-item a");
             for (Element hotTv : hotMovie) {
                 HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
                 tvBean.setLink(hotTv.attr("href"));
@@ -246,17 +246,18 @@ public class UJsonp {
                 tvBean.setHotTv_img(hot_image_src);
                 hotMovieBeans.add(tvBean);
             }
-            hotBeans.add(new HomeModel.HotBean("热门电影", hotTvBeans));
+            hotBeans.add(new HomeModel.HotBean("热门电影", 2, hotMovieBeans));
             //大家都在搜
-            Elements loveSearchs = elements.get(3).getElementsByTag(".c-scroll-item a");
+            Elements loveSearchs = elements.get(3).select("a");
             for (Element love : loveSearchs) {
                 HomeModel.HotTvBean tipBean = new HomeModel.HotTvBean();
                 tipBean.setLink(love.attr("href"));
                 tipBean.setHotTv_label(love.text());
+                hotSearchBeans.add(tipBean);
             }
-            hotBeans.add(new HomeModel.HotBean("大家都在搜", hotTvBeans));
+            hotBeans.add(new HomeModel.HotBean("大家都在搜", 3, hotSearchBeans));
             //热门综艺
-            Elements hotVariety = elements.get(4).getElementsByTag(".c-scroll-item a");
+            Elements hotVariety = elements.get(4).select(".c-scroll-item a");
             for (Element hotTv : hotVariety) {
                 HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
                 tvBean.setLink(hotTv.attr("href"));
@@ -267,10 +268,10 @@ public class UJsonp {
                 tvBean.setHotTv_img(hot_image_src);
                 hotVarietys.add(tvBean);
             }
-            hotBeans.add(new HomeModel.HotBean("热门综艺", hotTvBeans));
+            hotBeans.add(new HomeModel.HotBean("热门综艺", 4, hotVarietys));
 
             //热门动漫
-            Elements hotComic = elements.get(5).getElementsByTag(".c-scroll-item a");
+            Elements hotComic = elements.get(5).select(".c-scroll-item a");
             for (Element hotTv : hotComic) {
                 HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
                 tvBean.setLink(hotTv.attr("href"));
@@ -281,7 +282,7 @@ public class UJsonp {
                 tvBean.setHotTv_img(hot_image_src);
                 hothotComicBeans.add(tvBean);
             }
-            hotBeans.add(new HomeModel.HotBean("热门动漫", hotTvBeans));
+            hotBeans.add(new HomeModel.HotBean("热门动漫", 5, hothotComicBeans));
         } catch (Exception e) {
             e.printStackTrace();
         }

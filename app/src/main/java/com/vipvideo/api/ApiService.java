@@ -12,6 +12,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -58,6 +59,19 @@ public interface ApiService {
     Observable<BaseResPose<String>> validateCode(@QueryMap Map<String, String> where);
 
     @GET("/sf?pd=happy&openapi=1&from_sf=1&resource_id=5217&group=portal&alr=1&word=tvcenter_portal")
+    @Headers({
+            "Accept: text/html",
+    })
     Observable<BaseResPose<String>> getMainInfo();
+
+
+    @GET("/api/app/video/ver2/video/searchVideoInfo/")
+    @Headers({
+            "Content-Type: application/json"
+    })
+    Observable<String> searchVideoInfo(@Query("currentPage") int currentPage, @Query("pageSize") int pageSize, @Query("searchContent") String searchContent, @Query("entry") int entry);
+
+    @GET("/api/app/member/ver2/user/login/")
+    Observable<BaseResPose<String>> MhLogin(@Query("uuid") String uuid, @Query("model") String model);
 
 }

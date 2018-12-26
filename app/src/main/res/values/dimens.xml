@@ -49,5 +49,6 @@
     <dimen name="space_80">80dp</dimen>
     <dimen name="space_70">70</dimen>
     <dimen name="space_120">120dp</dimen>
+    <dimen name="space_160">160dp</dimen>
     <dimen name="space_200">200dp</dimen>
 </resources>

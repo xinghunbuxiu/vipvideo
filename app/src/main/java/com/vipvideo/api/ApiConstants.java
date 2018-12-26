@@ -28,6 +28,7 @@ public class ApiConstants {
     public static final String BASE_URL = "http://www.wdfgm.com";
 
     public static final String JUHE_URL = "http://v.juhe.cn";
+    private static final String M_MAHUA_URL = "http://api.hbzjmf.com";
 
     /**
      * 获取对应的host
@@ -55,6 +56,9 @@ public class ApiConstants {
                 break;
             case HostType.M_BAIDU_URL:
                 host = M_BAIDU_URL;
+                break;
+            case HostType.M_MAHUA_URL:
+                host = M_MAHUA_URL;
                 break;
             default:
                 host = BASE_URL;

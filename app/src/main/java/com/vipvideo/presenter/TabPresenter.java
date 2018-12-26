@@ -4,7 +4,11 @@ package com.vipvideo.presenter;
 import android.os.Bundle;
 
 import com.lixh.presenter.BasePresenter;
+import com.lixh.rxhttp.RxSubscriber;
+import com.vipvideo.api.Api;
+import com.vipvideo.api.HostType;
 import com.vipvideo.ui.TabsActivity;
+import com.vipvideo.util.web.mahua.MhSdk;
 
 ;
 
@@ -20,6 +24,19 @@ public class TabPresenter extends BasePresenter {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         tabsActivity = getActivity();
+    }
+
+    public void LoginMh() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(MhSdk.init().getAppInfo().getDevice());
+        stringBuilder.append(MhSdk.init().getAppInfo().getSystemName());
+        String model = stringBuilder.toString();
+        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).MhLogin(MhSdk.init().getAppInfo().getUuid(), model), new RxSubscriber<String>(tabsActivity, false) {
+            @Override
+            protected void _onNext(String o) {
+
+            }
+        });
 
     }
 }

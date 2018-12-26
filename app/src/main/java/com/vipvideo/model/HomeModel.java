@@ -34,11 +34,13 @@ public class HomeModel extends BaseModel {
 
     public static class HotBean extends BaseModel {
         String typeName;
+        int type;
         List<HomeModel.HotTvBean> beans;
 
-        public HotBean(String typeName, List<HotTvBean> hotTipBeans) {
+        public HotBean(String typeName,int type, List<HotTvBean> hotTipBeans) {
             this.typeName = typeName;
             this.beans = hotTipBeans;
+            this.type=type;
         }
 
         public String getTypeName() {
@@ -55,6 +57,14 @@ public class HomeModel extends BaseModel {
 
         public void setBeans(List<HomeModel.HotTvBean> beans) {
             this.beans = beans;
+        }
+
+        public int getType() {
+            return this.type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
         }
     }
 

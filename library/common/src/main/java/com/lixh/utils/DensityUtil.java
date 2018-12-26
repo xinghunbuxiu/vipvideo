@@ -1,6 +1,9 @@
 package com.lixh.utils;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.WindowManager;
 
 import com.lixh.app.BaseApplication;
 
@@ -9,7 +12,7 @@ public class DensityUtil {
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
-    public static int dip2px( float dpValue) {
+    public static int dip2px(float dpValue) {
         final float scale = BaseApplication.getAppResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
@@ -51,5 +54,21 @@ public class DensityUtil {
 
     public static int dpToPx(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, BaseApplication.getAppResources().getDisplayMetrics());
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((WindowManager) BaseApplication.getAppContext().getSystemService(
+                Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(
+                displaymetrics);
+        return displaymetrics;
+    }
+
+    public static float getScreenHeight() {
+        return getDisplayMetrics().heightPixels;
+    }
+
+    public static float getScreenWidth() {
+        return getDisplayMetrics().widthPixels;
     }
 }

@@ -215,6 +215,9 @@ public class VBaseAdapter<T> extends DelegateAdapter.Adapter<VBaseHolder<T>> {
         holder.setData (position, mDatas.get (position));
     }
 
+    public void clear(){
+        mDatas.clear();
+    }
 
     @Override
     public int getItemCount() {

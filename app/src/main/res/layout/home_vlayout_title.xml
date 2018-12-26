@@ -12,6 +12,6 @@
         android:drawablePadding="2dp"
         android:padding="10dp"
         android:text="最新栏目"
-        android:textColor="@color/color_sys_bg"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 </RelativeLayout>

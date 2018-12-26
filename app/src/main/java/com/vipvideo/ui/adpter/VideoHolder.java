@@ -21,7 +21,7 @@ public class VideoHolder extends VBaseHolder<VideosBean> {
     RoundImageView iv_image;
     @Bind(R.id.tv_title)
     TextView tv_title;
-    @Bind(R.id.tv_content)
+    @Bind(R.id.tv_label)
     TextView tv_content;
 
     public VideoHolder(View itemView) {

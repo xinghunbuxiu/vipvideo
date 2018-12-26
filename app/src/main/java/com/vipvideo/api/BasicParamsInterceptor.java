@@ -3,7 +3,6 @@ package com.vipvideo.api;
 import android.text.TextUtils;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +30,16 @@ public class BasicParamsInterceptor implements Interceptor {
     Map<String, String> paramsMap = new HashMap<>();
     Map<String, String> headerParamsMap = new HashMap<>();
     List<String> headerLinesList = new ArrayList<>();
+    private String userAgent = "Android";
+    BasicParamsInterceptor.IRequestIntercept requestIntercept;
+
+    interface IRequestIntercept {
+        void intercept(HttpUrl url, Headers.Builder headerBuilder, Request.Builder request);
+    }
+
+    public void setRequestIntercept(IRequestIntercept requestIntercept) {
+        this.requestIntercept = requestIntercept;
+    }
 
     private BasicParamsInterceptor() {
 
@@ -41,15 +50,10 @@ public class BasicParamsInterceptor implements Interceptor {
 
         Request request = chain.request();
         Request.Builder requestBuilder = request.newBuilder();
-        try {
-//            requestBuilder.header("User-Agent", "ANDROID");
-            requestBuilder.header("User-Agent", "IChunQiuExoPlayer/3.5.0.52 (Linux;Android 5.1.1) ExoPlayerLib/2.3.1");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.addHeader(request, requestBuilder);
-        // process header params inject
         Headers.Builder headerBuilder = request.headers().newBuilder();
+        if (requestIntercept != null) {
+            requestIntercept.intercept(request.url(), headerBuilder, requestBuilder);
+        }
         if (this.headerParamsMap.size() > 0) {
             Iterator iterator = this.headerParamsMap.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -57,23 +61,17 @@ public class BasicParamsInterceptor implements Interceptor {
                 headerBuilder.add((String) entry.getKey(), (String) entry.getValue());
             }
         }
-
         if (this.headerLinesList.size() > 0) {
             for (String line : this.headerLinesList) {
                 headerBuilder.add(line);
             }
             requestBuilder.headers(headerBuilder.build());
         }
-        // process header params end
-
-
-        // process queryParams inject whatever it's GET or POST
         if (this.queryParamsMap.size() > 0) {
             if (request.method().equals("GET")) {
                 request = this.injectParamsIntoUrl(request.url().newBuilder(), requestBuilder, this.queryParamsMap);
             }
         }
-        paramsMap.clear();
         // process post body inject
         if (this.paramsMap.size() > 0) {
             if (this.canInjectIntoBody(request)) {
@@ -83,13 +81,11 @@ public class BasicParamsInterceptor implements Interceptor {
                 }
 
                 FormBody formBody = formBodyBuilder.build();
-                String postBodyString = BasicParamsInterceptor.bodyToString(request.body());
-//                postBodyString += (postBodyString.length() > 0 ? "&" : "") + BasicParamsInterceptor.bodyToString(formBody);
-                postBodyString = bodyToString(formBody);
+                String postBodyString = bodyToString(request.body());
+                postBodyString += (postBodyString.length() > 0 ? "&" : "") + bodyToString(formBody);
                 requestBuilder.post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8"), postBodyString));
             }
         }
-
         request = requestBuilder.build();
         return chain.proceed(request);
     }
@@ -101,44 +97,6 @@ public class BasicParamsInterceptor implements Interceptor {
             out.append(pathSegments.get(i));
         }
         return out.toString();
-    }
-
-    private void addHeader(Request request, Request.Builder build) {
-        String method = request.method();
-        Map<String, String> headMap = new HashMap<>();
-        if ("POST".equals(method)) {
-            //build.put(RequestBody.create());
-            Map<String, String> map = new HashMap<>();
-            if (request.body() instanceof FormBody) {
-                FormBody body = (FormBody) request.body();
-                for (int i = 0; i < body.size(); i++) {
-                    map.put(body.encodedName(i), URLDecoder.decode(body.encodedValue(i)));
-                }
-                for (Entry<String, String> entry : this.paramsMap.entrySet()) {
-                    map.put(entry.getKey(), entry.getValue());
-                }
-            }
-//            headMap = CommonUnit.getUserToken(map, pathSegments);
-        } else if ("GET".equals(method)) {
-            if (this.queryParamsMap.size() > 0) {
-                request = this.injectParamsIntoUrl(request.url().newBuilder(), build, this.queryParamsMap);
-            }
-            String str = request.url().query();
-            if (!TextUtils.isEmpty(str)) {
-                if (str.contains("&")) {
-                    for (String key : str.split("&")) {
-                        headMap.put(key.split("=")[0], key.split("=")[1]);
-                    }
-                } else if (str.contains("=")) {
-                    headMap.put(str.split("=")[0], str.split("=")[1]);
-                }
-            }
-//            headMap = CommonUnit.getUserToken(headMap,pathSegments);
-        }
-        build.addHeader("Content-Type", "application/json");
-        for (String key : headMap.keySet()) {
-            build.addHeader(key, headMap.get(key));
-        }
     }
 
     private boolean canInjectIntoBody(Request request) {
@@ -188,35 +146,46 @@ public class BasicParamsInterceptor implements Interceptor {
         }
     }
 
-    public static class Builder {
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
+    public static class Builder {
         BasicParamsInterceptor interceptor;
 
         public Builder() {
             this.interceptor = new BasicParamsInterceptor();
         }
 
-        public BasicParamsInterceptor.Builder addParam(String key, String value) {
+        public void setRequestIntercept(IRequestIntercept intercept) {
+            this.interceptor.setRequestIntercept(intercept);
+        }
+
+        public void setUserAgent(String userAgent) {
+            interceptor.setUserAgent(userAgent);
+        }
+
+        public Builder addParam(String key, String value) {
             this.interceptor.paramsMap.put(key, value);
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addParamsMap(Map<String, String> paramsMap) {
+        public Builder addParamsMap(Map<String, String> paramsMap) {
             this.interceptor.paramsMap.putAll(paramsMap);
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addHeaderParam(String key, String value) {
+        public Builder addHeaderParam(String key, String value) {
             this.interceptor.headerParamsMap.put(key, value);
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addHeaderParamsMap(Map<String, String> headerParamsMap) {
+        public Builder addHeaderParamsMap(Map<String, String> headerParamsMap) {
             this.interceptor.headerParamsMap.putAll(headerParamsMap);
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addHeaderLine(String headerLine) {
+        public Builder addHeaderLine(String headerLine) {
             int index = headerLine.indexOf(":");
             if (index == -1) {
                 throw new IllegalArgumentException("Unexpected header: " + headerLine);
@@ -225,7 +194,7 @@ public class BasicParamsInterceptor implements Interceptor {
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addHeaderLinesList(List<String> headerLinesList) {
+        public Builder addHeaderLinesList(List<String> headerLinesList) {
             for (String headerLine : headerLinesList) {
                 int index = headerLine.indexOf(":");
                 if (index == -1) {
@@ -236,12 +205,12 @@ public class BasicParamsInterceptor implements Interceptor {
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addQueryParam(String key, String value) {
+        public Builder addQueryParam(String key, String value) {
             this.interceptor.queryParamsMap.put(key, value);
             return this;
         }
 
-        public BasicParamsInterceptor.Builder addQueryParamsMap(Map<String, String> queryParamsMap) {
+        public Builder addQueryParamsMap(Map<String, String> queryParamsMap) {
             this.interceptor.queryParamsMap.putAll(queryParamsMap);
             return this;
         }
@@ -250,5 +219,9 @@ public class BasicParamsInterceptor implements Interceptor {
             return this.interceptor;
         }
 
+        public Builder addIntercept(IRequestIntercept intercept) {
+            interceptor.setRequestIntercept(intercept);
+            return this;
+        }
     }
 }

@@ -43,4 +43,5 @@ public class HostType {
 
     public static final int BASE_DUOKAN_INFO_URL = 5;
     public static final int M_BAIDU_URL = 6;
+    public static final int M_MAHUA_URL = 7;
 }
