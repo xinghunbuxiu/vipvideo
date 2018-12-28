@@ -66,12 +66,15 @@ public interface ApiService {
 
 
     @GET("/api/app/video/ver2/video/searchVideoInfo/")
-    @Headers({
-            "Content-Type: application/json"
-    })
     Observable<String> searchVideoInfo(@Query("currentPage") int currentPage, @Query("pageSize") int pageSize, @Query("searchContent") String searchContent, @Query("entry") int entry);
+
+    @GET("/api/app/video/ver2/video/searchVideoInfoDetail_v2_2?videoId=0&from=0&columnId=0")
+    Observable<String> searchVideoInfoDetail(@Query("videoInfoId") String videoInfoId);
 
     @GET("/api/app/member/ver2/user/login/")
     Observable<BaseResPose<String>> MhLogin(@Query("uuid") String uuid, @Query("model") String model);
+
+    @GET("/app/video/ver2/user/clickPlayVideo_2_2/")
+    Observable<BaseResPose<String>> clickPlayVideo(@Query("videoId") String videoId, @Query("playType") String playType);
 
 }

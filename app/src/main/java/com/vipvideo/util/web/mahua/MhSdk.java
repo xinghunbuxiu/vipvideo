@@ -25,12 +25,12 @@ public class MhSdk {
     public static MhSdk init() {
         if (sdk == null) {
             sdk = new MhSdk(BaseApplication.getAppContext());
-        }
-        sdk.initAppInfo();
-        try {
-            sdk.initPackInfo();
-        } catch (Exception e) {
-            e.printStackTrace();
+            sdk.initAppInfo();
+            try {
+                sdk.initPackInfo();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return sdk;
     }

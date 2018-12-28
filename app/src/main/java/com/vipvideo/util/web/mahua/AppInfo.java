@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import java.util.Random;
 import java.util.UUID;
@@ -207,7 +208,7 @@ public class AppInfo {
             e.printStackTrace();
             deviceId = null;
         }
-        if (deviceId == null || deviceId.isEmpty()) {
+        if (TextUtils.isEmpty(deviceId)) {
             deviceId = Secure.getString(this.mContext.getContentResolver(), "android_id");
             if (deviceId != null) {
                 deviceId = deviceId.toLowerCase();
@@ -216,7 +217,7 @@ public class AppInfo {
                 }
             }
         }
-        if (deviceId == null || deviceId.isEmpty()) {
+        if (TextUtils.isEmpty(deviceId)) {
             WifiInfo connectionInfo = ((WifiManager) this.mContext.getSystemService("wifi")).getConnectionInfo();
             if (connectionInfo != null) {
                 deviceId = connectionInfo.getMacAddress();
@@ -237,16 +238,15 @@ public class AppInfo {
                 return deviceId;
             }
         }
-        str = deviceId;
-        if (str == null) {
-        }
-        sharedPreferences = this.mContext.getSharedPreferences(RHelp.STORE_NAME, 0);
-        deviceId = sharedPreferences.getString("mhuuid", "");
-        if (deviceId == "") {
-            deviceId = UUID.randomUUID().toString().replace("-", "");
-            edit = sharedPreferences.edit();
-            edit.putString("mhuuid", deviceId);
-            edit.commit();
+        if (TextUtils.isEmpty(deviceId)) {
+            sharedPreferences = this.mContext.getSharedPreferences(RHelp.STORE_NAME, 0);
+            deviceId = sharedPreferences.getString("mhuuid", "");
+            if (TextUtils.isEmpty(deviceId)) {
+                deviceId = UUID.randomUUID().toString().replace("-", "");
+                edit = sharedPreferences.edit();
+                edit.putString("mhuuid", deviceId);
+                edit.commit();
+            }
         }
         return deviceId;
     }

@@ -34,7 +34,7 @@ public class BasicParamsInterceptor implements Interceptor {
     BasicParamsInterceptor.IRequestIntercept requestIntercept;
 
     interface IRequestIntercept {
-        void intercept(HttpUrl url, Headers.Builder headerBuilder, Request.Builder request);
+        Request intercept(Request request);
     }
 
     public void setRequestIntercept(IRequestIntercept requestIntercept) {
@@ -49,11 +49,11 @@ public class BasicParamsInterceptor implements Interceptor {
     public Response intercept(Interceptor.Chain chain) throws IOException {
 
         Request request = chain.request();
+        if (requestIntercept != null) {
+            request = requestIntercept.intercept(request);
+        }
         Request.Builder requestBuilder = request.newBuilder();
         Headers.Builder headerBuilder = request.headers().newBuilder();
-        if (requestIntercept != null) {
-            requestIntercept.intercept(request.url(), headerBuilder, requestBuilder);
-        }
         if (this.headerParamsMap.size() > 0) {
             Iterator iterator = this.headerParamsMap.entrySet().iterator();
             while (iterator.hasNext()) {
@@ -65,7 +65,6 @@ public class BasicParamsInterceptor implements Interceptor {
             for (String line : this.headerLinesList) {
                 headerBuilder.add(line);
             }
-            requestBuilder.headers(headerBuilder.build());
         }
         if (this.queryParamsMap.size() > 0) {
             if (request.method().equals("GET")) {
@@ -86,6 +85,7 @@ public class BasicParamsInterceptor implements Interceptor {
                 requestBuilder.post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded;charset=UTF-8"), postBodyString));
             }
         }
+        requestBuilder.headers(headerBuilder.build());
         request = requestBuilder.build();
         return chain.proceed(request);
     }

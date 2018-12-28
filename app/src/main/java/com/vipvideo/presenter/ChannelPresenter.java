@@ -2,10 +2,12 @@ package com.vipvideo.presenter;
 
 import android.os.Bundle;
 
+import com.alibaba.fastjson.JSON;
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
 import com.vipvideo.api.Api;
 import com.vipvideo.api.HostType;
+import com.vipvideo.bean.SearchVideoInfo;
 import com.vipvideo.ui.ChannelActivity;
 
 /**
@@ -21,12 +23,13 @@ public class ChannelPresenter extends BasePresenter {
     }
 
 
-    public void loadPageInfo(String searchName) {
+    public void loadPageInfo(String searchName, int page) {
         ChannelActivity activity = getActivity();
-        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).searchVideoInfo( 1, 10, searchName, 1), new RxSubscriber<String>(activity, false) {
+        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).searchVideoInfo(page, 10, searchName, 1), new RxSubscriber<String>(activity, false) {
             @Override
             protected void _onNext(String result) {
-
+                SearchVideoInfo videoInfo = JSON.parseObject(result, SearchVideoInfo.class);
+                activity.setVideoInfoDatas(videoInfo.getData());
             }
         });
     }

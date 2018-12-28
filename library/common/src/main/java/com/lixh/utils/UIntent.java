@@ -2,6 +2,7 @@ package com.lixh.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -368,18 +369,13 @@ public class UIntent {
     }
 
 
-    public void goSetActivity() {
-        Intent localIntent = new Intent();
-        if (Build.VERSION.SDK_INT >= 9) {
-            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS")
-                    .setData(Uri.fromParts("package", mContext.getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            localIntent.setAction(Intent.ACTION_VIEW).
-                    setClassName("com.android.settings", "com.android.settings.InstalledAppDetails")
-                    .putExtra("com.android.settings.ApplicationPkgName", mContext.getPackageName());
-        }
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(localIntent);
+    public static void goSetActivity(Context context) {
+        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("package:");
+        stringBuilder.append(context.getPackageName());
+        intent.setData(Uri.parse(stringBuilder.toString()));
+        context.startActivity(intent);
     }
 
     /**

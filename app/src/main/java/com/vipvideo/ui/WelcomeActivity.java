@@ -29,6 +29,7 @@ public class WelcomeActivity extends LaunchActivity {
     @Override
     public void initView() {
         super.initView();
+
     }
 
     @Override

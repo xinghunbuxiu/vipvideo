@@ -19,6 +19,7 @@ import com.vipvideo.bean.TitleBean;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.model.HomeModel;
 import com.vipvideo.presenter.VideoPresenter;
+import com.vipvideo.ui.ChannelActivity;
 import com.vipvideo.ui.adpter.BannerHolder;
 import com.vipvideo.ui.adpter.HomeListHolder;
 import com.vipvideo.ui.adpter.TitleHolder;
@@ -108,7 +109,7 @@ public class HomeFragment extends BaseFragment<VideoPresenter> {
                             .setLayoutHelper(new LinearLayoutHelper())//
                             .setHolder(TopHotSearchHolder.class)//
                             .setListener((ItemListener<HomeModel.HotTvBean>) (view, position, mData) -> {
-
+                                        intent.withString("title", mData.getHotTv_name()).go(ChannelActivity.class);
                                     }
                             );
                     break;
@@ -118,7 +119,7 @@ public class HomeFragment extends BaseFragment<VideoPresenter> {
                             .setLayoutHelper(getListHelper(2))//
                             .setHolder(TopicCondHolder.class)//
                             .setListener((ItemListener<HomeModel.HotTvBean>) (view, position, mData) -> {
-                                mData.getLink();
+                                        mData.getLink();
                                     }
                             );
                     break;

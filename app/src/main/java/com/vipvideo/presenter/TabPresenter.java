@@ -3,9 +3,9 @@ package com.vipvideo.presenter;
 
 import android.os.Bundle;
 
+import com.jayway.jsonpath.JsonPath;
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
-import com.lixh.utils.ULog;
 import com.vipvideo.api.Api;
 import com.vipvideo.api.HostType;
 import com.vipvideo.ui.TabsActivity;
@@ -38,8 +38,8 @@ public class TabPresenter extends BasePresenter {
             @Override
             protected void _onNext(String str) {
                 String result = AesUtil.decryptHex(str, AesUtil.getKey(false));
-                ULog.e("imahua",result);
-
+                String mToken = JsonPath.read(result, "$.data.detail.token");
+                MhSdk.init().getAppInfo().setXAuthToken(mToken);
             }
         });
 

@@ -63,82 +63,82 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     @Override
     public void initTitle(UToolBar toolBar) {
-        toolBar.setVisibility (View.GONE);
+        toolBar.setVisibility(View.GONE);
     }
 
     @Override
     public void init(Bundle savedInstanceState) {
-        super.init (savedInstanceState);
-        workId = intent.getString ("workId");
-        initVLayout ( );
-        initVideoPlayer ( );
-        initAllType ( );
-        presenter = getPresenter ( );
-        presenter.getMovieByWorkId (workId);
+        super.init(savedInstanceState);
+        workId = intent.getString("workId");
+        initVLayout();
+        initVideoPlayer();
+        initAllType();
+        presenter = getPresenter();
+        presenter.getMovieByVideoId(workId);
     }
 
     private void initVLayout() {
-        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager (this);
-        rvVideo.setLayoutManager (virtualLayoutManager);
+        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager(this);
+        rvVideo.setLayoutManager(virtualLayoutManager);
         //设置缓存view个数(当视图中view的个数很多时，设置合理的缓存大小，防止来回滚动时重新创建 View)
-        final RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool ( );
-        rvVideo.setRecycledViewPool (viewPool);
-        viewPool.setMaxRecycledViews (0, 1);
-        viewPool.setMaxRecycledViews (0, 1);
-        delegateAdapter = new DelegateAdapter (virtualLayoutManager, false);
+        final RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
+        rvVideo.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 1);
+        viewPool.setMaxRecycledViews(0, 1);
+        delegateAdapter = new DelegateAdapter(virtualLayoutManager, false);
     }
 
     private void initAllType() {
 
-        shareAdapter = new VBaseAdapter (this)//
-                .setData (new ArrayList<VideoInfoBean> ( ))//
-                .setLayout (R.layout.layout_play_video_rv_top_share)//
-                .setLayoutHelper (new LinearLayoutHelper ( ))//
-                .setHolder (VideoTopShareHolder.class)//
-                .setListener ((ItemListener<VideoInfoBean>) (view, position, mData) -> {
-                            List<VideoInfoBean.SitesBean> sitesBeans = mData.getSites ( );
-                            String sites[] = new String[sitesBeans.size ( )];
-                            for (int i = 0; i < sitesBeans.size ( ); i++) {
-                                sites[i] = sitesBeans.get (i).getSite_name ( );
+        shareAdapter = new VBaseAdapter(this)//
+                .setData(new ArrayList<VideoInfoBean>())//
+                .setLayout(R.layout.layout_play_video_rv_top_share)//
+                .setLayoutHelper(new LinearLayoutHelper())//
+                .setHolder(VideoTopShareHolder.class)//
+                .setListener((ItemListener<VideoInfoBean>) (view, position, mData) -> {
+                            List<VideoInfoBean.SitesBean> sitesBeans = mData.getSites();
+                            String sites[] = new String[sitesBeans.size()];
+                            for (int i = 0; i < sitesBeans.size(); i++) {
+                                sites[i] = sitesBeans.get(i).getSite_name();
                             }
-                            Alert.displayAlertSingledDialog (this, sites, (parent, v, position1, id) -> {
-                                VideoInfoBean.SitesBean sitesBean = sitesBeans.get (position1);
-                                ((TextView) view).setText (sitesBean.getSite_name ( ));
-                                switchLine (sitesBean.getSite_url ( ));
+                            Alert.displayAlertSingledDialog(this, sites, (parent, v, position1, id) -> {
+                                VideoInfoBean.SitesBean sitesBean = sitesBeans.get(position1);
+                                ((TextView) view).setText(sitesBean.getSite_name());
+                                switchLine(sitesBean.getSite_url());
                             });
 
                         }
                 );
 
-        topDesAdapter = new VBaseAdapter (this)//
-                .setData (new ArrayList<VideoInfoBean> ( ))//
-                .setLayout (R.layout.layout_play_video_rv_top_des)//
-                .setLayoutHelper (new LinearLayoutHelper ( ))//
-                .setHolder (VideoTopDesHolder.class)//
-                .setListener ((view, position, mData) -> {
+        topDesAdapter = new VBaseAdapter(this)//
+                .setData(new ArrayList<VideoInfoBean>())//
+                .setLayout(R.layout.layout_play_video_rv_top_des)//
+                .setLayoutHelper(new LinearLayoutHelper())//
+                .setHolder(VideoTopDesHolder.class)//
+                .setListener((view, position, mData) -> {
 
                 });
-        delegateAdapter.addAdapter (topDesAdapter);
-        delegateAdapter.addAdapter (shareAdapter);
-        rvVideo.setAdapter (delegateAdapter);
+        delegateAdapter.addAdapter(topDesAdapter);
+        delegateAdapter.addAdapter(shareAdapter);
+        rvVideo.setAdapter(delegateAdapter);
     }
 
     private void initVideoPlayer() {
 
         //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils (this, detailPlayer);
+        orientationUtils = new OrientationUtils(this, detailPlayer);
         //初始化不打开外部的旋转
-        orientationUtils.setEnable (false);
-        gsyVideoOptionBuilder = new GSYVideoOptionBuilder ( )
-                .setIsTouchWiget (true)
-                .setRotateViewAuto (false)
-                .setLockLand (false)
-                .setShowFullAnimation (false)
-                .setNeedLockFull (true)
-                .setSeekRatio (1)
-                .setCacheWithPlay (true)
-                .setVideoTitle ("测试视频")
-                .setVideoAllCallBack (new GSYSampleCallBack ( ) {
+        orientationUtils.setEnable(false);
+        gsyVideoOptionBuilder = new GSYVideoOptionBuilder()
+                .setIsTouchWiget(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)
+                .setNeedLockFull(true)
+                .setSeekRatio(1)
+                .setCacheWithPlay(true)
+                .setVideoTitle("测试视频")
+                .setVideoAllCallBack(new GSYSampleCallBack() {
                     @Override
                     public void onStartPrepared(String url, Object... objects) {
                         super.onStartPrepared(url, objects);
@@ -146,28 +146,28 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
                     @Override
                     public void onPrepared(String url, Object... objects) {
-                        super.onPrepared (url, objects);
+                        super.onPrepared(url, objects);
                         //开始播放了才能旋转和全屏
-                        orientationUtils.setEnable (true);
+                        orientationUtils.setEnable(true);
                         isPlay = true;
                     }
 
                     @Override
                     public void onQuitFullscreen(String url, Object... objects) {
-                        super.onQuitFullscreen (url, objects);
+                        super.onQuitFullscreen(url, objects);
                         if (orientationUtils != null) {
-                            orientationUtils.backToProtVideo ( );
+                            orientationUtils.backToProtVideo();
                         }
                     }
                 });
-        gsyVideoOptionBuilder.build (detailPlayer);
-        detailPlayer.getFullscreenButton ( ).setOnClickListener (new View.OnClickListener ( ) {
+        gsyVideoOptionBuilder.build(detailPlayer);
+        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //直接横屏
-                orientationUtils.resolveByClick ( );
+                orientationUtils.resolveByClick();
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen (getActivity ( ), true, true);
+                detailPlayer.startWindowFullscreen(getActivity(), true, true);
             }
         });
     }
@@ -176,66 +176,66 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     public void onBackPressed() {
 
         if (orientationUtils != null) {
-            orientationUtils.backToProtVideo ( );
+            orientationUtils.backToProtVideo();
         }
 
-        if (GSYVideoManager.backFromWindowFull (this)) {
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed ( );
+        super.onBackPressed();
     }
 
     @Override
     protected void onPause() {
-        getCurPlay ( ).onVideoPause ( );
-        super.onPause ( );
+        getCurPlay().onVideoPause();
+        super.onPause();
         isPause = true;
     }
 
     @Override
     protected void onResume() {
-        getCurPlay ( ).onVideoResume ( );
-        super.onResume ( );
+        getCurPlay().onVideoResume();
+        super.onResume();
         isPause = false;
     }
 
     @Override
     protected void onDestroy() {
         if (isPlay) {
-            getCurPlay ( ).release ( );
+            getCurPlay().release();
         }
         if (orientationUtils != null)
-            orientationUtils.releaseListener ( );
-        super.onDestroy ( );
+            orientationUtils.releaseListener();
+        super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged (newConfig);
+        super.onConfigurationChanged(newConfig);
         //如果旋转了就全屏
         if (isPlay && !isPause) {
-            detailPlayer.onConfigurationChanged (this, newConfig, orientationUtils, true, true);
+            detailPlayer.onConfigurationChanged(this, newConfig, orientationUtils, true, true);
         }
     }
 
     private GSYVideoPlayer getCurPlay() {
-        if (detailPlayer.getFullWindowPlayer ( ) != null) {
-            return detailPlayer.getFullWindowPlayer ( );
+        if (detailPlayer.getFullWindowPlayer() != null) {
+            return detailPlayer.getFullWindowPlayer();
         }
         return detailPlayer;
     }
 
     private void playVideo() {
-        if (TextUtils.isEmpty (videoUrl) || detailPlayer == null) {
+        if (TextUtils.isEmpty(videoUrl) || detailPlayer == null) {
             return;
         }
-        detailPlayer.release ( );
-        gsyVideoOptionBuilder.setUrl (videoUrl)
-                .setCacheWithPlay (true)
-                .setVideoTitle ("测试视频")
-                .build (detailPlayer);
-        gsyVideoOptionBuilder.build (detailPlayer);
-        detailPlayer.postDelayed (() -> detailPlayer.startPlayLogic ( ), 1000);
+        detailPlayer.release();
+        gsyVideoOptionBuilder.setUrl(videoUrl)
+                .setCacheWithPlay(true)
+                .setVideoTitle("测试视频")
+                .build(detailPlayer);
+        gsyVideoOptionBuilder.build(detailPlayer);
+        detailPlayer.postDelayed(() -> detailPlayer.startPlayLogic(), 1000);
     }
 
     @Override
@@ -244,15 +244,15 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     }
 
     public void VideoInfoBean(VideoInfoBean bean) {
-        ArrayList<VideoInfoBean> b = new ArrayList<VideoInfoBean> ( );
-        b.add (bean);
-        topDesAdapter.setData (b);
-        topDesAdapter.notifyDataSetChanged ( );
-        shareAdapter.setData (b);
-        shareAdapter.notifyDataSetChanged ( );
-        videoUrl = bean.getSites ( ).get (0).getSite_url ( );
-        sit_host = bean.getSites ( ).get (0).getSite_domain ( );
-        switchLine (videoUrl);
+        ArrayList<VideoInfoBean> b = new ArrayList<VideoInfoBean>();
+        b.add(bean);
+        topDesAdapter.setData(b);
+        topDesAdapter.notifyDataSetChanged();
+        shareAdapter.setData(b);
+        shareAdapter.notifyDataSetChanged();
+        videoUrl = bean.getSites().get(0).getSite_url();
+        sit_host = bean.getSites().get(0).getSite_domain();
+        switchLine(videoUrl);
 
     }
 
@@ -296,7 +296,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     public void setRealPath(String realPath) {
         this.videoUrl = realPath;
         webView.onDestroy();
-        playVideo ( );
+        playVideo();
     }
 
 }

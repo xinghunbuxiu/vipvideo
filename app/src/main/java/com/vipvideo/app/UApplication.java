@@ -19,7 +19,6 @@ public class UApplication extends BaseApplication {
         JsCrawler.initialize(this);
         MhSdk.init();
         ULog.logInit(BuildConfig.LOG_DEBUG);
-
     }
 
     @Override

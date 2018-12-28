@@ -125,6 +125,18 @@ public class VideoPresenter extends BasePresenter {
 
     }
 
+    public void getMovieByVideoId(String workId) {
+        VideoPlayerActivity activity = getActivity();
+        rxHelper.createSubscriber(apiService.searchVideoInfoDetail(workId), new RxSubscriber<String>(activity, false) {
+            @Override
+            protected void _onNext(String bean) {
+
+                activity.setVideoInfoBean(bean);
+            }
+        });
+
+    }
+
     public void getRealPath(String site_domain, String site_url) {
         VideoPlayerActivity activity = getActivity();
 
@@ -179,7 +191,7 @@ public class VideoPresenter extends BasePresenter {
     }
 
     public void getMainInfo() {
-        HomeFragment homeFragment =getFragment();
+        HomeFragment homeFragment = getFragment();
         rxHelper.createSubscriber(Api.getDefault(HostType.M_BAIDU_URL).getMainInfo(), new RxSubscriber<String>(activity, false) {
             @Override
             protected void _onNext(String result) {
