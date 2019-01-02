@@ -2,6 +2,8 @@ package com.vipvideo.presenter;
 
 import android.os.Bundle;
 
+import com.alibaba.fastjson.JSON;
+import com.lixh.base.BaseResPose;
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
 import com.vipvideo.api.Api;
@@ -11,6 +13,8 @@ import com.vipvideo.bean.AllVideoInfo;
 import com.vipvideo.bean.AllVideoInfoBean;
 import com.vipvideo.bean.GroupVideoInfo;
 import com.vipvideo.bean.MovieTypeBean;
+import com.vipvideo.bean.PlayInfoData;
+import com.vipvideo.bean.SearchVideoDetail;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.model.HomeModel;
 import com.vipvideo.ui.fragment.HomeFragment;
@@ -18,6 +22,7 @@ import com.vipvideo.ui.fragment.VipFragment;
 import com.vipvideo.ui.video.AllVideoActivity;
 import com.vipvideo.ui.video.VideoPlayerActivity;
 import com.vipvideo.util.UJsonp;
+import com.vipvideo.util.web.mahua.AesUtil;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -29,7 +34,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
 
 
 /**
@@ -126,12 +133,18 @@ public class VideoPresenter extends BasePresenter {
     }
 
     public void getMovieByVideoId(String workId) {
+        ApiService apiService = Api.getDefault(HostType.M_MAHUA_URL);
         VideoPlayerActivity activity = getActivity();
-        rxHelper.createSubscriber(apiService.searchVideoInfoDetail(workId), new RxSubscriber<String>(activity, false) {
+        rxHelper.createSubscriber(apiService.searchVideoInfoDetail(workId).flatMap((Function<BaseResPose<String>, ObservableSource<BaseResPose<String>>>) s -> {
+            SearchVideoDetail detail = JSON.parseObject(s.data, SearchVideoDetail.class);
+            SearchVideoDetail.DataBean.VideoListBean videoListBeans = detail.getData().getVideoList().get(0);
+            return apiService.clickPlayVideo(videoListBeans.getId(), videoListBeans.getPlayType());
+        }), new RxSubscriber<String>(activity, false) {
             @Override
-            protected void _onNext(String bean) {
-
-                activity.setVideoInfoBean(bean);
+            protected void _onNext(String str) {
+                String result = AesUtil.decryptHex(str, AesUtil.getKey(false));
+                PlayInfoData data = JSON.parseObject(result, PlayInfoData.class);
+                activity.setVideoInfoBean(data);
             }
         });
 

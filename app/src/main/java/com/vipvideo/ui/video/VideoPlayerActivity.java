@@ -14,6 +14,7 @@ import com.lixh.base.BaseActivity;
 import com.lixh.base.adapter.ItemListener;
 import com.lixh.base.adapter.VBaseAdapter;
 import com.lixh.utils.Alert;
+import com.lixh.utils.ULog;
 import com.lixh.view.UToolBar;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -21,6 +22,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.vipvideo.R;
+import com.vipvideo.bean.PlayInfoData;
 import com.vipvideo.bean.VideoInfoBean;
 import com.vipvideo.presenter.VideoPresenter;
 import com.vipvideo.ui.adpter.VideoTopDesHolder;
@@ -59,6 +61,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
     private boolean isPlay;
     private boolean isPause;
     private String sit_host;
+    private PlayInfoData playInfoData;
 
 
     @Override
@@ -119,7 +122,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
                 });
         delegateAdapter.addAdapter(topDesAdapter);
-        delegateAdapter.addAdapter(shareAdapter);
+//        delegateAdapter.addAdapter(shareAdapter);
         rvVideo.setAdapter(delegateAdapter);
     }
 
@@ -295,8 +298,12 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     public void setRealPath(String realPath) {
         this.videoUrl = realPath;
-        webView.onDestroy();
+        ULog.e(videoUrl);
         playVideo();
     }
 
+    public void setVideoInfoBean(PlayInfoData playInfo) {
+        this.playInfoData = playInfo;
+        setRealPath(playInfoData.getData().getM3u8PlayUrl() + playInfoData.getData().getM3u8Format().get_$720P());
+    }
 }

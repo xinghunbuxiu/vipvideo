@@ -32,7 +32,7 @@ public class SearchVideoDetail extends BaseModel {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean extends BaseModel {
         /**
          * id : 3495
          * type : 3
@@ -42,7 +42,7 @@ public class SearchVideoDetail extends BaseModel {
          * doubanScore : 7.0
          * imdbScore : 7.0
          * intro : 唐门外门弟子唐三，因偷学内门绝学为唐门所不容，跳崖明志时却发现没有死，反而以另外一个身份来到了另一个世界，一个属于武魂的世界，名叫斗罗大陆。这里没有魔法，没有斗气，没有武术，却有神奇的武魂。这里的每个人，在自己六岁的时候，都会在武魂殿中令武魂觉醒。武魂有动物，有植物，有器物，武魂可以辅助人们的日常生活。而其中一些特别出色的武魂却可以用来修炼并进行战斗，这个职业，是斗罗大陆上最为强大也是最荣耀的职业“魂师”。
-         小小的唐三在圣魂村开始了他的魂师修炼之路，并萌生了振兴唐门的梦想。当唐门暗器来到斗罗大陆，当唐三武魂觉醒，他能否在这片武魂的世界再铸唐门的辉煌？
+         * 小小的唐三在圣魂村开始了他的魂师修炼之路，并萌生了振兴唐门的梦想。当唐门暗器来到斗罗大陆，当唐三武魂觉醒，他能否在这片武魂的世界再铸唐门的辉煌？
          * classifyTypeList : ["内地","冒险"]
          * episodeState : 0
          * episodeTotalCount : 31
@@ -398,7 +398,7 @@ public class SearchVideoDetail extends BaseModel {
             this.videoPageList = videoPageList;
         }
 
-        public static class VideoInfoConfigBean {
+        public static class VideoInfoConfigBean extends BaseModel {
             /**
              * videoCanDown : true
              */
@@ -467,16 +467,14 @@ public class SearchVideoDetail extends BaseModel {
              */
 
             private int id;
-            private Object isFavorite;
+            private String isFavorite;
             private int isHighlight;
             private String title;
             private int sortNum;
             private int duration;
             private int lastPlayTime;
-            private FormatExtraBean formatExtra;
-            private StatEndTimePBean statEndTimeP;
-            private Object period;
-            private Object tagDTO;
+            private String period;
+            private String tagDTO;
             private int playType;
 
             public int getId() {
@@ -487,11 +485,11 @@ public class SearchVideoDetail extends BaseModel {
                 this.id = id;
             }
 
-            public Object getIsFavorite() {
+            public String getIsFavorite() {
                 return isFavorite;
             }
 
-            public void setIsFavorite(Object isFavorite) {
+            public void setIsFavorite(String isFavorite) {
                 this.isFavorite = isFavorite;
             }
 
@@ -535,27 +533,11 @@ public class SearchVideoDetail extends BaseModel {
                 this.lastPlayTime = lastPlayTime;
             }
 
-            public FormatExtraBean getFormatExtra() {
-                return formatExtra;
-            }
-
-            public void setFormatExtra(FormatExtraBean formatExtra) {
-                this.formatExtra = formatExtra;
-            }
-
-            public StatEndTimePBean getStatEndTimeP() {
-                return statEndTimeP;
-            }
-
-            public void setStatEndTimeP(StatEndTimePBean statEndTimeP) {
-                this.statEndTimeP = statEndTimeP;
-            }
-
-            public Object getPeriod() {
+            public String getPeriod() {
                 return period;
             }
 
-            public void setPeriod(Object period) {
+            public void setPeriod(String period) {
                 this.period = period;
             }
 
@@ -563,7 +545,7 @@ public class SearchVideoDetail extends BaseModel {
                 return tagDTO;
             }
 
-            public void setTagDTO(Object tagDTO) {
+            public void setTagDTO(String tagDTO) {
                 this.tagDTO = tagDTO;
             }
 
@@ -575,13 +557,7 @@ public class SearchVideoDetail extends BaseModel {
                 this.playType = playType;
             }
 
-            public static class FormatExtraBean {
-                public static class _$1080PBean {
-                }
-            }
 
-            public static class StatEndTimePBean {
-            }
         }
     }
 }
