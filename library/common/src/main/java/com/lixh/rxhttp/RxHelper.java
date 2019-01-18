@@ -53,7 +53,9 @@ public class RxHelper {
             Observable<LifeEvent> compareLifecycleObservable =
                     lifecycleSubject.filter(activityLifeCycleEvent -> activityLifeCycleEvent.equals(event));
             return tObservable.flatMap((Function<BaseResPose<T>, ObservableSource<T>>) result -> {
-                ULog.e(result.toString());
+                if (result.toString().length() < 300) {
+                    ULog.e(result.toString());
+                }
                 return createData(result);
             }).takeUntil(compareLifecycleObservable).subscribeOn(Schedulers.io()).unsubscribeOn(Schedulers.io()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         };
@@ -66,11 +68,11 @@ public class RxHelper {
      * @param fromNetwork
      */
     public <T> void createSubscriber(Observable fromNetwork, final RxSubscriber result) {
-            //数据预处理
+        //数据预处理
         BehaviorSubject<LifeEvent> lifeEvent = lifecycleSubject.get(c.getClass().getName());
         Observable observable = fromNetwork.compose(handleResult(getEvent(), lifeEvent)).compose(RxSchedulers.io_main());
-            RxCache.load(c, caChe, 1000 * 60 * 30, observable, isForceRefresh)
-                    .subscribeWith(result);
+        RxCache.load(c, caChe, 1000 * 60 * 30, observable, isForceRefresh)
+                .subscribeWith(result);
 
     }
 
@@ -94,7 +96,7 @@ public class RxHelper {
                 if (result.success()) {
                     subscriber.onNext(result.data);
                 } else {
-                    subscriber.onError(new ApiException(result.code,result.message));
+                    subscriber.onError(new ApiException(result.code, result.message));
                 }
                 subscriber.onComplete();
             } catch (Exception e) {

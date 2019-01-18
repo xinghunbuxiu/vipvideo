@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.jayway.jsonpath.JsonPath;
 import com.lixh.presenter.BasePresenter;
 import com.lixh.rxhttp.RxSubscriber;
+import com.lixh.utils.ULog;
 import com.vipvideo.api.Api;
 import com.vipvideo.api.HostType;
 import com.vipvideo.ui.TabsActivity;
@@ -37,8 +38,11 @@ public class TabPresenter extends BasePresenter {
         rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).MhLogin(MhSdk.init().getAppInfo().getUuid(), model), new RxSubscriber<String>(tabsActivity, false) {
             @Override
             protected void _onNext(String str) {
+                ULog.e("LoginMh==" + str);
                 String result = AesUtil.decryptHex(str, AesUtil.getKey(false));
+                ULog.e("LogindecryptHex==" + result);
                 String mToken = JsonPath.read(result, "$.data.detail.token");
+                ULog.e("LoginmToken==" + result);
                 MhSdk.init().getAppInfo().setXAuthToken(mToken);
             }
         });

@@ -60,7 +60,6 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public boolean isContentTop() {
         return true;
     }
-
     @Override
     public void onAttach(Context context) {
         lifecycleSubject.onNext(LifeEvent.ATTACH);

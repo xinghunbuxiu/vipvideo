@@ -252,7 +252,7 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
         return gridLayoutHelper;
     }
     public void setVideoInfo(int page, AllVideoInfoBean videoInfo) {
-        this.page.finish(null, LoadingTip.LoadStatus.FINISH);
+        this.page.finish(LoadingTip.LoadStatus.FINISH);
         if (isFirst) {
             isFirst = false;
             movieTypeBean = videoInfo.getMovieTypeBean ( );

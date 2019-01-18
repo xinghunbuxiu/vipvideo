@@ -304,6 +304,7 @@ public class VideoPlayerActivity extends BaseActivity<VideoPresenter> {
 
     public void setVideoInfoBean(PlayInfoData playInfo) {
         this.playInfoData = playInfo;
-        setRealPath(playInfoData.getData().getM3u8PlayUrl() + playInfoData.getData().getM3u8Format().get_$720P());
+
+        setRealPath(playInfoData.getData().getM3u8PlayUrl() + playInfoData.getData().getM3u8Format().getFree());
     }
 }

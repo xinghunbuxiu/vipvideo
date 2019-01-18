@@ -37,6 +37,7 @@ public class ChannelActivity extends BaseActivity<ChannelPresenter> {
     @Override
     public void initTitle(UToolBar toolBar) {
         key = intent.getString("title");
+        toolBar.setTitle(key);
     }
 
     @Override
@@ -45,10 +46,10 @@ public class ChannelActivity extends BaseActivity<ChannelPresenter> {
         pageView = PageView.with(this)
                 .setPullLoadMore(true)
                 .setRefresh(true)
+                .setAutoRefresh(true)
                 .setDivideHeight(R.dimen.space_1)
                 .setLoadTip(tip)
                 .setOnLoadingListener(onLoadingListener)
-                .setAutoRefresh(false)
                 .setMaxRecycledViews(0, 20)
                 .build();
         layout.setContentView(pageView.getRootView());
@@ -80,6 +81,7 @@ public class ChannelActivity extends BaseActivity<ChannelPresenter> {
             mListAdapter.addDatas(videoInfoDatas);
             mListAdapter.notifyDataSetChanged();
         }
+        pageView.onFinish();
 
     }
 }

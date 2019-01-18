@@ -42,7 +42,7 @@ public class AesUtil {
         try {
             return aesDecryptByBytes(hexStringToBytes(str), str2);
         } catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
             return null;
         }
     }

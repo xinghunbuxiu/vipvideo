@@ -4,7 +4,6 @@ package com.lixh.base.adapter.recycleview;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.RecycledViewPool;
@@ -122,7 +121,7 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
     }
 
     public interface OnLoadFinish<T> {
-        void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus);
+        void finish(@LoadingTip.LoadStatus int loadStatus);
     }
 
     public void setViewPool(RecycledViewPool viewPool) {
@@ -137,23 +136,17 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
      * @param list       结束后加载list信息
      * @param loadStatus //状态
      */
-    public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-        onFinish(list);
+    public void finish(@LoadingTip.LoadStatus int loadStatus) {
+        onFinish();
     }
 
     /**
      * 结束填充
      *
-     * @param list
      */
-    public void onFinish(List<T> list) {
+    public void onFinish() {
         springView.finishRefreshAndLoadMore();
         onError(LoadingTip.LoadStatus.FINISH);
-        //是第一页并且 可以向上滚 说明超出一屏
-        if (page == 0 && ViewCompat.canScrollVertically(recyclerView, 1) && loadMoreAdapter != null) {
-            loadMoreAdapter.setLoadMoreEnabled(true);
-        }
-
     }
 
     /**
@@ -192,8 +185,8 @@ public class PageView<T> implements LoadMoreAdapter.OnLoadMoreListener, SpringVi
         }
 
         @Override
-        public void finish(List<T> list, @LoadingTip.LoadStatus int loadStatus) {
-            page.finish(list, loadStatus);
+        public void finish(@LoadingTip.LoadStatus int loadStatus) {
+            page.finish(loadStatus);
         }
     }
 

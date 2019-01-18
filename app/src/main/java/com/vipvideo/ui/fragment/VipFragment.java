@@ -150,7 +150,7 @@ public class VipFragment extends BaseFragment<VideoPresenter> {
     }
 
     public void finish() {
-        page.finish(null, LoadingTip.LoadStatus.FINISH);
+        page.finish(LoadingTip.LoadStatus.FINISH);
     }
 
     private LayoutHelper getListHelper() {

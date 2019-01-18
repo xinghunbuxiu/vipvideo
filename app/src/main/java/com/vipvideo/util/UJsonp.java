@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.lixh.utils.ULog;
 import com.vipvideo.app.UApplication;
 import com.vipvideo.bean.BannerBean;
 import com.vipvideo.model.HomeModel;
@@ -221,7 +220,6 @@ public class UJsonp {
             Elements hotTvs = elements.get(1).select(".c-scroll-item a");
             int i = 0;
             for (Element hotTv : hotTvs) {
-                ULog.e("hotTv" + i++);
                 HomeModel.HotTvBean tvBean = new HomeModel.HotTvBean();
                 tvBean.setLink(hotTv.attr("href"));
                 tvBean.setHotTv_label(hotTv.select("span:first-child").text());

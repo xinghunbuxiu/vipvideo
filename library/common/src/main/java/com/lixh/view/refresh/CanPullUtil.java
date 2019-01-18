@@ -1,7 +1,6 @@
 package com.lixh.view.refresh;
 
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -29,10 +28,10 @@ public class CanPullUtil {
                         && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
                         .getTop() < absListView.getPaddingTop());
             } else {
-                return ViewCompat.canScrollVertically(mChildView, -1) || mChildView.getScrollY() > 0;
+                return mChildView.canScrollVertically(-1) || mChildView.getScrollY() > 0;
             }
         } else {
-            return ViewCompat.canScrollVertically(mChildView, -1);
+            return mChildView.canScrollVertically(-1);
         }
     }
 
@@ -51,10 +50,10 @@ public class CanPullUtil {
                 }
 
             } else {
-                return ViewCompat.canScrollVertically(mChildView, 1) || mChildView.getScrollY() > 0;
+                return mChildView.canScrollVertically(1) || mChildView.getScrollY() > 0;
             }
         } else {
-            return ViewCompat.canScrollVertically(mChildView, 1);
+            return mChildView.canScrollVertically(1);
         }
     }
 

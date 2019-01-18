@@ -151,7 +151,6 @@ public class AppInfo {
         headerInfo.setXAuthToken(xAuthToken);
         return headerInfo;
     }
-
     @SuppressLint("WrongConstant")
     public boolean isEmulator() {
         StringBuilder stringBuilder = new StringBuilder();

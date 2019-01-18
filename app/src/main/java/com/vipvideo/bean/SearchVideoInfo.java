@@ -96,8 +96,8 @@ public class SearchVideoInfo extends BaseModel {
         private int downloadScore;
         private int playTimeLength;
         private String classifyType;
-        private int basePalyNum;
-        private int hotPlayNum;
+        private String basePalyNum;
+        private String hotPlayNum;
         private String tagSource;
         private String lastPeriod;
         private int vipFlag;
@@ -290,19 +290,19 @@ public class SearchVideoInfo extends BaseModel {
             this.classifyType = classifyType;
         }
 
-        public int getBasePalyNum() {
+        public String getBasePalyNum() {
             return basePalyNum;
         }
 
-        public void setBasePalyNum(int basePalyNum) {
+        public void setBasePalyNum(String basePalyNum) {
             this.basePalyNum = basePalyNum;
         }
 
-        public int getHotPlayNum() {
+        public String getHotPlayNum() {
             return hotPlayNum;
         }
 
-        public void setHotPlayNum(int hotPlayNum) {
+        public void setHotPlayNum(String hotPlayNum) {
             this.hotPlayNum = hotPlayNum;
         }
 

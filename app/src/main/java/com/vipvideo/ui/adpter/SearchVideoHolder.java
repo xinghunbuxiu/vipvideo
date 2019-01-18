@@ -1,5 +1,6 @@
 package com.vipvideo.ui.adpter;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,10 +34,19 @@ public class SearchVideoHolder extends VBaseHolder<SearchVideoInfo.DataBean> {
     @Override
     public void setData(int ps, SearchVideoInfo.DataBean data) {
         super.setData(ps, data);
-        Glide.with(mContext).load(data.getCoverHUrl()).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_image);
+        Glide.with(mContext).load(TextUtils.isEmpty(data.getCoverHUrl()) ? data.getCoverUrl() : data.getCoverHUrl()).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_image);
         tv_title.setText(data.getTitle());
         tvVideoNum.setText(data.getBasePalyNum());
         tvVideoTip.setText("豆瓣:" + data.getDoubanScore());
     }
 
+    @Override
+    public void init() {
+        super.init();
+        itemView.setOnClickListener(v -> {
+            if (mListener != null) {
+                mListener.onItemClick(v, position, mData);
+            }
+        });
+    }
 }

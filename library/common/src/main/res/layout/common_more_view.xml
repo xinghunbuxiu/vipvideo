@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 JustWayward Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +14,22 @@
   ~ limitations under the License.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="horizontal">
+
     <com.github.ybq.android.spinkit.SpinKitView xmlns:com.angel.recycling.desewang.app="http://schemas.android.com/apk/res-auto"
         style="@style/SpinKitView.Circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
         android:layout_gravity="center"
+        android:padding="20dp"
         com.angel.recycling.desewang.app:SpinKit_Color="@color/colorAccent" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="更多加载中……"/>
+        android:text="更多加载中……" />
 
 </LinearLayout>

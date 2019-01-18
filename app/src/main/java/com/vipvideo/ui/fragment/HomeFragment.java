@@ -109,7 +109,7 @@ public class HomeFragment extends BaseFragment<VideoPresenter> {
                             .setLayoutHelper(new LinearLayoutHelper())//
                             .setHolder(TopHotSearchHolder.class)//
                             .setListener((ItemListener<HomeModel.HotTvBean>) (view, position, mData) -> {
-                                        intent.withString("title", mData.getHotTv_name()).go(ChannelActivity.class);
+                                        intent.withString("title", mData.getHotTv_label()).go(ChannelActivity.class);
                                     }
                             );
                     break;
@@ -139,7 +139,7 @@ public class HomeFragment extends BaseFragment<VideoPresenter> {
     }
 
     public void finish() {
-        page.finish(null, LoadingTip.LoadStatus.FINISH);
+        page.finish(LoadingTip.LoadStatus.FINISH);
     }
 
     @Override
