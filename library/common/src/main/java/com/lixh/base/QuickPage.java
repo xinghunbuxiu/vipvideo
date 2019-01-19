@@ -1,19 +1,18 @@
-package com.lixh.base.adapter.recycleview;
+package com.lixh.base;
 
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.RecycledViewPool;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.alibaba.android.vlayout.DelegateAdapter;
-import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lixh.R;
-import com.lixh.base.adapter.VBaseAdapter;
+import com.lixh.base.adapter.recycleview.DividerDecoration;
 import com.lixh.utils.LoadingTip;
 import com.lixh.view.refresh.SpringView;
 
@@ -25,40 +24,37 @@ import java.util.List;
  * des
  */
 
-public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onReloadListener {
+public class QuickPage<T> implements BaseQuickAdapter.RequestLoadMoreListener, SpringView.OnRefreshListener, LoadingTip.onReloadListener {
     View rootView;
     RecyclerView recyclerView;
     SpringView springView;
+    private LoadingTip loadTip;
     int page = 0;
+    int pageSize = 10;
     LoadingTip loadingTip;
     private MyOnLoadFinish onLoadFinish;
-    VirtualLayoutManager virtualLayoutManager;
-    DelegateAdapter mAdapters;
+    public BaseQuickAdapter mAdapters;
     boolean refresh;
     boolean pullLoadMore;
     boolean isAutoLoadMore;
     boolean isAutoRefresh;
     @DimenRes
     int divideHeight = R.dimen.space_2;
-    private int orientation = OrientationHelper.VERTICAL;
     private OnLoadingListener onLoadingListener;
     private RecyclerView.OnScrollListener onScrollListener;
     private int divideColor;
-    RecyclerView.RecycledViewPool viewPool;
-    private RecycledViewPool recycledViewPool;
+    RecyclerView.LayoutManager layoutManager;
 
-    public static PageView with(Context context) {
-        return new PageView(context);
+    public static QuickPage with(Context context) {
+        return new QuickPage(context);
     }
 
-    public PageView(Context context) {
+    public QuickPage(Context context) {
         mContext = context;
         rootView = inflate(R.layout.base_recyview);
         recyclerView = $(R.id.recycle);
         springView = $(R.id.springView);
-        virtualLayoutManager = new VirtualLayoutManager(context);
-        mAdapters = new DelegateAdapter(virtualLayoutManager, false);
-        viewPool = new RecyclerView.RecycledViewPool();
+        layoutManager = new LinearLayoutManager(context);
     }
 
     @Override
@@ -66,58 +62,45 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
         onRefresh();
     }
 
-    public void onLoadMore() {
+    public void setAdapters(BaseQuickAdapter mAdapters) {
+        this.mAdapters = mAdapters;
+    }
+
+
+    public QuickPage setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
+        return this;
+    }
+
+
+    public void addData(List<T> datas) {
+        if (mAdapters != null) {
+            if (page == 1) {
+                mAdapters.replaceData(datas);
+            } else {
+                mAdapters.addData(datas);
+            }
+            if (datas.size() < pageSize) {
+                mAdapters.loadMoreEnd(page == 1);
+            } else {
+                mAdapters.loadMoreComplete();
+            }
+            if (page == 1 && isAutoLoadMore) {
+                mAdapters.disableLoadMoreIfNotFullPage();
+            }
+        }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
         page++;
         onLoad(onLoadingListener);
-    }
-
-    public PageView setLayoutManager(VirtualLayoutManager layoutManager) {
-        this.virtualLayoutManager = layoutManager;
-        return this;
-    }
-
-    public PageView setRecycledViewPool(RecycledViewPool recycledViewPool) {
-        this.recycledViewPool = recycledViewPool;
-        return this;
-    }
-
-    public RecycledViewPool getRecycledViewPool() {
-        return recycledViewPool;
-    }
-
-    public PageView setMaxRecycledViews(int viewType, int max) {
-        if (recycledViewPool != null) {
-            recycledViewPool.setMaxRecycledViews(viewType, max);
-        }
-
-        return this;
-    }
-
-    public void addAllAdapter(List<DelegateAdapter.Adapter> adapters) {
-        if (mAdapters != null) {
-            mAdapters.addAdapters(adapters);
-        }
-    }
-
-    public void addAdapter(VBaseAdapter adapters) {
-        if (mAdapters != null) {
-            mAdapters.addAdapter(adapters);
-        }
-    }
-
-    public void clear() {
-        if (mAdapters != null) {
-            mAdapters.clear();
-        }
     }
 
     public interface OnLoadFinish<T> {
         void finish(@LoadingTip.LoadStatus int loadStatus);
     }
 
-    public void setViewPool(RecycledViewPool viewPool) {
-        this.viewPool = viewPool;
-    }
 
     public interface OnLoadingListener {
         void load(int page, OnLoadFinish onLoadFinish);
@@ -127,6 +110,7 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
      * @param list       结束后加载list信息
      * @param loadStatus //状态
      */
+
     public void finish(@LoadingTip.LoadStatus int loadStatus) {
         onFinish();
     }
@@ -148,6 +132,9 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
                 if (page > 1) {
                     page--;
                 }
+                if (mAdapters != null) {
+                    mAdapters.loadMoreFail();
+                }
                 break;
             default:
                 if (loadingTip != null)
@@ -165,9 +152,9 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
     }
 
     class MyOnLoadFinish<T> implements OnLoadFinish<T> {
-        PageView page;
+        QuickPage page;
 
-        public MyOnLoadFinish(PageView page) {
+        public MyOnLoadFinish(QuickPage page) {
             this.page = page;
         }
 
@@ -187,27 +174,26 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
 
     static Context mContext;
 
-    public PageView build() {
+    public QuickPage build() {
         springView.setAutoRefresh(isAutoRefresh);
         onLoadingListener = getOnLoadingListener();
         if (loadingTip != null) {
             loadingTip.setLoadingTip(LoadingTip.LoadStatus.LOADING);
             loadingTip.setOnReloadListener(this);
         }
-        recyclerView.setLayoutManager(virtualLayoutManager);
-        if (viewPool != null) {
-            recyclerView.setRecycledViewPool(viewPool);
-        }
+        recyclerView.setLayoutManager(layoutManager);
+
         if (onScrollListener != null) {
             recyclerView.addOnScrollListener(onScrollListener);
         }
         if (mAdapters != null) {
             if (isAutoLoadMore) {
+                mAdapters.setEnableLoadMore(true);
             } else {
                 recyclerView.setAdapter(mAdapters);
             }
             if (isPullLoadMore()) {
-                springView.setOnLoadListener(() -> onLoadMore());
+                springView.setOnLoadListener(() -> onLoadMoreRequested());
             }
             if (isRefresh() && springView != null) {
                 springView.setOnRefreshListener(this);
@@ -248,24 +234,23 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
     }
 
 
-    public PageView setLoadTip(LoadingTip loadTip) {
+    public QuickPage setLoadTip(LoadingTip loadTip) {
         this.loadTip = loadTip;
         return this;
     }
 
-    private LoadingTip loadTip;
 
-    public PageView setOnLoadingListener(OnLoadingListener onLoadingListener) {
+    public QuickPage setOnLoadingListener(OnLoadingListener onLoadingListener) {
         this.onLoadingListener = onLoadingListener;
         return this;
     }
 
-    public PageView setAutoLoadMore(boolean autoLoadMore) {
+    public QuickPage setAutoLoadMore(boolean autoLoadMore) {
         isAutoLoadMore = autoLoadMore;
         return this;
     }
 
-    public PageView setAutoRefresh(boolean autoRefresh) {
+    public QuickPage setAutoRefresh(boolean autoRefresh) {
         this.isAutoRefresh = autoRefresh;
         return this;
     }
@@ -274,7 +259,7 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
         return pullLoadMore;
     }
 
-    public PageView setPullLoadMore(boolean pullLoadMore) {
+    public QuickPage setPullLoadMore(boolean pullLoadMore) {
         this.pullLoadMore = pullLoadMore;
         return this;
     }
@@ -287,7 +272,7 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
         return refresh;
     }
 
-    public PageView setRefresh(boolean refresh) {
+    public QuickPage setRefresh(boolean refresh) {
         this.refresh = refresh;
         return this;
     }
@@ -297,20 +282,13 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
         return divideHeight;
     }
 
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
-    }
 
-    public int getOrientation() {
-        return orientation;
-    }
-
-    public PageView setDivideHeight(@DimenRes int divideHeight) {
+    public QuickPage setDivideHeight(@DimenRes int divideHeight) {
         this.divideHeight = divideHeight;
         return this;
     }
 
-    public PageView setDivideHeight(@DimenRes int divideHeight, @ColorRes int color) {
+    public QuickPage setDivideHeight(@DimenRes int divideHeight, @ColorRes int color) {
         this.divideHeight = divideHeight;
         divideColor = color;
         return this;
@@ -323,7 +301,7 @@ public class PageView<T> implements SpringView.OnRefreshListener, LoadingTip.onR
      * @param onScrollListener
      * @return
      */
-    public PageView addOnScrollListener(RecyclerView.OnScrollListener onScrollListener) {
+    public QuickPage addOnScrollListener(RecyclerView.OnScrollListener onScrollListener) {
         this.onScrollListener = onScrollListener;
         return this;
     }
