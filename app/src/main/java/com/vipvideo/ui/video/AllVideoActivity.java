@@ -241,6 +241,8 @@ public class AllVideoActivity extends BaseActivity<VideoPresenter> {
     }
 
 
+
+
     private LayoutHelper getListHelper() {
         GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
         gridLayoutHelper.setPadding(16, 16, 16, 16);

@@ -9,6 +9,7 @@ import com.lixh.rxhttp.RxHelper;
 import com.lixh.rxlife.LifeEvent;
 import com.lixh.utils.LoadingTip;
 import com.lixh.utils.UIntent;
+import com.lixh.view.ILayout;
 import com.lixh.view.UToolBar;
 
 import io.reactivex.subjects.BehaviorSubject;
@@ -19,14 +20,17 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by xsf
  * on 2016.07.11:55
  */
-public abstract class BasePresenter{
+public abstract class BasePresenter {
     public UToolBar toolbar;
     public LoadingTip tip;
     public UIntent intent;
     public RxHelper rxHelper;
     public FragmentActivity activity;
     private BaseFragment fragment;
+    public ILayout view;
+
     public abstract void onCreate(Bundle savedInstanceState);
+
     /**
      * 对外部开放 以实现外面调用
      *
@@ -43,7 +47,7 @@ public abstract class BasePresenter{
      * @param <T>
      * @return
      */
-    public <T> T getActivity() {
+    public <T extends BaseActivity> T getActivity() {
         return (T) ((BaseActivity) activity).getActivity();
     }
 
@@ -57,21 +61,22 @@ public abstract class BasePresenter{
         return (T) fragment.getFragment();
     }
 
-
-    public <T extends BaseActivity> void init(T activity, Bundle savedInstanceState, BehaviorSubject<LifeEvent> lifecycleSubject) {
-        this.activity = activity;
-        tip = activity.tip;
-        intent = new UIntent(activity);
-        rxHelper = RxHelper.build(activity).setCaChe(activity.getClass().getName()).bindLifeCycle(lifecycleSubject);
-        onCreate(savedInstanceState);
+    public BasePresenter bind(ILayout layout) {
+        this.view = layout;
+        return this;
     }
 
-    public <T extends BaseFragment> void init(T fragment, Bundle savedInstanceState, BehaviorSubject<LifeEvent> lifecycleSubject) {
-        this.fragment = fragment;
-        tip = fragment.tip;
-        activity = fragment.getActivity();
-        intent = new UIntent(fragment.getActivity());
-        rxHelper = RxHelper.build(fragment.getActivity()).setCaChe(fragment.getClass().getName()).bindLifeCycle(lifecycleSubject);
+    public void init(Bundle savedInstanceState, BehaviorSubject<LifeEvent> lifecycleSubject) {
+        if (view instanceof BaseActivity) {
+            activity = ((BaseActivity) view);
+            tip = ((BaseActivity) view).tip;
+        } else {
+            this.fragment = ((BaseFragment) view);
+            tip = ((BaseFragment) view).tip;
+            activity = fragment.getActivity();
+        }
+        intent = new UIntent(activity);
+        rxHelper = RxHelper.build(activity).setCaChe(view.getClass().getName()).bindLifeCycle(lifecycleSubject);
         onCreate(savedInstanceState);
     }
 

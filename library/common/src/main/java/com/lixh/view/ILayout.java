@@ -8,8 +8,9 @@ import android.os.Bundle;
  * des
  */
 
-public interface ILayout {
+public interface ILayout<M> {
     void init(Bundle savedInstanceState);
+
     /**
      * 初始化标题
      *
@@ -25,5 +26,8 @@ public interface ILayout {
     int getLayoutId();
 
     boolean isShowBack();
+
     boolean isDoubleExit();
+
+    void setData(M  bean);
 }

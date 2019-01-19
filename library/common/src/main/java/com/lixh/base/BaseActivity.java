@@ -101,7 +101,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
         SystemBarTintManager systemBarTintManager = new SystemBarTintManager(this);
         systemBarTintManager.setTranslucentStatus(this, true);
         if (mPresenter != null) {
-            mPresenter.init(this, savedInstanceState, lifecycleSubject);
+            mPresenter.bind(this).init(savedInstanceState, lifecycleSubject);
         }
         init(savedInstanceState);
 
@@ -140,7 +140,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
             toolBar.setDisplayShowTitleEnabled(false);
             toolBar.setDisplayHomeAsUpEnabled(isShowBack());
             toolBar.setTitleTextColor(Color.WHITE);
-            final Drawable upArrow = ContextCompat.getDrawable(this,R.drawable.abc_ic_ab_back_material);
+            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_material);
             upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
             toolBar.setNavigationIcon(upArrow);
             initTitle(toolBar);
@@ -205,6 +205,10 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
     @Override
     public void update(Observable o, Message arg) {
+
+    }
+    @Override
+    public void setData(Object bean) {
 
     }
 }

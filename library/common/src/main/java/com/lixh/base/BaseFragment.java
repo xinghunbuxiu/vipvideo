@@ -19,13 +19,14 @@ import com.lixh.utils.LoadingTip;
 import com.lixh.utils.LocalAppInfo;
 import com.lixh.utils.TUtil;
 import com.lixh.utils.UIntent;
+import com.lixh.view.ILayout;
 import com.lixh.view.LoadView;
 import com.lixh.view.UToolBar;
 
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message> {
+public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message>, ILayout {
     public T mPresenter; //当前类需要的操作类
     public FragmentActivity activity;
     public LoadingTip tip;
@@ -34,7 +35,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public View mContentView;
     public UIntent intent;
 
-    protected void init(Bundle savedInstanceState) {
+    @Override
+    public void init(Bundle savedInstanceState) {
 
     }
 
@@ -60,6 +62,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public boolean isContentTop() {
         return true;
     }
+
     @Override
     public void onAttach(Context context) {
         lifecycleSubject.onNext(LifeEvent.ATTACH);
@@ -140,7 +143,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
             ButterKnife.bind(this, mContentView);
             initTitleBar();
             if (mPresenter != null) {
-                mPresenter.init(this, savedInstanceState, lifecycleSubject);
+                mPresenter.bind(this).init(savedInstanceState, lifecycleSubject);
             }
             init(savedInstanceState);
 

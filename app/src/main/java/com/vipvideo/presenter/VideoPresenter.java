@@ -64,6 +64,7 @@ public class VideoPresenter extends BasePresenter {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
     }
 
     public void getAllMovieType() {
@@ -71,6 +72,7 @@ public class VideoPresenter extends BasePresenter {
         rxHelper.createSubscriber(apiService.getAllMovieType(), new RxSubscriber<MovieTypeBean>(activity, false) {
             @Override
             protected void _onNext(MovieTypeBean bean) {
+                view.setData(bean);
                 vipFragment.setMovieTypeBean(bean);
             }
         });
