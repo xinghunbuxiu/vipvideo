@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -13,7 +14,7 @@ import com.lixh.R;
 /**
  * TODO: document your custom view class.
  */
-public class TextLineView extends TextView {
+public class TextLineView extends AppCompatTextView {
     public float lineHeight = 4;
     float mTextWidth;
     float mTextHeight;

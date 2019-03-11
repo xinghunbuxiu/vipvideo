@@ -125,23 +125,6 @@ public class EasyRVHolder extends RecyclerView.ViewHolder implements ViewHelper.
         return this;
     }
 
-    public EasyRVHolder setImageUrl(int viewId, String imgUrl, int placeHolderRes) {
-        ImageView view = getView(viewId);
-        Glide.with(mContext).load(imgUrl).placeholder(placeHolderRes).into(view);
-        return this;
-    }
-
-    public EasyRVHolder setCircleImageUrl(int viewId, String imgUrl, int placeHolderRes) {
-        ImageView view = getView(viewId);
-        Glide.with(mContext).load(imgUrl).placeholder(placeHolderRes) .transform(new GlideCircleTransfromUtil(mContext)).into(view);
-        return this;
-    }
-
-    public EasyRVHolder setRoundImageUrl(int viewId, String imgUrl, int placeHolderRes) {
-        ImageView view = getView(viewId);
-        Glide.with(mContext).load(imgUrl).placeholder(placeHolderRes) .transform(new GlideRoundTransformUtil(mContext)).into(view);
-        return this;
-    }
 
     @Override
     public EasyRVHolder setImageBitmap(int viewId, Bitmap imgBitmap) {

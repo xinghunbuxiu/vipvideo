@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
     signingConfigs {
 
         config {
@@ -59,6 +61,9 @@ android {
     packagingOptions {
         pickFirst 'META-INF/*'
     }
+    lintOptions {
+        abortOnError false
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -77,18 +82,18 @@ dependencies {
             }
         }
     }
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':library:common')
-    implementation project(':library:ireader')
-    implementation 'org.jsoup:jsoup:1.10.2'
-    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':library:common')
+    api project(':library:ireader')
+    api 'org.jsoup:jsoup:1.10.2'
+    api 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     //Optional: see how to use the utility.
-    implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
-    implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    api group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    api 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
 //完整版引入
-    implementation 'com.shuyu:GSYVideoPlayer:6.0.1'
-    implementation 'me.panpf:sketch:2.6.2-b1'
-
+    api 'com.shuyu:GSYVideoPlayer:6.0.1'
+    api 'me.panpf:sketch:2.6.2-b1'
+    api 'tk.zielony:carbon:0.15.3'
     //基本东西
     implementation rootProject.ext.dependencies.butterknife
     implementation rootProject.ext.dependencies.appcompatV7

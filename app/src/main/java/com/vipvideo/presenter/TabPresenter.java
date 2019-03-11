@@ -2,6 +2,7 @@ package com.vipvideo.presenter;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.jayway.jsonpath.JsonPath;
 import com.lixh.presenter.BasePresenter;
@@ -35,15 +36,19 @@ public class TabPresenter extends BasePresenter {
         stringBuilder.append(MhSdk.init().getAppInfo().getDevice());
         stringBuilder.append(MhSdk.init().getAppInfo().getSystemName());
         String model = stringBuilder.toString();
-        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).MhLogin(MhSdk.init().getAppInfo().getUuid(), model), new RxSubscriber<String>(tabsActivity, false) {
+        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).MhLogin(MhSdk.init().getAppInfo().getUuid(), model, ""), new RxSubscriber<String>(tabsActivity, false) {
             @Override
             protected void _onNext(String str) {
-                ULog.e("LoginMh==" + str);
-                String result = AesUtil.decryptHex(str, AesUtil.getKey(false));
-                ULog.e("LogindecryptHex==" + result);
-                String mToken = JsonPath.read(result, "$.data.detail.token");
-                ULog.e("LoginmToken==" + result);
-                MhSdk.init().getAppInfo().setXAuthToken(mToken);
+                try {
+                    ULog.e("LoginMh==" + str);
+                    String result = AesUtil.decryptHex(str, AesUtil.getKey(false));
+                    ULog.e("LogindecryptHex==" + result);
+                    String mToken = JsonPath.read(result, "$.data.detail.token");
+                    ULog.e("LoginmToken==" + result);
+                    MhSdk.init().getAppInfo().setXAuthToken(mToken);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

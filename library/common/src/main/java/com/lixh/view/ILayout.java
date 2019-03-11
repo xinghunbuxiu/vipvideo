@@ -29,5 +29,4 @@ public interface ILayout<M> {
 
     boolean isDoubleExit();
 
-    void setData(M  bean);
 }

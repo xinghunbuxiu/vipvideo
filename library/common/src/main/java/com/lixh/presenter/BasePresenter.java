@@ -9,6 +9,7 @@ import com.lixh.rxhttp.RxHelper;
 import com.lixh.rxlife.LifeEvent;
 import com.lixh.utils.LoadingTip;
 import com.lixh.utils.UIntent;
+import com.lixh.view.IBase;
 import com.lixh.view.ILayout;
 import com.lixh.view.UToolBar;
 
@@ -27,7 +28,7 @@ public abstract class BasePresenter {
     public RxHelper rxHelper;
     public FragmentActivity activity;
     private BaseFragment fragment;
-    public ILayout view;
+    public IBase view;
 
     public abstract void onCreate(Bundle savedInstanceState);
 
@@ -61,7 +62,7 @@ public abstract class BasePresenter {
         return (T) fragment.getFragment();
     }
 
-    public BasePresenter bind(ILayout layout) {
+    public BasePresenter bind(IBase layout) {
         this.view = layout;
         return this;
     }

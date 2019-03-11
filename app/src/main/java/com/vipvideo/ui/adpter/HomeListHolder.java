@@ -8,6 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lixh.base.adapter.VBaseHolder;
 import com.lixh.base.adapter.abslistview.EasyLVAdapter;
 import com.lixh.base.adapter.abslistview.EasyLVHolder;
+import com.lixh.utils.ImageLoaderUtils;
 import com.vipvideo.R;
 import com.vipvideo.model.HomeModel;
 import com.vipvideo.view.HorizontalListView;
@@ -37,7 +38,7 @@ public class HomeListHolder extends VBaseHolder<HomeModel.HotBean> {
                 RoundImageView iv_image = holder.getView(R.id.iv_image);
                 TextView tv_title = holder.getView(R.id.tv_title);
                 TextView tv_label = holder.getView(R.id.tv_label);
-                Glide.with(mContext).load(hotBean.getHotTv_img()).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_image);
+                ImageLoaderUtils.displayRound(mContext, iv_image, hotBean.getHotTv_img());
                 tv_label.setText(hotBean.getHotTv_label());
                 tv_title.setText(hotBean.getHotTv_name() + "\n" + hotBean.getHotTv_star());
             }

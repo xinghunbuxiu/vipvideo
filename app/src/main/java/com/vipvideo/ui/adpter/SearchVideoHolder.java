@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lixh.base.adapter.VBaseHolder;
+import com.lixh.utils.ImageLoaderUtils;
 import com.vipvideo.R;
 import com.vipvideo.bean.SearchVideoInfo;
 import com.vipvideo.view.RoundImageView;
@@ -34,7 +35,8 @@ public class SearchVideoHolder extends VBaseHolder<SearchVideoInfo.DataBean> {
     @Override
     public void setData(int ps, SearchVideoInfo.DataBean data) {
         super.setData(ps, data);
-        Glide.with(mContext).load(TextUtils.isEmpty(data.getCoverHUrl()) ? data.getCoverUrl() : data.getCoverHUrl()).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_image);
+        ImageLoaderUtils.displayRound(mContext, iv_image, TextUtils.isEmpty(data.getCoverHUrl()) ? data.getCoverUrl() : data.getCoverHUrl());
+
         tv_title.setText(data.getTitle());
         tvVideoNum.setText(data.getBasePalyNum());
         tvVideoTip.setText("豆瓣:" + data.getDoubanScore());

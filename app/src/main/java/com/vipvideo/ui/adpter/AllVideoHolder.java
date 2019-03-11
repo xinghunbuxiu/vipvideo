@@ -6,6 +6,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lixh.base.adapter.VBaseHolder;
+import com.lixh.utils.ImageLoaderUtils;
 import com.vipvideo.R;
 import com.vipvideo.bean.AllVideoInfo.VideoListBean.VideosBean;
 import com.vipvideo.view.RoundImageView;
@@ -29,7 +30,7 @@ public class AllVideoHolder extends VBaseHolder<VideosBean> {
     @Override
     public void setData(int ps, VideosBean data) {
         super.setData(ps, data);
-        Glide.with(mContext).load(data.getImg_url()).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_image);
+        ImageLoaderUtils.displayRound(mContext, iv_image, data.getImg_url());
         tv_title.setText(data.getTitle());
     }
 

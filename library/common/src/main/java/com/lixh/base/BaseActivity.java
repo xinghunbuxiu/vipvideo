@@ -27,6 +27,7 @@ import com.lixh.utils.SystemBarTintManager;
 import com.lixh.utils.TUtil;
 import com.lixh.utils.UIntent;
 import com.lixh.utils.UToast;
+import com.lixh.view.IBase;
 import com.lixh.view.ILayout;
 import com.lixh.view.LoadView;
 import com.lixh.view.LoadView.Builder;
@@ -38,7 +39,7 @@ import io.reactivex.subjects.BehaviorSubject;
 /**
  * 基类Activity
  */
-public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements Observer<Message>, ILayout {
+public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements Observer<Message>, ILayout, IBase {
     public T mPresenter; //当前类需要的操作类
     public LoadingTip tip;
     public LoadView layout;
@@ -207,6 +208,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     public void update(Observable o, Message arg) {
 
     }
+
     @Override
     public void setData(Object bean) {
 

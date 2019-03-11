@@ -83,9 +83,9 @@ public interface ApiService {
     Observable<BaseResPose<String>> searchVideoByPage(@QueryMap Map<String, String> videoInfo);
 
     @GET("/api/app/member/ver2/user/login/")
-    Observable<BaseResPose<String>> MhLogin(@Query("uuid") String uuid, @Query("model") String model);
+    Observable<BaseResPose<String>> MhLogin(@Query("uuid") String uuid, @Query("model") String model,@Query("invitation") String invitation);
 
-    @GET("/api/app/video/ver2/user/clickPlayVideo_2_2/")
-    Observable<BaseResPose<String>> clickPlayVideo(@Query("videoId") int videoId, @Query("playType") int playType);
+    @GET("/api/app/video/ver2/user/clickPlayVideo_2_5/")
+    Observable<BaseResPose<String>> clickPlayVideo(@Query("videoId") int videoId, @Query("playType") int playType, @Query("serverTime") long j, @Query("authKey") String str);
 
 }

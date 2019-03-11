@@ -152,7 +152,7 @@ public class VideoPresenter extends BasePresenter {
 
     public void getPlayUrl(SearchVideoDetail.DataBean.VideoListBean videoListBeans) {
         VideoPlayerActivity activity = getActivity();
-        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).clickPlayVideo(videoListBeans.getId(), videoListBeans.getPlayType()), new RxSubscriber<String>(activity, false) {
+        rxHelper.createSubscriber(Api.getDefault(HostType.M_MAHUA_URL).clickPlayVideo(videoListBeans.getId(), videoListBeans.getPlayType(), 0L, ""), new RxSubscriber<String>(activity, false) {
             @Override
             protected void _onNext(String str) {
                 String result = AesUtil.decryptHex(str, AesUtil.getKey(false));

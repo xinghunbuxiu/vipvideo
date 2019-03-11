@@ -19,6 +19,7 @@ import com.lixh.utils.LoadingTip;
 import com.lixh.utils.LocalAppInfo;
 import com.lixh.utils.TUtil;
 import com.lixh.utils.UIntent;
+import com.lixh.view.IBase;
 import com.lixh.view.ILayout;
 import com.lixh.view.LoadView;
 import com.lixh.view.UToolBar;
@@ -26,7 +27,7 @@ import com.lixh.view.UToolBar;
 import butterknife.ButterKnife;
 import io.reactivex.subjects.BehaviorSubject;
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message>, ILayout {
+public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements Observer<Message>,IBase {
     public T mPresenter; //当前类需要的操作类
     public FragmentActivity activity;
     public LoadingTip tip;
@@ -35,8 +36,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
     public View mContentView;
     public UIntent intent;
 
-    @Override
-    public void init(Bundle savedInstanceState) {
+    protected void init(Bundle savedInstanceState) {
 
     }
 
@@ -212,4 +212,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
 
     }
 
+    @Override
+    public void setData(Object bean) {
+
+    }
 }

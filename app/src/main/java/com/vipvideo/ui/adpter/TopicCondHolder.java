@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lixh.base.adapter.VBaseHolder;
+import com.lixh.utils.ImageLoaderUtils;
 import com.vipvideo.R;
 import com.vipvideo.model.HomeModel;
 
@@ -33,7 +34,8 @@ public class TopicCondHolder extends VBaseHolder<HomeModel.HotTvBean> {
         super.setData(ps, data);
         tvTopicName.setText(data.getHotTv_label());
         tvTopicAuthor.setText(data.getHotTv_name());
-        Glide.with (mContext).load (data.getHotTv_img()).centerCrop ( ).diskCacheStrategy (DiskCacheStrategy.ALL).into(ivTopic);
+        ImageLoaderUtils.displayRound(mContext, ivTopic, data.getHotTv_img());
+
     }
 
     public void init() {
